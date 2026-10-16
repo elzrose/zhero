@@ -44,17 +44,6 @@ export function StudentNavbar({ onOpenAuth, onNavigate, activePage = 'landing' }
             <span style={{ fontSize: '1.25rem', fontWeight: 800, letterSpacing: '-0.03em', color: '#171717' }}>
               ZHERO
             </span>
-            <span style={{
-              fontSize: '0.7rem',
-              fontWeight: 700,
-              padding: '2px 8px',
-              borderRadius: '9999px',
-              backgroundColor: '#FFE5CE',
-              color: '#FE6904',
-              letterSpacing: '0.02em',
-            }}>
-              STUDENT
-            </span>
           </div>
         </div>
 

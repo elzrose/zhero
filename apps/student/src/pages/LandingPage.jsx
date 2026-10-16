@@ -1,5 +1,5 @@
 import React from 'react';
-import { Sparkles, ArrowRight, Compass, Building } from 'lucide-react';
+import { ArrowRight, Compass, Building } from 'lucide-react';
 import { DecorativeWave } from '../components/DecorativeWave';
 
 export function LandingPage({ onStartAssessment, onExploreCareers }) {
@@ -24,24 +24,6 @@ export function LandingPage({ onStartAssessment, onExploreCareers }) {
           position: 'relative',
           zIndex: 1,
         }}>
-          {/* Top Pill Badge */}
-          <div style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '8px',
-            padding: '6px 14px',
-            borderRadius: '9999px',
-            backgroundColor: '#FFE5CE',
-            border: '1px solid #FA9B2A',
-            color: '#FE6904',
-            fontSize: '0.82rem',
-            fontWeight: 700,
-            marginBottom: '1.75rem',
-            boxShadow: '0 2px 8px rgba(254, 105, 4, 0.12)',
-          }}>
-            <Sparkles size={15} />
-            <span>AI-Guided Career Discovery & Practical Learning Roadmaps</span>
-          </div>
 
           {/* Large Bold Headline with Orange Highlight */}
           <h1 style={{
