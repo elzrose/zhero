@@ -40,7 +40,7 @@ export function Sidebar({
       badgeVariant: 'warning',
     },
     { id: 'ai-monitoring', label: 'Verbal AI & Diagnostics', icon: Cpu },
-    { id: 'simulations', label: 'Simulations & Bounties', icon: Briefcase },
+    { id: 'bounties', label: 'Company Bounties', icon: Briefcase },
     { id: 'analytics', label: 'Cognitive & Cohort Analytics', icon: BarChart3 },
     { id: 'settings', label: 'Access Control & Settings', icon: Settings },
     { id: 'audit-logs', label: 'Audit Logs', icon: ScrollText },

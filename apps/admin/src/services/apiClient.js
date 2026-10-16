@@ -1,7 +1,7 @@
 /**
  * Centralized API Client & Backend Connection Manager
  * Intelligently switches between live backend endpoints (if configured)
- * and the local persistent simulation store.
+ * and the local persistent mock store.
  */
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || '';

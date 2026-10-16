@@ -250,7 +250,7 @@ export function AnalyticsPage() {
           ))}
         </div>
         <div style={{ marginTop: '1rem', fontSize: '0.75rem', color: '#77736D', backgroundColor: '#FFFFFF', padding: '0.65rem 1rem', borderRadius: '8px', border: '1px solid #FAD1C6' }}>
-          💡 <strong>How it works:</strong> Gemini triggers scenario-based micro-prompts at calibrated intervals (24h, 3d, 7d, 14d) based on students' real-life career simulations to cement knowledge before neuro-decay sets in.
+          💡 <strong>How it works:</strong> Gemini triggers scenario-based micro-prompts at calibrated intervals (24h, 3d, 7d, 14d) based on student assessment topics and industry bounty tasks to cement knowledge before neuro-decay sets in.
         </div>
       </div>
 

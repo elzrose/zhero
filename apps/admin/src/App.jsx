@@ -11,7 +11,7 @@ import { DashboardPage } from './pages/DashboardPage';
 import { UsersPage } from './pages/UsersPage';
 import { InstitutionsPage } from './pages/InstitutionsPage';
 import { AiMonitoringPage } from './pages/AiMonitoringPage';
-import { SimulationsPage } from './pages/SimulationsPage';
+import { BountiesPage } from './pages/BountiesPage';
 import { AnalyticsPage } from './pages/AnalyticsPage';
 import { AuditLogsPage } from './pages/AuditLogsPage';
 import { SettingsPage } from './pages/SettingsPage';
@@ -27,7 +27,7 @@ function AdminAppContent() {
       'users',
       'institutions',
       'ai-monitoring',
-      'simulations',
+      'bounties',
       'analytics',
       'settings',
       'audit-logs',
@@ -104,8 +104,8 @@ function AdminAppContent() {
         return <InstitutionsPage />;
       case 'ai-monitoring':
         return <AiMonitoringPage />;
-      case 'simulations':
-        return <SimulationsPage />;
+      case 'bounties':
+        return <BountiesPage />;
       case 'analytics':
         return <AnalyticsPage />;
       case 'settings':

@@ -52,7 +52,7 @@ export function Topbar({ activeTab, onSelectTab }) {
       users: 'User Management',
       institutions: 'Tuition Centres & Human Mentors',
       'ai-monitoring': 'Verbal AI & Upstream Telemetry',
-      simulations: 'Simulations, Alumni Insights & Bounties',
+      bounties: 'Company Bounties & Partner Authorization',
       analytics: 'Cognitive Retention & Habit Analytics',
       settings: 'Access Control & Settings',
       'audit-logs': 'Administrative Audit Logs',

@@ -9,8 +9,9 @@ import {
   INITIAL_AUDIT_LOGS,
   INITIAL_HUMAN_VALIDATIONS,
   INITIAL_VERBAL_INTERVIEWS,
-  INITIAL_CAREER_SIMULATIONS,
+  INITIAL_PARTNER_COMPANIES,
   INITIAL_BOUNTIES,
+  INITIAL_BOUNTY_SUBMISSIONS,
   INITIAL_LEARNING_SCIENCE,
 } from './mockData';
 
@@ -25,8 +26,9 @@ const KEYS = {
   AUDIT_LOGS: 'zhero_admin_audit_logs_v1',
   HUMAN_VALIDATIONS: 'zhero_admin_human_validations_v1',
   VERBAL_INTERVIEWS: 'zhero_admin_verbal_interviews_v1',
-  CAREER_SIMULATIONS: 'zhero_admin_career_simulations_v1',
+  COMPANIES: 'zhero_admin_companies_v1',
   BOUNTIES: 'zhero_admin_bounties_v1',
+  BOUNTY_SUBMISSIONS: 'zhero_admin_bounty_subs_v1',
   LEARNING_SCIENCE: 'zhero_admin_learning_science_v1',
   SESSION: 'zhero_admin_session_v1',
   PLATFORM_SETTINGS: 'zhero_admin_settings_v1',
@@ -78,8 +80,9 @@ export const StorageService = {
     getStored(KEYS.AUDIT_LOGS, INITIAL_AUDIT_LOGS);
     getStored(KEYS.HUMAN_VALIDATIONS, INITIAL_HUMAN_VALIDATIONS);
     getStored(KEYS.VERBAL_INTERVIEWS, INITIAL_VERBAL_INTERVIEWS);
-    getStored(KEYS.CAREER_SIMULATIONS, INITIAL_CAREER_SIMULATIONS);
+    getStored(KEYS.COMPANIES, INITIAL_PARTNER_COMPANIES);
     getStored(KEYS.BOUNTIES, INITIAL_BOUNTIES);
+    getStored(KEYS.BOUNTY_SUBMISSIONS, INITIAL_BOUNTY_SUBMISSIONS);
     getStored(KEYS.LEARNING_SCIENCE, INITIAL_LEARNING_SCIENCE);
     getStored(KEYS.PLATFORM_SETTINGS, DEFAULT_SETTINGS);
   },
@@ -96,8 +99,9 @@ export const StorageService = {
     localStorage.setItem(KEYS.AUDIT_LOGS, JSON.stringify(INITIAL_AUDIT_LOGS));
     localStorage.setItem(KEYS.HUMAN_VALIDATIONS, JSON.stringify(INITIAL_HUMAN_VALIDATIONS));
     localStorage.setItem(KEYS.VERBAL_INTERVIEWS, JSON.stringify(INITIAL_VERBAL_INTERVIEWS));
-    localStorage.setItem(KEYS.CAREER_SIMULATIONS, JSON.stringify(INITIAL_CAREER_SIMULATIONS));
+    localStorage.setItem(KEYS.COMPANIES, JSON.stringify(INITIAL_PARTNER_COMPANIES));
     localStorage.setItem(KEYS.BOUNTIES, JSON.stringify(INITIAL_BOUNTIES));
+    localStorage.setItem(KEYS.BOUNTY_SUBMISSIONS, JSON.stringify(INITIAL_BOUNTY_SUBMISSIONS));
     localStorage.setItem(KEYS.LEARNING_SCIENCE, JSON.stringify(INITIAL_LEARNING_SCIENCE));
     localStorage.setItem(KEYS.PLATFORM_SETTINGS, JSON.stringify(DEFAULT_SETTINGS));
     window.dispatchEvent(new CustomEvent('zhero_store_change', { detail: { key: 'ALL' } }));
@@ -175,12 +179,34 @@ export const StorageService = {
     setStored(KEYS.VERBAL_INTERVIEWS, interviews);
   },
 
-  // Career Simulations & Alumni Insights
-  getCareerSimulations() {
-    return getStored(KEYS.CAREER_SIMULATIONS, INITIAL_CAREER_SIMULATIONS);
+  // Partner Companies (Bounties Provider Authorization)
+  getCompanies() {
+    return getStored(KEYS.COMPANIES, INITIAL_PARTNER_COMPANIES);
   },
-  saveCareerSimulations(simulations) {
-    setStored(KEYS.CAREER_SIMULATIONS, simulations);
+  saveCompanies(companies) {
+    setStored(KEYS.COMPANIES, companies);
+  },
+  toggleCompanyPrivilege(companyId) {
+    const list = this.getCompanies();
+    const updated = list.map(c => {
+      if (c.id === companyId) {
+        return { ...c, postingPrivilege: !c.postingPrivilege };
+      }
+      return c;
+    });
+    this.saveCompanies(updated);
+    return updated;
+  },
+  updateCompanyStatus(companyId, status) {
+    const list = this.getCompanies();
+    const updated = list.map(c => {
+      if (c.id === companyId) {
+        return { ...c, verifiedStatus: status };
+      }
+      return c;
+    });
+    this.saveCompanies(updated);
+    return updated;
   },
 
   // Bounties & Job Opportunities
@@ -189,6 +215,24 @@ export const StorageService = {
   },
   saveBounties(bounties) {
     setStored(KEYS.BOUNTIES, bounties);
+  },
+  updateBountyStatus(bountyId, status) {
+    const list = this.getBounties();
+    const updated = list.map(b => (b.id === bountyId ? { ...b, approvalStatus: status } : b));
+    this.saveBounties(updated);
+    return updated;
+  },
+  getBountySubmissions() {
+    return getStored(KEYS.BOUNTY_SUBMISSIONS, INITIAL_BOUNTY_SUBMISSIONS);
+  },
+  saveBountySubmissions(submissions) {
+    setStored(KEYS.BOUNTY_SUBMISSIONS, submissions);
+  },
+  updateBountySubmissionStatus(subId, status, stipendDisbursed = false) {
+    const list = this.getBountySubmissions();
+    const updated = list.map(s => (s.id === subId ? { ...s, status, stipendDisbursed } : s));
+    this.saveBountySubmissions(updated);
+    return updated;
   },
 
   // Learning Science (Streaks, Badges & Forgetting Curve)

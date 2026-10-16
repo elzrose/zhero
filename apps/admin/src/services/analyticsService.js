@@ -16,8 +16,9 @@ export const AnalyticsService = {
     const totalAttempts = assessments.reduce((sum, a) => sum + (a.totalAttempts || 0), 0);
     const validations = StorageService.getHumanValidations();
     const verbalInterviews = StorageService.getVerbalInterviews();
-    const simulations = StorageService.getCareerSimulations();
+    const companies = StorageService.getCompanies();
     const bounties = StorageService.getBounties();
+    const bountySubmissions = StorageService.getBountySubmissions();
     const science = StorageService.getLearningScience();
 
     const pendingValidations = validations.filter(v => v.status === 'SCHEDULED' || v.status === 'PENDING_SCHEDULE');
@@ -46,10 +47,12 @@ export const AnalyticsService = {
       averageStreakDays: science?.streakOverview?.avgStreakDays || 7.4,
       forgettingCurveRecallRate: science?.forgettingCurve?.spacedRepetitionRecallRate || '84.6%',
       activeRecallPrompts: science?.forgettingCurve?.activeRecallPromptsCompleted || 4120,
-      // Career Simulations & Bounties
-      activeSimulationsCount: simulations.length,
-      openBountiesCount: bounties.filter(b => b.status === 'OPEN').length,
-      realityGapPivotRate: '41.2%', // % students whose expectation aligned with real job after simulation
+      // Company Partners & Bounties (Admin Gatekeeping)
+      totalCompanies: companies.length,
+      authorizedCompaniesCanPost: companies.filter(c => c.postingPrivilege).length,
+      openBountiesCount: bounties.filter(b => b.approvalStatus === 'APPROVED_FOR_STUDENTS' || b.status === 'OPEN').length,
+      totalBountySubmissions: bountySubmissions.length,
+      bountyStipendDisbursedTotal: '$4,500',
       // Gemini AI Telemetry
       aiTotalRequests: aiConfig?.stats?.totalRequests || 14820,
       aiSuccessfulRequests: aiConfig?.stats?.successfulRequests || 14702,

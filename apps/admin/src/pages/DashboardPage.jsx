@@ -68,7 +68,7 @@ export function DashboardPage({ onNavigate }) {
       { Metric: 'Anti-Speedrunning Integrity Rate', Value: metrics.verbalInterviewsVerifiedHumanRate },
       { Metric: 'Total Tuition Centres', Value: metrics.totalInstitutions },
       { Metric: 'Pending Centre Approvals', Value: metrics.pendingApprovals },
-      { Metric: 'Active Career Reality Simulations', Value: metrics.activeSimulationsCount },
+      { Metric: 'Authorized Partner Companies', Value: metrics.authorizedCompaniesCanPost },
       { Metric: 'Open Industry Bounties', Value: metrics.openBountiesCount },
       { Metric: 'Gemini AI Inferences', Value: metrics.aiTotalRequests },
       { Metric: 'AI Architecture', Value: 'Multimodal Voice + Reverse Proxy + Human Validation' },
@@ -82,7 +82,7 @@ export function DashboardPage({ onNavigate }) {
       {/* Page Header */}
       <PageHeader
         title="Operations, Human-in-the-Loop & AI Observability"
-        description="Unified administration for Zhero: Verbal AI interviews, tuition centre mentor validations via GMeet, cognitive spaced repetition, and career reality simulations."
+        description="Unified administration for Zhero: Verbal AI interviews, tuition centre mentor validations via GMeet, cognitive spaced repetition, and industry company bounties."
         actions={
           <div style={{ display: 'flex', gap: '0.6rem', alignItems: 'center' }}>
             <div
@@ -280,7 +280,7 @@ export function DashboardPage({ onNavigate }) {
               The Hybrid Synergy: Multimodal AI Guidance + Human Validation + Cognitive Habits
             </div>
             <div style={{ fontSize: '0.8rem', color: '#77736D', marginTop: '2px' }}>
-              Verbal AI interviews stop speedrunning; tuition centre mentors validate assessments via Google Meet; real-life simulations crush romanticized career expectations; and spaced repetition defeats the forgetting curve.
+              Verbal AI interviews stop speedrunning; tuition centre mentors validate assessments via Google Meet; partner company bounties deliver real-world industry experience; and spaced repetition defeats the forgetting curve.
             </div>
           </div>
         </div>
@@ -500,7 +500,7 @@ export function DashboardPage({ onNavigate }) {
             Administrative Command Center
           </h2>
           <p style={{ fontSize: '0.825rem', color: '#77736D', marginBottom: '1.25rem' }}>
-            Shortcuts to high-frequency operational governance, simulations, and AI configuration.
+            Shortcuts to high-frequency operational governance, company bounties, and AI configuration.
           </p>
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
@@ -530,7 +530,7 @@ export function DashboardPage({ onNavigate }) {
             </button>
 
             <button
-              onClick={() => onNavigate('simulations')}
+              onClick={() => onNavigate('bounties')}
               style={{
                 textAlign: 'left',
                 padding: '1rem',
@@ -544,13 +544,13 @@ export function DashboardPage({ onNavigate }) {
               onMouseLeave={(e) => (e.currentTarget.style.borderColor = '#FAD1C6')}
             >
               <div style={{ color: '#DB5E8C', marginBottom: '0.5rem' }}>
-                <Compass size={20} />
+                <Briefcase size={20} />
               </div>
               <div style={{ fontSize: '0.875rem', fontWeight: 700, color: '#171717' }}>
-                Simulations & Bounties
+                Company Bounties
               </div>
               <div style={{ fontSize: '0.75rem', color: '#77736D', marginTop: '2px' }}>
-                Alumni advice & job opps
+                Partner problems & stipends
               </div>
             </button>
 
