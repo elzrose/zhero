@@ -481,16 +481,38 @@ export const storageService = {
 
       let changedTaskTitle = '';
       let isCompletedNow = false;
+      let bypassBlocked = false;
 
       roadmap.phases.forEach((phase) => {
         phase.tasks.forEach((task) => {
           if (task.id === taskId) {
-            task.completed = !task.completed;
+            // If task is currently incomplete, verify whether it has verified mastery evidence
+            if (!task.completed) {
+              const hasVerifiedEvidence = Boolean(task.verifiedCheckpoint || task.isMastered);
+              // Disallow manual frontend completion without mastery evidence for structured milestones
+              if (!hasVerifiedEvidence && !task.isCustom) {
+                bypassBlocked = true;
+                return;
+              }
+              task.completed = true;
+              isCompletedNow = true;
+            } else {
+              task.completed = false;
+              isCompletedNow = false;
+            }
             changedTaskTitle = task.title;
-            isCompletedNow = task.completed;
           }
         });
       });
+
+      if (bypassBlocked) {
+        console.warn(`[ZHERO Mastery Gate] Manual completion blocked: Milestone "${taskId}" requires verified checkpoint.`);
+        return {
+          ...roadmap,
+          bypassBlocked: true,
+          message: 'This milestone has a mastery gate. Please complete the verification checkpoint to demonstrate understanding.',
+        };
+      }
 
       roadmap.lastUpdated = new Date().toISOString();
       localStorage.setItem(STORAGE_KEYS.ACTIVE_ROADMAP, JSON.stringify(roadmap));

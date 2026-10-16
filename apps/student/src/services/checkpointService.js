@@ -4,7 +4,7 @@
  * supports speech & text input, and provides transparent rubric feedback.
  */
 
-import { RESOURCES_DATA } from '../data/resourcesData';
+import { RESOURCES_DATA } from '../data/resourcesData.js';
 
 // Knowledge base of milestone concepts, resources & scenarios
 const MILESTONE_KNOWLEDGE_BASE = {

@@ -203,9 +203,10 @@ class DailyPlannerService {
 
       if (nextTask) {
         // Check if concept is already mastered
-        const isMastered = (learningProfile.competencies || []).some(
-          (c) => c.concept.toLowerCase() === nextTask.title.toLowerCase()
-        );
+        const isMastered =
+          (learningProfile.competencies || []).some(
+            (c) => c.concept.toLowerCase() === nextTask.title.toLowerCase()
+          ) || Boolean(nextTask.isMastered || nextTask.verifiedCheckpoint);
 
         // If not already mastered, add to candidates
         if (!isMastered) {

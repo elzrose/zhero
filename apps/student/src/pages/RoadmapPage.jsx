@@ -12,7 +12,9 @@ import {
   Mic,
   ExternalLink,
   Zap,
-  ArrowRight
+  ArrowRight,
+  Lock,
+  Award
 } from 'lucide-react';
 import { CAREERS_DATA } from '../data/careersData';
 import { Modal } from '../components/Modal';
@@ -20,6 +22,8 @@ import { storageService } from '../services/storageService';
 import { checkpointService } from '../services/checkpointService';
 import { spacedRepetitionService } from '../services/spacedRepetitionService';
 import { VerbalCheckpointModal } from '../components/VerbalCheckpointModal';
+import { MasteryGateModal } from '../components/MasteryGateModal';
+import { masteryService } from '../services/masteryService';
 import { DailyRevisionQueue } from '../components/DailyRevisionQueue';
 import { LearningCalibrationView } from '../components/LearningCalibrationView';
 import { calibrationService } from '../services/calibrationService';
@@ -546,6 +550,7 @@ export function RoadmapPage({
                       const isExpanded = expandedTaskId === task.id;
                       const resources = checkpointService.getCuratedResourcesForMilestone(task, activeRoadmap?.careerId);
                       const keyConcepts = checkpointService.getKeyConcepts(task);
+                      const taskState = masteryService.getMilestoneState(task.id, task);
 
                       return (
                         <div
@@ -555,6 +560,8 @@ export function RoadmapPage({
                             backgroundColor: task.isAdaptiveRemediation ? '#FFFDF5' : '#FFFFFF',
                             border: task.isAdaptiveRemediation
                               ? '1.5px solid #F59E0B'
+                              : taskState === 'locked'
+                              ? '1px solid #FCA5A5'
                               : isExpanded
                               ? '1.5px solid #FE6904'
                               : '1px solid #EAE7E2',
@@ -576,20 +583,38 @@ export function RoadmapPage({
                             }}
                           >
                             <div style={{ display: 'flex', alignItems: 'center', gap: '14px', flex: 1 }}>
-                              {/* Verified Checkmark vs In Progress Badge */}
+                              {/* Verified Checkmark vs Lock vs In Progress Badge */}
                               <div style={{
                                 width: '28px',
                                 height: '28px',
                                 borderRadius: '8px',
-                                backgroundColor: task.completed ? '#ECFDF5' : '#F4F4F3',
-                                color: task.completed ? '#047857' : '#9CA3AF',
+                                backgroundColor: taskState === 'mastered'
+                                  ? '#ECFDF5'
+                                  : taskState === 'locked'
+                                  ? '#FEF2F2'
+                                  : '#F4F4F3',
+                                color: taskState === 'mastered'
+                                  ? '#047857'
+                                  : taskState === 'locked'
+                                  ? '#DC2626'
+                                  : '#9CA3AF',
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
-                                border: task.completed ? '1px solid #A7F3D0' : '1px solid #EAE7E2',
+                                border: taskState === 'mastered'
+                                  ? '1px solid #A7F3D0'
+                                  : taskState === 'locked'
+                                  ? '1px solid #FECACA'
+                                  : '1px solid #EAE7E2',
                                 flexShrink: 0,
                               }}>
-                                {task.completed ? <CheckCircle2 size={18} /> : <BookOpen size={16} />}
+                                {taskState === 'mastered' ? (
+                                  <CheckCircle2 size={18} />
+                                ) : taskState === 'locked' ? (
+                                  <Lock size={14} />
+                                ) : (
+                                  <BookOpen size={16} />
+                                )}
                               </div>
 
                               <div style={{ flex: 1 }}>
@@ -597,7 +622,7 @@ export function RoadmapPage({
                                   <span style={{
                                     fontSize: '0.95rem',
                                     fontWeight: 700,
-                                    color: task.completed ? '#4B5563' : '#171717',
+                                    color: taskState === 'locked' ? '#9CA3AF' : task.completed ? '#4B5563' : '#171717',
                                   }}>
                                     {task.title}
                                   </span>
@@ -615,7 +640,35 @@ export function RoadmapPage({
                                     </span>
                                   )}
 
-                                  {task.completed && (
+                                  {taskState === 'locked' && (
+                                    <span style={{
+                                      fontSize: '0.7rem',
+                                      fontWeight: 800,
+                                      padding: '2px 8px',
+                                      borderRadius: '999px',
+                                      backgroundColor: '#FEF2F2',
+                                      color: '#B91C1C',
+                                      border: '1px solid #FECACA',
+                                    }}>
+                                      🔒 Locked (Prerequisites Required)
+                                    </span>
+                                  )}
+
+                                  {taskState === 'remediation_required' && (
+                                    <span style={{
+                                      fontSize: '0.7rem',
+                                      fontWeight: 800,
+                                      padding: '2px 8px',
+                                      borderRadius: '999px',
+                                      backgroundColor: '#FFFBEB',
+                                      color: '#B45309',
+                                      border: '1px solid #FDE68A',
+                                    }}>
+                                      ⚠️ Targeted Remediation Needed
+                                    </span>
+                                  )}
+
+                                  {taskState === 'mastered' && (
                                     <span style={{
                                       fontSize: '0.72rem',
                                       fontWeight: 800,
@@ -624,7 +677,7 @@ export function RoadmapPage({
                                       backgroundColor: '#ECFDF5',
                                       color: '#047857',
                                     }}>
-                                      ✓ Verified ({task.verifiedCheckpoint?.score || 92}%)
+                                      ✓ Mastered ⭐ ({task.verifiedCheckpoint?.score || 92}%)
                                     </span>
                                   )}
                                 </div>
@@ -744,10 +797,10 @@ export function RoadmapPage({
                                 </div>
                               </div>
 
-                              {/* Verbal AI Checkpoint Callout */}
+                              {/* Intelligent Mastery Gate Callout */}
                               <div style={{
-                                backgroundColor: task.completed ? '#ECFDF5' : '#FFFFFF',
-                                border: task.completed ? '1px solid #A7F3D0' : '1.5px solid #FE6904',
+                                backgroundColor: taskState === 'mastered' ? '#ECFDF5' : taskState === 'locked' ? '#FEF2F2' : '#FFFFFF',
+                                border: taskState === 'mastered' ? '1px solid #A7F3D0' : taskState === 'locked' ? '1px solid #FECACA' : '1.5px solid #FE6904',
                                 borderRadius: '16px',
                                 padding: '1.25rem',
                                 display: 'flex',
@@ -758,15 +811,25 @@ export function RoadmapPage({
                               }}>
                                 <div>
                                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
-                                    <Sparkles size={16} color={task.completed ? '#047857' : '#FE6904'} />
+                                    <Award size={16} color={taskState === 'mastered' ? '#047857' : taskState === 'locked' ? '#DC2626' : '#FE6904'} />
                                     <span style={{ fontSize: '0.9rem', fontWeight: 800, color: '#171717' }}>
-                                      {task.completed ? 'Milestone Verified via Verbal AI Checkpoint' : 'Verify Understanding via Verbal AI Checkpoint'}
+                                      {taskState === 'mastered'
+                                        ? 'Milestone Mastered via Intelligent Mastery Gate ⭐'
+                                        : taskState === 'locked'
+                                        ? 'Prerequisites Required Before Checkpoint'
+                                        : taskState === 'remediation_required'
+                                        ? 'Targeted Remediation & Reassessment 🎯'
+                                        : 'Evidence-Based Mastery Gate Checkpoint'}
                                     </span>
                                   </div>
                                   <p style={{ margin: 0, fontSize: '0.825rem', color: '#6B7280', maxWidth: '520px', lineHeight: '1.5' }}>
-                                    {task.completed
-                                      ? `Rubric evaluation passed with ${task.verifiedCheckpoint?.score || 92}% conceptual accuracy. Concepts are enrolled in your spaced repetition queue.`
-                                      : 'To prevent superficial speedrunning, explain concepts in your own words using speech or text. Evaluated by Gemini against transparent rubrics.'}
+                                    {taskState === 'mastered'
+                                      ? `Demonstrated ${task.verifiedCheckpoint?.score || 92}% accuracy across conceptual and practical rubrics. Enrolled in spaced repetition.`
+                                      : taskState === 'locked'
+                                      ? 'Master prerequisite foundational milestones first to protect curriculum continuity and unlock this checkpoint.'
+                                      : taskState === 'remediation_required'
+                                      ? 'Review the targeted learning resources and retry the conceptual and practical verification without penalty.'
+                                      : 'Demonstrate conceptual understanding, objective quiz accuracy (>=80%), and practical application to progress.'}
                                   </p>
                                 </div>
 
@@ -779,17 +842,25 @@ export function RoadmapPage({
                                     gap: '8px',
                                     padding: '10px 20px',
                                     borderRadius: '12px',
-                                    backgroundColor: task.completed ? '#FFFFFF' : '#FE6904',
-                                    color: task.completed ? '#047857' : '#FFFFFF',
-                                    border: task.completed ? '1px solid #A7F3D0' : 'none',
+                                    backgroundColor: taskState === 'mastered' ? '#FFFFFF' : taskState === 'locked' ? '#DC2626' : '#FE6904',
+                                    color: taskState === 'mastered' ? '#047857' : '#FFFFFF',
+                                    border: taskState === 'mastered' ? '1px solid #A7F3D0' : 'none',
                                     fontSize: '0.875rem',
                                     fontWeight: 800,
                                     cursor: 'pointer',
-                                    boxShadow: task.completed ? 'none' : '0 4px 14px rgba(254, 105, 4, 0.25)',
+                                    boxShadow: taskState === 'mastered' ? 'none' : '0 4px 14px rgba(254, 105, 4, 0.25)',
                                   }}
                                 >
-                                  <Mic size={16} />
-                                  <span>{task.completed ? 'Re-verify with AI' : 'Start Verbal AI Checkpoint'}</span>
+                                  {taskState === 'locked' ? <Lock size={16} /> : <Award size={16} />}
+                                  <span>
+                                    {taskState === 'locked'
+                                      ? 'View Prerequisites'
+                                      : taskState === 'mastered'
+                                      ? 'Review Mastery Gate'
+                                      : taskState === 'remediation_required'
+                                      ? 'Retry Mastery Checkpoint'
+                                      : 'Enter Mastery Gate'}
+                                  </span>
                                 </button>
                               </div>
                             </div>
@@ -906,9 +977,9 @@ export function RoadmapPage({
         </div>
       )}
 
-      {/* Verbal AI Checkpoint Modal */}
-      {isCheckpointModalOpen && (
-        <VerbalCheckpointModal
+      {/* Intelligent Mastery Gate Modal */}
+      {isCheckpointModalOpen && activeCheckpointTask && (
+        <MasteryGateModal
           isOpen={isCheckpointModalOpen}
           onClose={() => {
             setIsCheckpointModalOpen(false);
@@ -916,7 +987,7 @@ export function RoadmapPage({
           }}
           task={activeCheckpointTask}
           careerTitle={activeRoadmap?.careerTitle}
-          onMilestoneVerified={handleMilestoneVerified}
+          onMilestoneMastered={handleMilestoneVerified}
         />
       )}
     </div>
