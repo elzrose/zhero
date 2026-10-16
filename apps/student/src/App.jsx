@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '@shared/styles/tokens.css';
 import { StudentNavbar } from './components/StudentNavbar';
 import { StudentSidebar } from './components/StudentSidebar';
@@ -34,6 +34,15 @@ export default function App() {
   const [compareList, setCompareList] = useState(() => storageService.getCompareList());
   const [bookmarkedResources, setBookmarkedResources] = useState(() => storageService.getBookmarkedResources());
   const [completedResources, setCompletedResources] = useState(() => storageService.getCompletedResources());
+
+  useEffect(() => {
+    const handleSync = () => {
+      setActiveRoadmap(storageService.getActiveRoadmap());
+      setCompareList(storageService.getCompareList());
+    };
+    window.addEventListener('storage', handleSync);
+    return () => window.removeEventListener('storage', handleSync);
+  }, []);
 
   const showToast = (msg) => {
     setToastMessage(msg);

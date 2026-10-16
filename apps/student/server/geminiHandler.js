@@ -143,3 +143,149 @@ export async function handleGeminiChat(body) {
 export async function handleGeminiAnalysis(body) {
   return handleGeminiMcqAnalysis(body);
 }
+
+// Local intelligent rubric evaluator fallback
+function evaluateCheckpointLocally(milestoneTitle, keyConcepts = [], studentResponse = '') {
+  const text = (studentResponse || '').trim().toLowerCase();
+  const wordCount = text.split(/\s+/).filter(Boolean).length;
+
+  if (wordCount < 8) {
+    return {
+      score: 40,
+      passed: false,
+      rubricScores: {
+        conceptualAccuracy: 45,
+        practicalJustification: 30,
+        absenceOfMisconceptions: 50,
+      },
+      feedback: 'Your explanation is very brief. To demonstrate complete understanding, explain the reasoning behind your choice and how the mechanics work.',
+      identifiedStrengths: ['Initial attempt submitted'],
+      identifiedMisconceptions: ['Insufficient technical depth to evaluate mastery'],
+      followUpQuestion: null,
+      remediationNeeded: true,
+      remediationRecommendation: `Review the recommended documentation for ${milestoneTitle} and explain with a concrete code or architecture example.`,
+    };
+  }
+
+  // Match key concept keywords
+  const matchedConcepts = keyConcepts.filter((c) => {
+    const words = c.toLowerCase().split(/\s+/);
+    return words.some((w) => w.length > 3 && text.includes(w));
+  });
+
+  const conceptCoverage = keyConcepts.length > 0 ? (matchedConcepts.length / keyConcepts.length) : 0.8;
+  const hasReasoning = text.includes('because') || text.includes('since') || text.includes('why') || text.includes('allows') || text.includes('instead') || text.includes('helps');
+
+  let conceptualAccuracy = Math.min(95, Math.max(55, Math.round(50 + conceptCoverage * 40)));
+  let practicalJustification = Math.min(95, Math.max(50, Math.round((hasReasoning ? 75 : 55) + Math.min(20, wordCount * 0.4))));
+  let absenceOfMisconceptions = 90;
+
+  if (wordCount > 35 && hasReasoning) {
+    conceptualAccuracy = Math.min(98, conceptualAccuracy + 10);
+    practicalJustification = Math.min(96, practicalJustification + 10);
+  }
+
+  const score = Math.round((conceptualAccuracy * 0.4) + (practicalJustification * 0.4) + (absenceOfMisconceptions * 0.2));
+  const passed = score >= 70;
+
+  return {
+    score,
+    passed,
+    rubricScores: {
+      conceptualAccuracy,
+      practicalJustification,
+      absenceOfMisconceptions,
+    },
+    feedback: passed
+      ? `Strong explanation! You demonstrated solid command of ${keyConcepts.slice(0, 2).join(' and ') || 'the core principles'} and justified your practical approach well.`
+      : `You have the right general idea, but need to provide a deeper explanation of the underlying mechanics before clearing this milestone.`,
+    identifiedStrengths: matchedConcepts.length > 0
+      ? matchedConcepts.map((c) => `Clear grasp of ${c}`)
+      : ['Clear explanation of the problem context'],
+    identifiedMisconceptions: passed ? [] : ['Lacks detailed justification on why this solution is optimal'],
+    followUpQuestion: !passed && score >= 55 ? `Could you give a specific example of how you would handle this in a real-world project?` : null,
+    remediationNeeded: !passed && score < 55,
+    remediationRecommendation: !passed ? `Review the curated MDN & practical tutorials linked in this milestone.` : null,
+  };
+}
+
+// Verbal AI Course Checkpoint Evaluation
+export async function handleGeminiCheckpointEvaluation(body) {
+  const {
+    milestoneTitle = '',
+    keyConcepts = [],
+    checkpointPrompt = '',
+    studentResponse = '',
+  } = body;
+
+  const apiKey = getApiKey();
+  if (apiKey) {
+    try {
+      const genAI = new GoogleGenerativeAI(apiKey);
+      const model = genAI.getGenerativeModel({
+        model: 'gemini-2.5-flash',
+        generationConfig: { responseMimeType: 'application/json' },
+      });
+
+      const prompt = `
+You are the expert Technical Evaluator for ZHERO's adaptive learning checkpoints.
+The student has submitted an explanation (either spoken aloud and transcribed, or typed) for a learning milestone.
+Evaluate their response using this transparent 3-part rubric:
+1. Conceptual Accuracy (0-100%): Did they correctly describe the underlying principles and technical mechanics?
+2. Practical Justification & Depth (0-100%): Did they explain *why* this approach is used, trade-offs, or real-world application?
+3. Absence of Misconceptions (0-100%): Did they avoid conflating concepts or stating inaccurate assumptions?
+
+CRITICAL INSTRUCTIONS:
+- Identify genuine understanding vs superficial memorization.
+- Do NOT penalize brevity or speed if the core technical rationale is sound.
+- If the student shows solid understanding (overall >= 70%), pass them.
+- If they are close (50-69%), provide a targeted follow-up question.
+- If they have significant misconceptions (< 50%), recommend remediation and allow retry.
+
+MILESTONE: ${milestoneTitle}
+EXPECTED KEY CONCEPTS: ${keyConcepts.join(', ')}
+CHECKPOINT SCENARIO PROMPT: "${checkpointPrompt}"
+STUDENT'S EXPLANATION: "${studentResponse}"
+
+REQUIRED JSON SCHEMA:
+{
+  "score": number (0-100),
+  "passed": boolean (score >= 70),
+  "rubricScores": {
+    "conceptualAccuracy": number (0-100),
+    "practicalJustification": number (0-100),
+    "absenceOfMisconceptions": number (0-100)
+  },
+  "feedback": "2-3 sentences of clear, encouraging, specific feedback",
+  "identifiedStrengths": ["string"],
+  "identifiedMisconceptions": ["string"],
+  "followUpQuestion": string or null,
+  "remediationNeeded": boolean,
+  "remediationRecommendation": string or null
+}
+`;
+
+      const result = await model.generateContent(prompt);
+      const text = result.response.text();
+      const parsed = JSON.parse(text);
+
+      return {
+        success: true,
+        isAiPowered: true,
+        data: parsed,
+        modelUsed: 'gemini-2.5-flash',
+      };
+    } catch (err) {
+      console.warn('Gemini Checkpoint Evaluation API error, falling back to local heuristic evaluator:', err);
+    }
+  }
+
+  // Fallback intelligent evaluation engine
+  return {
+    success: true,
+    isAiPowered: false,
+    data: evaluateCheckpointLocally(milestoneTitle, keyConcepts, studentResponse),
+    modelUsed: 'heuristic-rubric-engine',
+  };
+}
+

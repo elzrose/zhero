@@ -530,6 +530,78 @@ export const storageService = {
     }
   },
 
+  // Complete milestone after passing Verbal AI Checkpoint
+  completeMilestoneWithCheckpoint(taskId, checkpointResult) {
+    try {
+      const roadmap = this.getActiveRoadmap();
+      if (!roadmap) return null;
+
+      let completedTaskTitle = '';
+      roadmap.phases.forEach((phase) => {
+        phase.tasks.forEach((task) => {
+          if (task.id === taskId) {
+            task.completed = true;
+            task.verifiedCheckpoint = {
+              score: checkpointResult.score,
+              rubricScores: checkpointResult.rubricScores,
+              feedback: checkpointResult.feedback,
+              verifiedAt: new Date().toISOString(),
+              modelUsed: checkpointResult.modelUsed || 'gemini-2.5-flash',
+            };
+            completedTaskTitle = task.title;
+          }
+        });
+      });
+
+      roadmap.lastUpdated = new Date().toISOString();
+      localStorage.setItem(STORAGE_KEYS.ACTIVE_ROADMAP, JSON.stringify(roadmap));
+
+      if (completedTaskTitle) {
+        this.logActivity(`Verified milestone via Verbal AI Checkpoint: "${completedTaskTitle}" (Score: ${checkpointResult.score}%)`);
+      }
+
+      return roadmap;
+    } catch {
+      return null;
+    }
+  },
+
+  // Automatically injects targeted revision task into roadmap when a student struggles during spaced repetition
+  injectAdaptiveRemediationTask(conceptTitle, milestoneTitle) {
+    try {
+      const roadmap = this.getActiveRoadmap();
+      if (!roadmap || !roadmap.phases || roadmap.phases.length === 0) return null;
+
+      // Check if an active adaptive task for this concept already exists
+      const alreadyExists = roadmap.phases.some((phase) =>
+        phase.tasks.some((t) => t.isAdaptiveRemediation && t.relatedConcept === conceptTitle && !t.completed)
+      );
+      if (alreadyExists) return roadmap;
+
+      const adaptiveTask = {
+        id: `adaptive-${Date.now()}`,
+        title: `⚡ Adaptive Review: ${conceptTitle}`,
+        duration: '2 – 3 days',
+        completed: false,
+        isAdaptiveRemediation: true,
+        relatedConcept: conceptTitle,
+        parentMilestone: milestoneTitle || 'Foundational Milestone',
+        reason: 'Automated retrieval practice indicated memory decay on this concept.',
+      };
+
+      // Insert at the top of current active phase (first phase with incomplete tasks)
+      let targetPhase = roadmap.phases.find((p) => p.tasks.some((t) => !t.completed)) || roadmap.phases[0];
+      targetPhase.tasks.unshift(adaptiveTask);
+
+      roadmap.lastUpdated = new Date().toISOString();
+      localStorage.setItem(STORAGE_KEYS.ACTIVE_ROADMAP, JSON.stringify(roadmap));
+      this.logActivity(`Adaptive learning intelligence inserted revision task for "${conceptTitle}".`);
+      return roadmap;
+    } catch {
+      return null;
+    }
+  },
+
   // --- Skill Audit & Readiness ---
   getSkillAudit(careerId = 'full-stack-engineer') {
     try {

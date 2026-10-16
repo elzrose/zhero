@@ -2,7 +2,7 @@ import { defineConfig, loadEnv } from 'vite'
 import react from '@vitejs/plugin-react'
 import path from 'path'
 import { fileURLToPath } from 'url'
-import { handleGeminiChat, handleGeminiAnalysis, handleGeminiMcqAnalysis } from './server/geminiHandler.js'
+import { handleGeminiChat, handleGeminiAnalysis, handleGeminiMcqAnalysis, handleGeminiCheckpointEvaluation } from './server/geminiHandler.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
@@ -51,6 +51,15 @@ function geminiServerPlugin(env) {
         if ((req.url === '/api/gemini/analyze' || req.url === '/api/gemini/analyze-mcq') && req.method === 'POST') {
           const body = await readBody();
           const result = await handleGeminiMcqAnalysis(body);
+          res.setHeader('Content-Type', 'application/json');
+          res.end(JSON.stringify(result));
+          return;
+        }
+
+        // 4. Verbal AI Course Checkpoint Evaluation
+        if (req.url === '/api/gemini/evaluate-checkpoint' && req.method === 'POST') {
+          const body = await readBody();
+          const result = await handleGeminiCheckpointEvaluation(body);
           res.setHeader('Content-Type', 'application/json');
           res.end(JSON.stringify(result));
           return;

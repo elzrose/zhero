@@ -12,7 +12,8 @@ import {
   Sparkles,
   Award,
   Layers,
-  ChevronDown
+  ChevronDown,
+  BookOpen
 } from 'lucide-react';
 import { storageService } from '../../services/storageService';
 import { CAREERS_DATA } from '../../data/careersData';
