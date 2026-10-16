@@ -1,249 +1,351 @@
 import React, { useState } from 'react';
 import '@shared/styles/tokens.css';
-import { BrandNavbar } from '@shared/components/BrandNavbar';
+import { StudentNavbar } from './components/StudentNavbar';
+import { StudentSidebar } from './components/StudentSidebar';
+import { StudentHeader } from './components/StudentHeader';
+import { AuthModal } from './pages/AuthModal';
+import { LandingPage } from './pages/LandingPage';
+import { DashboardPage } from './pages/DashboardPage';
+import { AssessmentPage } from './pages/AssessmentPage';
+import { ResultsPage } from './pages/ResultsPage';
+import { CareersPage } from './pages/CareersPage';
+import { CareerDetailPage } from './pages/CareerDetailPage';
+import { ComparePage } from './pages/ComparePage';
+import { SkillGapPage } from './pages/SkillGapPage';
+import { RoadmapPage } from './pages/RoadmapPage';
+import { ResourcesPage } from './pages/ResourcesPage';
+import { ProgressPage } from './pages/ProgressPage';
+import { ProfilePage } from './pages/ProfilePage';
+import { storageService } from './services/storageService';
 
 export default function App() {
-  const [selectedCareer, setSelectedCareer] = useState(0);
+  const [currentPage, setCurrentPage] = useState('landing');
+  const [selectedCareerId, setSelectedCareerId] = useState('full-stack-engineer');
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
+  const [toastMessage, setToastMessage] = useState('');
 
-  const careers = [
-    {
-      title: 'Full Stack Engineer',
-      match: '94% Match',
-      industry: 'Software & Technology',
-      avgSalary: '₹9 - 18 LPA',
-      demand: 'High',
-      topSkills: ['React', 'Node.js', 'PostgreSQL', 'System Design'],
-      missingSkills: ['Docker', 'Cloud CI/CD'],
-    },
-    {
-      title: 'AI / ML Specialist',
-      match: '88% Match',
-      industry: 'Artificial Intelligence',
-      avgSalary: '₹12 - 24 LPA',
-      demand: 'Very High',
-      topSkills: ['Python', 'Data Structures', 'Linear Algebra'],
-      missingSkills: ['PyTorch', 'Vector Embeddings', 'LLM Fine-tuning'],
-    },
-    {
-      title: 'UI/UX Product Designer',
-      match: '82% Match',
-      industry: 'Product Design',
-      avgSalary: '₹8 - 15 LPA',
-      demand: 'Growing',
-      topSkills: ['Figma', 'Wireframing', 'User Research'],
-      missingSkills: ['Design Systems', 'Micro-interactions'],
-    },
-  ];
+  // Persistent States
+  const [userProfile, setUserProfile] = useState(() => storageService.getUserProfile());
+  const [assessmentResults, setAssessmentResults] = useState(() => storageService.getAssessmentResults());
+  const [activeRoadmap, setActiveRoadmap] = useState(() => storageService.getActiveRoadmap());
+  const [savedCareers, setSavedCareers] = useState(() => storageService.getSavedCareers());
+  const [compareList, setCompareList] = useState(() => storageService.getCompareList());
+  const [bookmarkedResources, setBookmarkedResources] = useState(() => storageService.getBookmarkedResources());
+  const [completedResources, setCompletedResources] = useState(() => storageService.getCompletedResources());
+
+  const showToast = (msg) => {
+    setToastMessage(msg);
+    setTimeout(() => setToastMessage(''), 3000);
+  };
+
+  const handleNavigate = (pageId) => {
+    setCurrentPage(pageId);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleSelectCareer = (careerId) => {
+    setSelectedCareerId(careerId);
+    setCurrentPage('career-detail');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleToggleSaveCareer = (careerId) => {
+    const updated = storageService.toggleSaveCareer(careerId);
+    setSavedCareers(updated);
+    showToast(updated.includes(careerId) ? 'Career saved to targets!' : 'Career removed from targets.');
+  };
+
+  const handleToggleCompareCareer = (careerId) => {
+    const updated = storageService.toggleCompareCareer(careerId);
+    setCompareList(updated);
+    showToast(updated.includes(careerId) ? 'Added to career comparison!' : 'Removed from comparison.');
+  };
+
+  const handleGenerateRoadmap = (careerId) => {
+    const roadmap = storageService.setRoadmapForCareer(careerId);
+    setActiveRoadmap(roadmap);
+    showToast(`Active roadmap set to ${roadmap.careerTitle}!`);
+    setCurrentPage('roadmap');
+  };
+
+  const handleAuditSkills = (careerId) => {
+    setSelectedCareerId(careerId);
+    setCurrentPage('skill-gap');
+  };
+
+  const handleToggleRoadmapTask = (taskId) => {
+    const updated = storageService.toggleRoadmapTask(taskId);
+    if (updated) {
+      setActiveRoadmap({ ...updated });
+    }
+  };
+
+  const handleAddCustomTask = (phaseIndex, title, duration) => {
+    const updated = storageService.addCustomTask(phaseIndex, title, duration);
+    if (updated) {
+      setActiveRoadmap({ ...updated });
+      showToast('Custom milestone added to roadmap!');
+    }
+  };
+
+  const handleToggleBookmarkResource = (resId) => {
+    const updated = storageService.toggleBookmarkResource(resId);
+    setBookmarkedResources(updated);
+    showToast(updated.includes(resId) ? 'Resource bookmarked!' : 'Bookmark removed.');
+  };
+
+  const handleToggleCompleteResource = (resId) => {
+    const updated = storageService.toggleCompleteResource(resId);
+    setCompletedResources(updated);
+    showToast(updated.includes(resId) ? 'Resource marked completed!' : 'Resource status updated.');
+  };
+
+  const handleCompleteAssessment = (results) => {
+    setAssessmentResults(results);
+    showToast('Assessment scored and top matches updated!');
+    setCurrentPage('results');
+  };
+
+  const handleResetAssessment = () => {
+    storageService.resetAssessment();
+    setAssessmentResults(null);
+    showToast('Assessment progress reset.');
+    setCurrentPage('assessment');
+  };
+
+  const handleResetAllData = () => {
+    storageService.resetAll();
+    setUserProfile(storageService.getUserProfile());
+    setAssessmentResults(storageService.getAssessmentResults());
+    setActiveRoadmap(storageService.getActiveRoadmap());
+    setSavedCareers(storageService.getSavedCareers());
+    setCompareList(storageService.getCompareList());
+    setBookmarkedResources(storageService.getBookmarkedResources());
+    setCompletedResources(storageService.getCompletedResources());
+    showToast('All demo state restored to baseline.');
+    setCurrentPage('dashboard');
+  };
+
+  const handleLogout = () => {
+    storageService.logoutUser();
+    setUserProfile({ ...userProfile, isLoggedIn: false });
+    showToast('Signed out of student session.');
+    setCurrentPage('landing');
+  };
+
+  const isPublicPage = currentPage === 'landing';
+
+  // Titles mapping for Dashboard Header
+  const pageTitles = {
+    dashboard: { title: 'Student Dashboard', subtitle: 'Personalized career intelligence & roadmap tracking' },
+    assessment: { title: 'Career Interest Assessment', subtitle: '16 psychometric scenario questions' },
+    results: { title: 'Assessment Results', subtitle: 'Your top 5 aligned career pathways' },
+    careers: { title: 'Career Catalogue', subtitle: '18+ emerging & core professional disciplines' },
+    'career-detail': { title: 'Career Profile', subtitle: 'Comprehensive skill & pathway breakdown' },
+    compare: { title: 'Career Comparison', subtitle: 'Side-by-side analysis across requirements and compensation' },
+    'skill-gap': { title: 'Skill-Gap Diagnostic', subtitle: 'Interactive self-audit against industry standards' },
+    roadmap: { title: 'Personalized Roadmap', subtitle: 'Actionable step-by-step learning milestones' },
+    resources: { title: 'Learning Resources', subtitle: 'Curated beginner guides and tutorials' },
+    progress: { title: 'Growth Metrics', subtitle: 'Quantitative readiness and session activity audit' },
+    profile: { title: 'Student Settings', subtitle: 'Profile details and demo storage controls' },
+  };
+
+  const headerInfo = pageTitles[currentPage] || { title: 'ZHERO Student Portal', subtitle: '' };
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-      <BrandNavbar currentApp="student" badgeText="Student Platform" />
-
-      {/* Main Container */}
-      <main style={{ maxWidth: '1200px', width: '100%', margin: '0 auto', padding: '2rem 1.5rem', flex: 1 }}>
-        {/* Developer Branch Indicator Banner */}
+    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: '#F8F8F7' }}>
+      {/* Toast Feedback Notification */}
+      {toastMessage && (
         <div style={{
-          background: '#FFE5CE',
-          border: '1px solid #FA9B2A',
-          borderRadius: '12px',
+          position: 'fixed',
+          bottom: '24px',
+          right: '24px',
+          backgroundColor: '#171717',
+          color: '#FFFFFF',
           padding: '0.75rem 1.25rem',
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          marginBottom: '2rem',
-          flexWrap: 'wrap',
-          gap: '0.75rem',
-        }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span style={{ fontSize: '1.1rem' }}>🚀</span>
-            <span style={{ fontSize: '0.875rem', fontWeight: 600, color: '#171717' }}>
-              Developer 1 Workspace — Student Application
-            </span>
-          </div>
-          <div style={{ display: 'flex', gap: '1rem', fontSize: '0.8rem', color: '#77736F' }}>
-            <span>Target Branch: <strong style={{ color: '#FE6904' }}>feature/student</strong></span>
-            <span>Port: <strong style={{ color: '#171717' }}>3001</strong></span>
-          </div>
-        </div>
-
-        {/* Sponsor Banner */}
-        <div style={{
+          borderRadius: '10px',
+          fontSize: '0.85rem',
+          fontWeight: 600,
+          boxShadow: '0 10px 25px rgba(0, 0, 0, 0.2)',
+          zIndex: 999,
           display: 'flex',
           alignItems: 'center',
-          justifyContent: 'space-between',
-          background: '#FFFFFF',
-          border: '1px solid #EAE7E2',
-          borderRadius: '16px',
-          padding: '1.25rem 1.75rem',
-          marginBottom: '2rem',
-          boxShadow: '0 2px 8px rgba(23, 23, 23, 0.03)',
+          gap: '8px',
+          animation: 'slideUp 0.2s ease',
         }}>
-          <div>
-            <span style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em', color: '#77736F', fontWeight: 600 }}>
-              Sponsored Access
-            </span>
-            <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: '#171717', marginTop: '2px' }}>
-              Apex Career Academy — Kochi Campus
-            </h3>
-            <p style={{ fontSize: '0.85rem', color: '#77736F', marginTop: '2px' }}>
-              Your premium assessments and personalized career guidance are fully sponsored by your institution.
-            </p>
-          </div>
-          <span style={{
-            background: '#FFE5CE',
-            color: '#FE6904',
-            padding: '6px 14px',
-            borderRadius: '9999px',
-            fontSize: '0.8rem',
-            fontWeight: 700,
-          }}>
-            Active Sponsor
-          </span>
+          <span style={{ color: '#FE6904' }}>✓</span>
+          <span>{toastMessage}</span>
         </div>
+      )}
 
-        {/* Hero Section */}
-        <div style={{ marginBottom: '2.5rem' }}>
-          <h1 style={{ fontSize: '2.25rem', fontWeight: 800, color: '#171717', letterSpacing: '-0.03em' }}>
-            Welcome back, <span style={{ color: '#FE6904' }}>Ananya</span> 👋
-          </h1>
-          <p style={{ fontSize: '1.05rem', color: '#77736F', marginTop: '0.5rem', maxWidth: '650px' }}>
-            Continue your career readiness path. Complete your aptitude assessments to unlock tailored career recommendations and skill roadmaps.
-          </p>
+      {/* Auth Modal */}
+      <AuthModal
+        isOpen={isAuthModalOpen}
+        onClose={() => setIsAuthModalOpen(false)}
+        onAuthSuccess={(profile) => {
+          setUserProfile(profile);
+          setCurrentPage('dashboard');
+          showToast(`Welcome back, ${profile.name}!`);
+        }}
+      />
+
+      {isPublicPage ? (
+        /* PUBLIC LANDING PAGE */
+        <>
+          <StudentNavbar
+            activePage={currentPage}
+            onNavigate={handleNavigate}
+            onOpenAuth={() => setIsAuthModalOpen(true)}
+          />
+          <LandingPage
+            onStartAssessment={() => handleNavigate('assessment')}
+            onExploreCareers={() => handleNavigate('careers')}
+            onOpenAuth={() => setIsAuthModalOpen(true)}
+          />
+        </>
+      ) : (
+        /* LOGGED-IN PORTAL WITH SIDEBAR & TOPBAR */
+        <div style={{ display: 'flex', flex: 1, minHeight: '100vh' }}>
+          <StudentSidebar
+            currentPage={currentPage}
+            onNavigate={handleNavigate}
+            userProfile={userProfile}
+            onLogout={handleLogout}
+            isMobileOpen={isMobileSidebarOpen}
+            onCloseMobile={() => setIsMobileSidebarOpen(false)}
+          />
+
+          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0 }}>
+            <StudentHeader
+              title={headerInfo.title}
+              subtitle={headerInfo.subtitle}
+              onOpenMobile={() => setIsMobileSidebarOpen(true)}
+              onNavigate={handleNavigate}
+            />
+
+            <main style={{ flex: 1, overflowY: 'auto' }}>
+              {currentPage === 'dashboard' && (
+                <DashboardPage
+                  userProfile={userProfile}
+                  assessmentResults={assessmentResults}
+                  activeRoadmap={activeRoadmap}
+                  savedCareers={savedCareers}
+                  onNavigate={handleNavigate}
+                  onSelectCareer={handleSelectCareer}
+                  onToggleRoadmapTask={handleToggleRoadmapTask}
+                />
+              )}
+
+              {currentPage === 'assessment' && (
+                <AssessmentPage
+                  onCompleteAssessment={handleCompleteAssessment}
+                  onCancel={() => handleNavigate('dashboard')}
+                />
+              )}
+
+              {currentPage === 'results' && (
+                <ResultsPage
+                  assessmentResults={assessmentResults}
+                  onSelectCareer={handleSelectCareer}
+                  onGenerateRoadmap={handleGenerateRoadmap}
+                  onAuditSkills={handleAuditSkills}
+                  onCompareCareer={handleToggleCompareCareer}
+                  onRetakeAssessment={() => handleNavigate('assessment')}
+                  savedCareers={savedCareers}
+                  onToggleSaveCareer={handleToggleSaveCareer}
+                />
+              )}
+
+              {currentPage === 'careers' && (
+                <CareersPage
+                  onSelectCareer={handleSelectCareer}
+                  savedCareers={savedCareers}
+                  onToggleSaveCareer={handleToggleSaveCareer}
+                  compareList={compareList}
+                  onToggleCompareCareer={handleToggleCompareCareer}
+                  assessmentResults={assessmentResults}
+                />
+              )}
+
+              {currentPage === 'career-detail' && (
+                <CareerDetailPage
+                  careerId={selectedCareerId}
+                  onBack={() => handleNavigate('careers')}
+                  onGenerateRoadmap={handleGenerateRoadmap}
+                  onAuditSkills={handleAuditSkills}
+                  onToggleCompareCareer={handleToggleCompareCareer}
+                  compareList={compareList}
+                  savedCareers={savedCareers}
+                  onToggleSaveCareer={handleToggleSaveCareer}
+                  onSelectCareer={handleSelectCareer}
+                />
+              )}
+
+              {currentPage === 'compare' && (
+                <ComparePage
+                  compareList={compareList}
+                  onToggleCompareCareer={handleToggleCompareCareer}
+                  onSelectCareer={handleSelectCareer}
+                  onGenerateRoadmap={handleGenerateRoadmap}
+                  onAuditSkills={handleAuditSkills}
+                  onNavigate={handleNavigate}
+                />
+              )}
+
+              {currentPage === 'skill-gap' && (
+                <SkillGapPage
+                  initialCareerId={selectedCareerId}
+                  onGenerateRoadmap={handleGenerateRoadmap}
+                  onNavigate={handleNavigate}
+                />
+              )}
+
+              {currentPage === 'roadmap' && (
+                <RoadmapPage
+                  activeRoadmap={activeRoadmap}
+                  onToggleTask={handleToggleRoadmapTask}
+                  onAddCustomTask={handleAddCustomTask}
+                  onSwitchRoadmapCareer={handleGenerateRoadmap}
+                  onAuditSkills={handleAuditSkills}
+                />
+              )}
+
+              {currentPage === 'resources' && (
+                <ResourcesPage
+                  bookmarkedResources={bookmarkedResources}
+                  onToggleBookmark={handleToggleBookmarkResource}
+                  completedResources={completedResources}
+                  onToggleComplete={handleToggleCompleteResource}
+                />
+              )}
+
+              {currentPage === 'progress' && (
+                <ProgressPage
+                  assessmentResults={assessmentResults}
+                  activeRoadmap={activeRoadmap}
+                  savedCareers={savedCareers}
+                  completedResources={completedResources}
+                  onNavigate={handleNavigate}
+                />
+              )}
+
+              {currentPage === 'profile' && (
+                <ProfilePage
+                  userProfile={userProfile}
+                  onUpdateProfile={(p) => {
+                    const updated = storageService.saveUserProfile(p);
+                    setUserProfile(updated);
+                  }}
+                  onResetAssessment={handleResetAssessment}
+                  onResetAllData={handleResetAllData}
+                  onLogout={handleLogout}
+                />
+              )}
+            </main>
+          </div>
         </div>
-
-        {/* Two-Column Grid */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', gap: '1.5rem', marginBottom: '2.5rem' }}>
-          {/* Assessment Progress Card */}
-          <div className="card">
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-              <span className="badge">Assessment Status</span>
-              <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#FE6904' }}>65% Complete</span>
-            </div>
-            <h2 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '0.5rem' }}>
-              STEM & Engineering Aptitude Profile
-            </h2>
-            <p style={{ fontSize: '0.875rem', color: '#77736F', marginBottom: '1.25rem' }}>
-              13 of 20 questions completed. Your cognitive strengths currently indicate high problem decomposition & spatial logic.
-            </p>
-            {/* Progress Bar */}
-            <div style={{ width: '100%', height: '8px', background: '#EAE7E2', borderRadius: '9999px', overflow: 'hidden', marginBottom: '1.25rem' }}>
-              <div style={{ width: '65%', height: '100%', background: 'linear-gradient(90deg, #FE6904, #FA9B2A)', borderRadius: '9999px' }} />
-            </div>
-            <button className="btn-primary" style={{ width: '100%' }}>
-              Resume Assessment →
-            </button>
-          </div>
-
-          {/* Skill-Gap Snapshot */}
-          <div className="card">
-            <span className="badge" style={{ marginBottom: '1rem' }}>Skill-Gap Analysis</span>
-            <h2 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '0.5rem' }}>
-              Recommended Next Milestone
-            </h2>
-            <p style={{ fontSize: '0.875rem', color: '#77736F', marginBottom: '1rem' }}>
-              Bridging these gaps increases your readiness score for <strong style={{ color: '#171717' }}>{careers[selectedCareer].title}</strong>:
-            </p>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginBottom: '1.25rem' }}>
-              {careers[selectedCareer].missingSkills.map((skill, idx) => (
-                <div key={idx} style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  padding: '0.5rem 0.75rem',
-                  background: '#F8F8F7',
-                  borderRadius: '8px',
-                  border: '1px solid #EAE7E2',
-                  fontSize: '0.85rem',
-                }}>
-                  <span style={{ fontWeight: 500 }}>{skill}</span>
-                  <span style={{ color: '#FE6904', fontSize: '0.75rem', fontWeight: 600 }}>+8% Readiness</span>
-                </div>
-              ))}
-            </div>
-            <button className="btn-secondary" style={{ width: '100%' }}>
-              Explore Learning Roadmap
-            </button>
-          </div>
-        </div>
-
-        {/* Career Recommendations Section */}
-        <div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem' }}>
-            <div>
-              <h2 style={{ fontSize: '1.35rem', fontWeight: 700, color: '#171717' }}>
-                Top Career Recommendations
-              </h2>
-              <p style={{ fontSize: '0.875rem', color: '#77736F' }}>
-                Generated based on your academic background, strengths, and market demand.
-              </p>
-            </div>
-          </div>
-
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.25rem' }}>
-            {careers.map((career, i) => (
-              <div
-                key={i}
-                onClick={() => setSelectedCareer(i)}
-                style={{
-                  background: '#FFFFFF',
-                  borderRadius: '16px',
-                  padding: '1.5rem',
-                  border: selectedCareer === i ? '2px solid #FE6904' : '1px solid #EAE7E2',
-                  boxShadow: selectedCareer === i ? '0 4px 20px rgba(254, 105, 4, 0.12)' : '0 1px 3px rgba(23, 23, 23, 0.04)',
-                  cursor: 'pointer',
-                  transition: 'all 0.2s',
-                }}
-              >
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
-                  <span style={{
-                    fontSize: '0.75rem',
-                    fontWeight: 700,
-                    padding: '3px 8px',
-                    borderRadius: '6px',
-                    background: selectedCareer === i ? '#FFE5CE' : '#F8F8F7',
-                    color: selectedCareer === i ? '#FE6904' : '#77736F',
-                  }}>
-                    {career.match}
-                  </span>
-                  <span style={{ fontSize: '0.8rem', color: '#77736F' }}>{career.avgSalary}</span>
-                </div>
-                <h3 style={{ fontSize: '1.15rem', fontWeight: 700, color: '#171717', marginBottom: '0.4rem' }}>
-                  {career.title}
-                </h3>
-                <p style={{ fontSize: '0.8rem', color: '#77736F', marginBottom: '1rem' }}>
-                  {career.industry} • Demand: <strong style={{ color: '#171717' }}>{career.demand}</strong>
-                </p>
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
-                  {career.topSkills.map((skill, sIdx) => (
-                    <span key={sIdx} style={{
-                      fontSize: '0.75rem',
-                      background: '#F8F8F7',
-                      color: '#171717',
-                      padding: '3px 8px',
-                      borderRadius: '6px',
-                      border: '1px solid #EAE7E2',
-                    }}>
-                      {skill}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </main>
-
-      {/* Footer */}
-      <footer style={{
-        textAlign: 'center',
-        padding: '1.5rem',
-        borderTop: '1px solid #EAE7E2',
-        background: '#FFFFFF',
-        fontSize: '0.8rem',
-        color: '#77736F',
-      }}>
-        ZHERO Monorepo Foundation — KSUM She Builds Hackathon 2026 • Developer 1 App (apps/student)
-      </footer>
+      )}
     </div>
   );
 }
