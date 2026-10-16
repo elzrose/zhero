@@ -4,30 +4,36 @@
    ========================================================================== */
 
 :root {
-  /* Brand Core Colors */
-  --zhero-primary-orange: #FE6904;
-  --zhero-warm-orange: #FA9B2A;
-  --zhero-pale-peach: #FFE5CE;
-  --zhero-golden-orange: #F39E2A;
+  /* Brand Core Colors (Strict 4-shade palette) */
+  --shade-1: #FCEADE; /* Pale Blush Cream - canvas & light fills */
+  --shade-2: #FAD1C6; /* Soft Peach - borders & soft interactive elements */
+  --shade-3: #F5AFAE; /* Muted Rose - secondary accents & charts */
+  --shade-4: #DB5E8C; /* Deep Berry Rose - primary interactive, buttons & headings */
+
+  --zhero-primary-coral: var(--shade-4);
+  --zhero-primary-orange: var(--shade-4);
+  --zhero-warm-orange: var(--shade-3);
+  --zhero-pale-peach: var(--shade-1);
+  --zhero-golden-orange: var(--shade-4);
   
   /* Neutrals & Surfaces */
   --zhero-white: #FFFFFF;
-  --zhero-off-white: #F8F8F7;
+  --zhero-off-white: var(--shade-1);
   --zhero-near-black: #171717;
-  --zhero-muted-text: #77736F;
-  --zhero-borders: #EAE7E2;
-  --zhero-surface-subtle: #FAF9F7;
+  --zhero-muted-text: #77736D;
+  --zhero-borders: var(--shade-2);
+  --zhero-surface-subtle: var(--shade-1);
 
   /* Semantic Mappings */
-  --color-primary: var(--zhero-primary-orange);
-  --color-primary-hover: #E25A00;
-  --color-primary-light: var(--zhero-pale-peach);
-  --color-accent: var(--zhero-warm-orange);
-  --color-bg-base: var(--zhero-off-white);
+  --color-primary: var(--shade-4);
+  --color-primary-hover: var(--shade-4);
+  --color-primary-light: var(--shade-1);
+  --color-accent: var(--shade-3);
+  --color-bg-base: var(--shade-1);
   --color-bg-card: var(--zhero-white);
   --color-text-main: var(--zhero-near-black);
   --color-text-muted: var(--zhero-muted-text);
-  --color-border: var(--zhero-borders);
+  --color-border: var(--shade-2);
 
   /* Typography */
   --font-family-base: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
@@ -104,7 +110,7 @@ body {
   cursor: pointer;
   transition: all var(--transition-fast);
   text-decoration: none;
-  box-shadow: 0 2px 6px rgba(254, 105, 4, 0.25);
+  box-shadow: 0 2px 6px rgba(219, 94, 140, 0.25);
 }
 
 .btn-primary:hover {
@@ -131,7 +137,7 @@ body {
 
 .btn-secondary:hover {
   background: var(--zhero-surface-subtle);
-  border-color: #D6D2CC;
+  border-color: var(--shade-2);
 }
 
 .card {
