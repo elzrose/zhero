@@ -16,6 +16,10 @@ export function Stage6ChooseCareerRoadmap({ onFinalChoiceConfirmed, onBackToStag
     ? preliminary.careers.slice(0, 5)
     : CAREERS_DATA.slice(0, 5);
 
+  const [selectedCareerId, setSelectedCareerId] = useState(
+    availableCareers[0]?.id || 'full-stack-engineer'
+  );
+
   const selectedCareer = availableCareers.find((c) => c.id === selectedCareerId) || availableCareers[0];
   const matchedCd = CAREERS_DATA.find((cd) => 
     cd.id === selectedCareerId || 
