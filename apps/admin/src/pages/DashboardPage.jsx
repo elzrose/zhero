@@ -240,7 +240,6 @@ export function DashboardPage({ onNavigate }) {
           icon={Sparkles}
           variant="orange"
           badgeText="84.6% vs 22% Decay"
-          onClick={() => onNavigate('analytics')}
         />
       </div>
 
@@ -580,7 +579,7 @@ export function DashboardPage({ onNavigate }) {
             </button>
 
             <button
-              onClick={() => onNavigate('analytics')}
+              onClick={() => onNavigate('users')}
               style={{
                 textAlign: 'left',
                 padding: '1rem',
@@ -594,13 +593,13 @@ export function DashboardPage({ onNavigate }) {
               onMouseLeave={(e) => (e.currentTarget.style.borderColor = '#FAD1C6')}
             >
               <div style={{ color: '#DB5E8C', marginBottom: '0.5rem' }}>
-                <Flame size={20} />
+                <Users size={20} />
               </div>
               <div style={{ fontSize: '0.875rem', fontWeight: 700, color: '#171717' }}>
-                Streaks & Retention
+                User Directory
               </div>
               <div style={{ fontSize: '0.75rem', color: '#77736D', marginTop: '2px' }}>
-                Forgetting curve & pacing
+                Students, centres & roles
               </div>
             </button>
           </div>

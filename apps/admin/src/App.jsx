@@ -12,7 +12,6 @@ import { UsersPage } from './pages/UsersPage';
 import { InstitutionsPage } from './pages/InstitutionsPage';
 import { AiMonitoringPage } from './pages/AiMonitoringPage';
 import { BountiesPage } from './pages/BountiesPage';
-import { AnalyticsPage } from './pages/AnalyticsPage';
 import { AuditLogsPage } from './pages/AuditLogsPage';
 import { SettingsPage } from './pages/SettingsPage';
 
@@ -28,7 +27,6 @@ function AdminAppContent() {
       'institutions',
       'ai-monitoring',
       'bounties',
-      'analytics',
       'settings',
       'audit-logs',
     ];
@@ -106,8 +104,6 @@ function AdminAppContent() {
         return <AiMonitoringPage />;
       case 'bounties':
         return <BountiesPage />;
-      case 'analytics':
-        return <AnalyticsPage />;
       case 'settings':
         return <SettingsPage />;
       case 'audit-logs':
