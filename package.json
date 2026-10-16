@@ -1,0 +1,30 @@
+{
+  "name": "zhero-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "ZHERO — Career Guidance and Educational Support Monorepo (KSUM She Builds Hackathon)",
+  "workspaces": [
+    "apps/*"
+  ],
+  "scripts": {
+    "dev:student": "npm --prefix apps/student run dev",
+    "dev:tuition": "npm --prefix apps/tuition-centre run dev",
+    "dev:admin": "npm --prefix apps/admin run dev",
+    "build:student": "npm --prefix apps/student run build",
+    "build:tuition": "npm --prefix apps/tuition-centre run build",
+    "build:admin": "npm --prefix apps/admin run build",
+    "build:all": "npm --prefix apps/student run build && npm --prefix apps/tuition-centre run build && npm --prefix apps/admin run build",
+    "preview:student": "npm --prefix apps/student run preview",
+    "preview:tuition": "npm --prefix apps/tuition-centre run preview",
+    "preview:admin": "npm --prefix apps/admin run preview"
+  },
+  "keywords": [
+    "zhero",
+    "career-guidance",
+    "edtech",
+    "b2b2c",
+    "hackathon"
+  ],
+  "author": "ZHERO Team",
+  "license": "MIT"
+}
