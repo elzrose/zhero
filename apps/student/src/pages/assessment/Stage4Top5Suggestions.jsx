@@ -23,25 +23,43 @@ export function Stage4Top5Suggestions({ onProceedToComparison, onBackToStage3 })
         description: c.description,
         matchScore: 95 - idx * 4,
         whyFit: `Directly aligns with your interest in "${context.descriptiveInterests?.slice(0, 80) || 'problem solving'}" and your ${context.courseStream || 'technical'} coursework.`,
-        keyStrengths: c.skills?.slice(0, 3) || ['Analytical Thinking', 'Problem Solving', 'Creativity'],
-        skillsToDevelop: c.skills?.slice(3, 5) || ['Advanced System Design', 'Project Execution'],
-        workExample: c.starterProjects?.[0]?.title || 'Build an interactive web application with structured APIs.',
+        keyStrengths: c.requiredSkills?.map((s) => s.name)?.slice(0, 3) || ['Analytical Thinking', 'Problem Solving', 'Creativity'],
+        skillsToDevelop: c.requiredSkills?.map((s) => s.name)?.slice(3, 5) || ['Advanced System Design', 'Project Execution'],
+        workExample: c.starterProject?.title || 'Build an interactive web application with structured APIs.',
       }));
 
   const [compareList, setCompareList] = useState(() => {
-    return storageService.getCompareList() || [rawCareers[0]?.id, rawCareers[1]?.id].filter(Boolean);
+    const stored = storageService.getCompareList();
+    if (stored && stored.length > 0) {
+      const valid = stored.filter((id) => rawCareers.some((c) => c.id === id));
+      if (valid.length >= 2) return valid.slice(0, 3);
+    }
+    const defaults = [rawCareers[0]?.id, rawCareers[1]?.id].filter(Boolean);
+    storageService.setCompareList(defaults);
+    return defaults;
   });
 
   const handleToggleCompare = (careerId) => {
-    const updated = storageService.toggleCompareCareer(careerId);
+    let updated;
+    if (compareList.includes(careerId)) {
+      if (compareList.length <= 1) return;
+      updated = compareList.filter((id) => id !== careerId);
+    } else {
+      if (compareList.length >= 3) {
+        updated = [compareList[1], compareList[2], careerId];
+      } else {
+        updated = [...compareList, careerId];
+      }
+    }
     setCompareList(updated);
+    storageService.setCompareList(updated);
   };
 
   const handleContinue = () => {
-    if (compareList.length < 2 && rawCareers.length >= 2) {
-      storageService.toggleCompareCareer(rawCareers[0].id);
-      storageService.toggleCompareCareer(rawCareers[1].id);
-    }
+    const listToSave = compareList.length >= 2
+      ? compareList
+      : [rawCareers[0]?.id, rawCareers[1]?.id].filter(Boolean);
+    storageService.setCompareList(listToSave);
     onProceedToComparison();
   };
 
@@ -264,7 +282,7 @@ export function Stage4Top5Suggestions({ onProceedToComparison, onBackToStage3 })
             boxShadow: '0 4px 16px rgba(254, 105, 4, 0.25)',
           }}
         >
-          <span>Compare Careers Side-by-Side</span>
+          <span>Compare Careers Side-by-Side ({compareList.length} Selected)</span>
           <ArrowRight size={18} />
         </button>
       </div>

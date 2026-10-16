@@ -399,9 +399,21 @@ export const storageService = {
   getCompareList() {
     try {
       const data = localStorage.getItem(STORAGE_KEYS.COMPARE_LIST);
-      return data ? JSON.parse(data) : ['full-stack-engineer', 'ai-data-scientist'];
+      if (!data) return [];
+      const parsed = JSON.parse(data);
+      return Array.isArray(parsed) ? parsed : [];
     } catch {
-      return ['full-stack-engineer', 'ai-data-scientist'];
+      return [];
+    }
+  },
+
+  setCompareList(list) {
+    try {
+      const valid = Array.isArray(list) ? list.slice(0, 3) : [];
+      localStorage.setItem(STORAGE_KEYS.COMPARE_LIST, JSON.stringify(valid));
+      return valid;
+    } catch {
+      return [];
     }
   },
 
@@ -418,8 +430,7 @@ export const storageService = {
           updated = [...list, careerId];
         }
       }
-      localStorage.setItem(STORAGE_KEYS.COMPARE_LIST, JSON.stringify(updated));
-      return updated;
+      return this.setCompareList(updated);
     } catch {
       return [];
     }

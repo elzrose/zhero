@@ -16,11 +16,18 @@ export function Stage6ChooseCareerRoadmap({ onFinalChoiceConfirmed, onBackToStag
     ? preliminary.careers.slice(0, 5)
     : CAREERS_DATA.slice(0, 5);
 
-  const [selectedCareerId, setSelectedCareerId] = useState(
-    availableCareers[0]?.id || 'full-stack-engineer'
+  const selectedCareer = availableCareers.find((c) => c.id === selectedCareerId) || availableCareers[0];
+  const matchedCd = CAREERS_DATA.find((cd) => 
+    cd.id === selectedCareerId || 
+    (selectedCareer?.title && cd.title.toLowerCase() === selectedCareer.title.toLowerCase())
   );
 
-  const chosenCareer = CAREERS_DATA.find((c) => c.id === selectedCareerId) || CAREERS_DATA[0];
+  const chosenCareer = {
+    ...(matchedCd || CAREERS_DATA[0]),
+    ...(selectedCareer || {}),
+    id: selectedCareer?.id || matchedCd?.id || 'career-choice',
+    title: selectedCareer?.title || matchedCd?.title || 'Selected Career',
+  };
 
   const handleConfirmCareer = () => {
     storageService.updateCareerGoal(chosenCareer.title);
