@@ -5,6 +5,7 @@ import { Badge } from '../components/common/Badge';
 import { Button } from '../components/common/Button';
 import { AuditService } from '../services/auditService';
 import { AnalyticsService } from '../services/analyticsService';
+import { useToast } from '../context/ToastContext';
 import { Download, Clock } from 'lucide-react';
 
 export function AuditLogsPage() {

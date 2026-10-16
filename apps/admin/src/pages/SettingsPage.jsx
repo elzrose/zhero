@@ -6,11 +6,24 @@ import { StorageService } from '../services/storageService';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
 
+const DEFAULT_SETTINGS = {
+  platformName: 'ZHERO Education & Career Engine',
+  maintenanceMode: false,
+  selfRegistrationAllowed: true,
+  defaultSeatQuota: 100,
+  notificationAlerts: true,
+  require2FAForSuperAdmin: true,
+  dataRetentionMonths: 24,
+};
+
 export function SettingsPage() {
   const { user, isSuperAdmin, switchRole } = useAuth();
   const { addToast } = useToast();
 
-  const [settings, setSettings] = useState(StorageService.getSettings());
+  const [settings, setSettings] = useState(() => ({
+    ...DEFAULT_SETTINGS,
+    ...(StorageService.getSettings() || {}),
+  }));
 
   // Password reset simulation
   const [currentPw, setCurrentPw] = useState('');
@@ -247,7 +260,7 @@ export function SettingsPage() {
                 type="text"
                 disabled={!isSuperAdmin}
                 className="admin-input"
-                value={settings.platformName}
+                value={settings?.platformName || ''}
                 onChange={(e) => setSettings({ ...settings, platformName: e.target.value })}
               />
             </div>
@@ -260,7 +273,7 @@ export function SettingsPage() {
                 type="number"
                 disabled={!isSuperAdmin}
                 className="admin-input"
-                value={settings.defaultSeatQuota}
+                value={settings?.defaultSeatQuota || 100}
                 onChange={(e) => setSettings({ ...settings, defaultSeatQuota: Number(e.target.value) })}
               />
             </div>
@@ -271,7 +284,7 @@ export function SettingsPage() {
               <input
                 type="checkbox"
                 disabled={!isSuperAdmin}
-                checked={settings.maintenanceMode}
+                checked={Boolean(settings?.maintenanceMode)}
                 onChange={(e) => setSettings({ ...settings, maintenanceMode: e.target.checked })}
               />
               <span style={{ fontWeight: 600, color: '#171717' }}>Maintenance Mode</span>
@@ -282,7 +295,7 @@ export function SettingsPage() {
               <input
                 type="checkbox"
                 disabled={!isSuperAdmin}
-                checked={settings.notificationAlerts}
+                checked={Boolean(settings?.notificationAlerts)}
                 onChange={(e) => setSettings({ ...settings, notificationAlerts: e.target.checked })}
               />
               <span style={{ fontWeight: 600, color: '#171717' }}>Real-time Audit Alert Notifications</span>

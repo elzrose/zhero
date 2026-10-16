@@ -5,6 +5,7 @@ import './styles/admin.css';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { ToastProvider } from './context/ToastContext';
 import { AdminLayout } from './components/layout/AdminLayout';
+import { ErrorBoundary } from './components/common/ErrorBoundary';
 
 import { LoginPage } from './pages/LoginPage';
 import { DashboardPage } from './pages/DashboardPage';
@@ -114,9 +115,13 @@ function AdminAppContent() {
   };
 
   return (
-    <AdminLayout activeTab={activeTab} onSelectTab={(tab) => setActiveTab(tab)}>
-      {renderActiveView()}
-    </AdminLayout>
+    <ErrorBoundary>
+      <AdminLayout activeTab={activeTab} onSelectTab={(tab) => setActiveTab(tab)}>
+        <ErrorBoundary key={activeTab}>
+          {renderActiveView()}
+        </ErrorBoundary>
+      </AdminLayout>
+    </ErrorBoundary>
   );
 }
 
