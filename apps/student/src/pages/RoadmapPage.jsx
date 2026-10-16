@@ -20,6 +20,8 @@ import { checkpointService } from '../services/checkpointService';
 import { spacedRepetitionService } from '../services/spacedRepetitionService';
 import { VerbalCheckpointModal } from '../components/VerbalCheckpointModal';
 import { DailyRevisionQueue } from '../components/DailyRevisionQueue';
+import { LearningCalibrationView } from '../components/LearningCalibrationView';
+import { calibrationService } from '../services/calibrationService';
 
 export function RoadmapPage({
   activeRoadmap,
@@ -176,6 +178,40 @@ export function RoadmapPage({
           </span>
         </button>
 
+        {/* 2. 7-Day Adaptive Calibration Tab */}
+        <button
+          type="button"
+          onClick={() => setActiveTab('calibration')}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            padding: '12px 4px',
+            border: 'none',
+            borderBottom: activeTab === 'calibration' ? '3px solid #FE6904' : '3px solid transparent',
+            backgroundColor: 'transparent',
+            color: activeTab === 'calibration' ? '#FE6904' : '#77736F',
+            fontSize: '1rem',
+            fontWeight: 800,
+            cursor: 'pointer',
+            marginBottom: '-2px',
+            transition: 'all 0.15s ease',
+          }}
+        >
+          <Sparkles size={18} />
+          <span>7-Day Calibration</span>
+          <span style={{
+            fontSize: '0.75rem',
+            fontWeight: 800,
+            padding: '2px 8px',
+            borderRadius: '999px',
+            backgroundColor: activeTab === 'calibration' ? '#FFE5CE' : '#F4F4F3',
+            color: activeTab === 'calibration' ? '#FE6904' : '#77736F',
+          }}>
+            Day {calibrationService.getCalibrationState().currentDay}/7
+          </span>
+        </button>
+
         <button
           type="button"
           onClick={() => setActiveTab('revision')}
@@ -223,7 +259,13 @@ export function RoadmapPage({
         </button>
       </div>
 
-      {activeTab === 'revision' ? (
+      {activeTab === 'calibration' ? (
+        /* 7-Day Adaptive Learning Calibration View */
+        <LearningCalibrationView
+          onNavigateToRoadmap={() => setActiveTab('roadmap')}
+          onNavigateToRevision={() => setActiveTab('revision')}
+        />
+      ) : activeTab === 'revision' ? (
         /* Daily Spaced Repetition Revision View */
         <DailyRevisionQueue
           onRoadmapUpdated={() => {
@@ -234,6 +276,54 @@ export function RoadmapPage({
       ) : (
         /* Curated Learning Roadmap View */
         <div>
+          {/* Active 7-Day Calibration Reminder Banner */}
+          {calibrationService.getCalibrationState().status === 'active' && (
+            <div style={{
+              backgroundColor: '#FFFBEB',
+              border: '1px solid #FDE68A',
+              borderRadius: '16px',
+              padding: '1rem 1.25rem',
+              marginBottom: '1.5rem',
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              flexWrap: 'wrap',
+              gap: '0.75rem',
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <Sparkles size={20} color="#D97706" />
+                <div>
+                  <div style={{ fontSize: '0.85rem', fontWeight: 800, color: '#92400E' }}>
+                    7-Day Learning Calibration Active (Day {calibrationService.getCalibrationState().currentDay} of 7)
+                  </div>
+                  <div style={{ fontSize: '0.75rem', color: '#B45309' }}>
+                    Your roadmap is provisional. Tasks and targeted practice adapt as ZHERO observes your actual learning rhythm.
+                  </div>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setActiveTab('calibration')}
+                style={{
+                  padding: '7px 16px',
+                  borderRadius: '10px',
+                  backgroundColor: '#D97706',
+                  color: '#FFFFFF',
+                  border: 'none',
+                  fontSize: '0.78rem',
+                  fontWeight: 800,
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                }}
+              >
+                <span>View Calibration Plan</span>
+                <ArrowRight size={14} />
+              </button>
+            </div>
+          )}
+
           {/* Evidence Banner */}
           {finalEvidence && (
             <div style={{

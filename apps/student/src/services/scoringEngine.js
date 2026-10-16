@@ -4,8 +4,8 @@
  * to career profiles based on multi-dimensional cognitive alignment.
  */
 
-import { CAREERS_DATA } from '../data/careersData';
-import { ASSESSMENT_QUESTIONS } from '../data/assessmentQuestions';
+import { CAREERS_DATA } from '../data/careersData.js';
+import { ASSESSMENT_QUESTIONS } from '../data/assessmentQuestions.js';
 
 export function calculateAssessmentResults(answersMap) {
   // 1. Initialize raw dimension totals

@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import { checkpointService } from '../services/checkpointService';
 import { spacedRepetitionService } from '../services/spacedRepetitionService';
+import { calibrationService } from '../services/calibrationService';
 
 export function VerbalCheckpointModal({
   isOpen,
@@ -134,6 +135,18 @@ export function VerbalCheckpointModal({
       });
 
       setEvaluationResult(result);
+
+      // Record learning event for 7-Day Calibration tracking
+      calibrationService.recordLearningEvent({
+        activityType: 'verbal_checkpoint',
+        conceptTitle: task.title,
+        conceptId: task.id,
+        result: result.passed ? 'mastered' : 'struggling',
+        score: result.score,
+        selfReportedConfidence: result.passed ? 4 : 2,
+        perceivedDifficulty: result.passed ? 'manageable' : 'challenging',
+        notes: `Verbal checkpoint: ${result.feedback?.summary || ''}`,
+      });
 
       if (result.passed) {
         // Automatically enroll concepts into Spaced Repetition queue

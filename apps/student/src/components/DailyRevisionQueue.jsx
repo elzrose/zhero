@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { spacedRepetitionService } from '../services/spacedRepetitionService';
 import { storageService } from '../services/storageService';
+import { calibrationService } from '../services/calibrationService';
 
 export function DailyRevisionQueue({ onRoadmapUpdated }) {
   const [concepts, setConcepts] = useState(() => spacedRepetitionService.getAllConcepts());
@@ -44,6 +45,18 @@ export function DailyRevisionQueue({ onRoadmapUpdated }) {
       rating,
       studentRecallNotes
     );
+
+    // Record learning event for 7-Day Calibration tracking
+    calibrationService.recordLearningEvent({
+      activityType: 'spaced_repetition',
+      conceptTitle: currentPracticeConcept.title,
+      conceptId: currentPracticeConcept.id,
+      result: rating >= 2 ? 'mastered' : 'struggling',
+      score: rating === 3 ? 100 : rating === 2 ? 75 : rating === 1 ? 50 : 25,
+      selfReportedConfidence: rating + 1,
+      perceivedDifficulty: rating <= 1 ? 'challenging' : 'manageable',
+      notes: `Active recall rating: ${rating}/3 (${result?.ratingLabel || ''})`,
+    });
 
     // If rated Hard (1), trigger adaptive revision task injection into the active roadmap
     if (result?.adaptiveRemediationTriggered) {

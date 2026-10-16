@@ -4,8 +4,8 @@
  * and modular APIs ready for backend synchronization.
  */
 
-import { CAREERS_DATA } from '../data/careersData';
-import { calculateAssessmentResults } from './scoringEngine';
+import { CAREERS_DATA } from '../data/careersData.js';
+import { calculateAssessmentResults } from './scoringEngine.js';
 
 const STORAGE_KEYS = {
   USER_PROFILE: 'zhero_student_profile',

@@ -10,6 +10,7 @@ import {
   Mic
 } from 'lucide-react';
 import { CAREERS_DATA } from '../data/careersData';
+import { calibrationService } from '../services/calibrationService';
 
 export function DashboardPage({
   userProfile,
@@ -132,6 +133,78 @@ export function DashboardPage({
             <ArrowRight size={16} />
           </button>
         </div>
+      </div>
+
+      {/* 7-Day Adaptive Calibration Status Banner */}
+      <div style={{
+        background: 'linear-gradient(135deg, #FFFBEB 0%, #FEF3C7 100%)',
+        border: '1px solid #FDE68A',
+        borderRadius: '18px',
+        padding: '1.25rem 1.5rem',
+        marginBottom: '2rem',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        flexWrap: 'wrap',
+        gap: '1rem',
+        boxShadow: '0 2px 10px rgba(245, 158, 11, 0.08)',
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <div style={{
+            width: '42px',
+            height: '42px',
+            borderRadius: '12px',
+            backgroundColor: '#FEF08A',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            color: '#B45309',
+            flexShrink: 0,
+          }}>
+            <Sparkles size={22} />
+          </div>
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '2px', flexWrap: 'wrap' }}>
+              <span style={{ fontSize: '0.95rem', fontWeight: 800, color: '#92400E' }}>
+                7-Day Adaptive Learning Calibration
+              </span>
+              <span style={{
+                fontSize: '0.72rem',
+                fontWeight: 800,
+                padding: '2px 8px',
+                borderRadius: '999px',
+                backgroundColor: '#FDE68A',
+                color: '#78350F',
+              }}>
+                Day {calibrationService.getCalibrationState().currentDay} of 7 (Provisional Plan)
+              </span>
+            </div>
+            <p style={{ margin: 0, fontSize: '0.8rem', color: '#B45309', lineHeight: '1.4' }}>
+              Core academic syllabus protected ({calibrationService.getCalibrationState().academicSyllabus.stream}). ZHERO is observing your comprehension to personalize your roadmap.
+            </p>
+          </div>
+        </div>
+
+        <button
+          onClick={() => onNavigate('roadmap')}
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '6px',
+            padding: '0.65rem 1.25rem',
+            borderRadius: '12px',
+            backgroundColor: '#D97706',
+            color: '#FFFFFF',
+            border: 'none',
+            fontSize: '0.85rem',
+            fontWeight: 800,
+            cursor: 'pointer',
+            boxShadow: '0 2px 8px rgba(217, 119, 6, 0.25)',
+          }}
+        >
+          <span>Open Day {calibrationService.getCalibrationState().currentDay} Plan</span>
+          <ArrowRight size={14} />
+        </button>
       </div>
 
       {/* 4 Summary Stats */}

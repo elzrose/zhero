@@ -1,6 +1,7 @@
 import React from 'react';
-import { CheckCircle2, Bookmark, Map, BookOpen, ArrowRight } from 'lucide-react';
+import { CheckCircle2, Bookmark, Map, BookOpen, ArrowRight, Sparkles } from 'lucide-react';
 import { storageService } from '../services/storageService';
+import { calibrationService } from '../services/calibrationService';
 
 export function ProgressPage({
   activeRoadmap,
@@ -78,6 +79,19 @@ export function ProgressPage({
             {completedResources.length}
           </div>
           <span style={{ fontSize: '0.75rem', color: '#2E7D32', fontWeight: 600 }}>Tutorials & Docs</span>
+        </div>
+
+        <div className="card" onClick={() => onNavigate('roadmap')} style={{ cursor: 'pointer' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <span style={{ fontSize: '0.8rem', color: '#77736F', fontWeight: 600 }}>Adaptive Calibration</span>
+            <Sparkles size={16} color="#D97706" />
+          </div>
+          <div style={{ fontSize: '1.75rem', fontWeight: 800, color: '#171717', marginTop: '0.5rem' }}>
+            Day {calibrationService.getCalibrationState().currentDay} / 7
+          </div>
+          <span style={{ fontSize: '0.75rem', color: '#D97706', fontWeight: 700, textTransform: 'capitalize' }}>
+            {calibrationService.getCalibrationState().learningProfile.evidenceQuality.replace('_', ' ')}
+          </span>
         </div>
       </div>
 
