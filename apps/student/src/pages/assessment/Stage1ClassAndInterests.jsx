@@ -4,10 +4,7 @@ import {
   BookOpen,
   Sparkles,
   ArrowRight,
-  ShieldCheck,
-  CheckCircle2,
-  HelpCircle,
-  Lightbulb
+  CheckCircle2
 } from 'lucide-react';
 import { storageService } from '../../services/storageService';
 
@@ -18,31 +15,30 @@ const CLASS_OPTIONS = [
   'Undergraduate (1st / 2nd Year)',
   'Undergraduate (Final Year)',
   'Postgraduate / Masters',
-  'Other / Working Professional'
+  'Other'
 ];
 
 const COURSE_OPTIONS = [
   'Computer Science & Engineering',
-  'Science (Physics, Chemistry, Math - PCM)',
-  'Science (Physics, Chem, Biology - PCB)',
+  'Science (PCM - Physics, Chemistry, Math)',
+  'Science (PCB - Physics, Chem, Biology)',
   'Commerce with Mathematics',
-  'Commerce with Computer / IP',
+  'Commerce with Informatics / Computer',
   'Humanities & Social Sciences',
-  'Mechanical / Electrical Engineering',
+  'Mechanical / Civil / Electrical Engg',
   'Business Administration (BBA/BCom)',
-  'Design, Media & Communication',
+  'Design & Digital Media',
   'Other / Self-Taught'
 ];
 
-const INTEREST_CHIPS = [
-  'Building web & mobile apps',
-  'Visual UI/UX design & sketching',
-  'Analyzing numbers & finding patterns',
-  'Solving difficult logical puzzles',
-  'Organizing events & team leadership',
-  'Robotics & hardware prototyping',
-  'Psychology & understanding people',
-  'Creative writing & digital storytelling'
+const QUICK_INTERESTS = [
+  'Web & App Development',
+  'UI/UX & Visual Design',
+  'Data Analytics & Math',
+  'Solving Logic Puzzles',
+  'Organizing Events & Teams',
+  'Robotics & Hardware',
+  'Psychology & Human Behavior'
 ];
 
 export function Stage1ClassAndInterests({ onProceed }) {
@@ -53,7 +49,7 @@ export function Stage1ClassAndInterests({ onProceed }) {
   const [customCourse, setCustomCourse] = useState(saved.customCourse || '');
   const [descriptiveInterests, setDescriptiveInterests] = useState(
     saved.descriptiveInterests ||
-    'I love building digital projects and seeing ideas come to life. In my free time, I enjoy experimenting with technology, designing clean user interfaces, and solving logical problems that require creative thinking.'
+    'I love building digital projects and seeing ideas come to life. In my free time, I enjoy experimenting with technology, designing clean user interfaces, and solving logical problems.'
   );
 
   const handleChipClick = (chip) => {
@@ -82,70 +78,44 @@ export function Stage1ClassAndInterests({ onProceed }) {
   };
 
   return (
-    <div style={{ maxWidth: '840px', margin: '0 auto', paddingBottom: '3rem' }}>
-      {/* Introduction Card */}
-      <div style={{
-        backgroundColor: '#FFFFFF',
-        borderRadius: '20px',
-        border: '1px solid #EAE7E2',
-        padding: '1.75rem 2rem',
-        marginBottom: '2rem',
-        boxShadow: '0 2px 10px rgba(23, 23, 23, 0.03)',
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
-          <span style={{
-            fontSize: '0.75rem',
-            fontWeight: 800,
-            padding: '3px 10px',
-            borderRadius: '999px',
-            backgroundColor: '#FFE5CE',
-            color: '#FE6904',
-          }}>
-            Stage 1 of 6
-          </span>
-          <span style={{ fontSize: '0.8rem', color: '#77736F' }}>Student Intake</span>
-        </div>
-
-        <h2 style={{ fontSize: '1.6rem', fontWeight: 800, color: '#171717', margin: '0 0 8px 0' }}>
-          Tell Us About Your Academic Path & Passions
+    <div style={{ maxWidth: '780px', margin: '0 auto', paddingBottom: '3rem' }}>
+      {/* Spacious Clean Header */}
+      <div style={{ marginBottom: '2.5rem', textAlign: 'center' }}>
+        <h2 style={{
+          fontSize: '2rem',
+          fontWeight: 800,
+          color: '#171717',
+          letterSpacing: '-0.02em',
+          margin: '0 0 0.5rem 0',
+        }}>
+          Let's Start with Your Background
         </h2>
-        <p style={{ fontSize: '0.925rem', color: '#4B5563', lineHeight: '1.6', margin: 0 }}>
-          Before taking the AI MCQ assessment, help us understand what class you're in, your current course, and what genuinely excites you in your own words.
+        <p style={{ fontSize: '1rem', color: '#77736F', margin: 0, maxWidth: '540px', marginInline: 'auto', lineHeight: '1.6' }}>
+          Tell us what class you are in, your current course, and what genuinely excites you. Our AI evaluates your answers in the next step.
         </p>
       </div>
 
-      <form onSubmit={handleContinue}>
-        {/* Question 1: What class are you in? */}
+      <form onSubmit={handleContinue} style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+        {/* Input 1: Class / Grade */}
         <div style={{
           backgroundColor: '#FFFFFF',
           borderRadius: '20px',
           border: '1px solid #EAE7E2',
-          padding: '1.75rem',
-          marginBottom: '1.5rem',
-          boxShadow: '0 2px 8px rgba(23, 23, 23, 0.02)',
+          padding: '2rem',
+          boxShadow: '0 2px 12px rgba(23, 23, 23, 0.02)',
         }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '1rem' }}>
-            <div style={{
-              width: '36px',
-              height: '36px',
-              borderRadius: '10px',
-              backgroundColor: '#FFE5CE',
-              color: '#FE6904',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}>
-              <GraduationCap size={20} />
-            </div>
-            <div>
-              <h3 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 800, color: '#171717' }}>
-                1. What class / education level are you currently studying?
-              </h3>
-              <p style={{ margin: '2px 0 0 0', fontSize: '0.8rem', color: '#77736F' }}>
-                Select your current grade or collegiate level
-              </p>
-            </div>
-          </div>
+          <label style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            fontSize: '1rem',
+            fontWeight: 800,
+            color: '#171717',
+            marginBottom: '1rem',
+          }}>
+            <GraduationCap size={18} color="#FE6904" />
+            <span>1. What class or academic level are you in?</span>
+          </label>
 
           <div style={{
             display: 'grid',
@@ -159,11 +129,11 @@ export function Stage1ClassAndInterests({ onProceed }) {
                   key={item}
                   onClick={() => setClassGrade(item)}
                   style={{
-                    padding: '12px 14px',
+                    padding: '12px 16px',
                     borderRadius: '12px',
                     border: isSelected ? '2px solid #FE6904' : '1px solid #EAE7E2',
-                    backgroundColor: isSelected ? '#FFF8F4' : '#F8F8F7',
-                    color: isSelected ? '#FE6904' : '#171717',
+                    backgroundColor: isSelected ? '#FFF8F4' : '#FBFBFA',
+                    color: isSelected ? '#FE6904' : '#374151',
                     fontWeight: isSelected ? 700 : 500,
                     fontSize: '0.875rem',
                     cursor: 'pointer',
@@ -181,43 +151,32 @@ export function Stage1ClassAndInterests({ onProceed }) {
           </div>
         </div>
 
-        {/* Question 2: What course are you doing? */}
+        {/* Input 2: Course / Stream */}
         <div style={{
           backgroundColor: '#FFFFFF',
           borderRadius: '20px',
           border: '1px solid #EAE7E2',
-          padding: '1.75rem',
-          marginBottom: '1.5rem',
-          boxShadow: '0 2px 8px rgba(23, 23, 23, 0.02)',
+          padding: '2rem',
+          boxShadow: '0 2px 12px rgba(23, 23, 23, 0.02)',
         }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '1rem' }}>
-            <div style={{
-              width: '36px',
-              height: '36px',
-              borderRadius: '10px',
-              backgroundColor: '#FFE5CE',
-              color: '#FE6904',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}>
-              <BookOpen size={20} />
-            </div>
-            <div>
-              <h3 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 800, color: '#171717' }}>
-                2. What course, stream, or major are you enrolled in?
-              </h3>
-              <p style={{ margin: '2px 0 0 0', fontSize: '0.8rem', color: '#77736F' }}>
-                Choose your academic stream or specify custom subjects
-              </p>
-            </div>
-          </div>
+          <label style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            fontSize: '1rem',
+            fontWeight: 800,
+            color: '#171717',
+            marginBottom: '1rem',
+          }}>
+            <BookOpen size={18} color="#FE6904" />
+            <span>2. What course or stream are you currently studying?</span>
+          </label>
 
           <div style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(230px, 1fr))',
             gap: '10px',
-            marginBottom: '1rem',
+            marginBottom: courseStream === 'Other / Self-Taught' ? '1rem' : 0,
           }}>
             {COURSE_OPTIONS.map((course) => {
               const isSelected = courseStream === course;
@@ -226,11 +185,11 @@ export function Stage1ClassAndInterests({ onProceed }) {
                   key={course}
                   onClick={() => setCourseStream(course)}
                   style={{
-                    padding: '12px 14px',
+                    padding: '12px 16px',
                     borderRadius: '12px',
                     border: isSelected ? '2px solid #FE6904' : '1px solid #EAE7E2',
-                    backgroundColor: isSelected ? '#FFF8F4' : '#F8F8F7',
-                    color: isSelected ? '#FE6904' : '#171717',
+                    backgroundColor: isSelected ? '#FFF8F4' : '#FBFBFA',
+                    color: isSelected ? '#FE6904' : '#374151',
                     fontWeight: isSelected ? 700 : 500,
                     fontSize: '0.85rem',
                     cursor: 'pointer',
@@ -252,80 +211,74 @@ export function Stage1ClassAndInterests({ onProceed }) {
               type="text"
               value={customCourse}
               onChange={(e) => setCustomCourse(e.target.value)}
-              placeholder="Specify your course or self-directed study focus..."
+              placeholder="Specify your stream or self-directed coursework..."
               style={{
                 width: '100%',
-                padding: '10px 14px',
-                borderRadius: '10px',
+                padding: '12px 16px',
+                borderRadius: '12px',
                 border: '1.5px solid #FE6904',
-                fontSize: '0.875rem',
+                fontSize: '0.9rem',
                 outline: 'none',
+                marginTop: '8px',
               }}
             />
           )}
         </div>
 
-        {/* Question 3: Descriptive Interests */}
+        {/* Input 3: Descriptive Interests */}
         <div style={{
           backgroundColor: '#FFFFFF',
           borderRadius: '20px',
           border: '1px solid #EAE7E2',
-          padding: '1.75rem',
-          marginBottom: '2rem',
-          boxShadow: '0 2px 8px rgba(23, 23, 23, 0.02)',
+          padding: '2rem',
+          boxShadow: '0 2px 12px rgba(23, 23, 23, 0.02)',
         }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '0.75rem' }}>
-            <div style={{
-              width: '36px',
-              height: '36px',
-              borderRadius: '10px',
-              backgroundColor: '#FFE5CE',
-              color: '#FE6904',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}>
-              <Sparkles size={20} />
-            </div>
-            <div>
-              <h3 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 800, color: '#171717' }}>
-                3. In your own words, what are your genuine interests and passions?
-              </h3>
-              <p style={{ margin: '2px 0 0 0', fontSize: '0.8rem', color: '#77736F' }}>
-                Describe what activities, projects, or topics make you lose track of time
-              </p>
-            </div>
-          </div>
+          <label style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            fontSize: '1rem',
+            fontWeight: 800,
+            color: '#171717',
+            marginBottom: '0.5rem',
+          }}>
+            <Sparkles size={18} color="#FE6904" />
+            <span>3. In your own words, what are your genuine interests?</span>
+          </label>
+          <p style={{ fontSize: '0.85rem', color: '#77736F', margin: '0 0 1rem 0' }}>
+            Write freely about projects you loved, topics you enjoy reading or creating, or things you want to build.
+          </p>
 
           <textarea
             rows={4}
             value={descriptiveInterests}
             onChange={(e) => setDescriptiveInterests(e.target.value)}
-            placeholder="e.g. I love designing clean interfaces, coding small games, and reading about emerging AI tools. I also enjoy mentoring classmates..."
+            placeholder="Type your interests in your own words..."
             required
             style={{
               width: '100%',
-              padding: '12px 16px',
-              borderRadius: '12px',
+              padding: '14px 18px',
+              borderRadius: '14px',
               border: '1.5px solid #EAE7E2',
-              fontSize: '0.925rem',
+              fontSize: '0.95rem',
               color: '#171717',
               outline: 'none',
               lineHeight: '1.6',
-              backgroundColor: '#F8F8F7',
+              backgroundColor: '#FBFBFA',
+              boxSizing: 'border-box',
               transition: 'border-color 0.2s ease',
             }}
             onFocus={(e) => (e.target.style.borderColor = '#FE6904')}
             onBlur={(e) => (e.target.style.borderColor = '#EAE7E2')}
           />
 
-          {/* Quick topic suggestion chips */}
+          {/* Quick topic tags */}
           <div style={{ marginTop: '1rem' }}>
-            <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#77736F', marginBottom: '6px' }}>
-              Quick Suggestions (Click to append):
-            </div>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
-              {INTEREST_CHIPS.map((chip) => (
+            <span style={{ fontSize: '0.75rem', fontWeight: 600, color: '#77736F', marginRight: '8px' }}>
+              Suggestions:
+            </span>
+            <div style={{ display: 'inline-flex', flexWrap: 'wrap', gap: '6px', marginTop: '4px' }}>
+              {QUICK_INTERESTS.map((chip) => (
                 <button
                   key={chip}
                   type="button"
@@ -333,7 +286,7 @@ export function Stage1ClassAndInterests({ onProceed }) {
                   style={{
                     backgroundColor: '#FFFFFF',
                     border: '1px solid #EAE7E2',
-                    padding: '4px 10px',
+                    padding: '4px 12px',
                     borderRadius: '999px',
                     fontSize: '0.75rem',
                     color: '#4B5563',
@@ -350,8 +303,8 @@ export function Stage1ClassAndInterests({ onProceed }) {
           </div>
         </div>
 
-        {/* Submit & Go to Stage 2 Button */}
-        <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+        {/* Submit Button */}
+        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '1rem' }}>
           <button
             type="submit"
             disabled={!descriptiveInterests.trim()}
@@ -362,16 +315,16 @@ export function Stage1ClassAndInterests({ onProceed }) {
               backgroundColor: !descriptiveInterests.trim() ? '#EAE7E2' : '#FE6904',
               color: '#FFFFFF',
               border: 'none',
-              padding: '14px 28px',
+              padding: '14px 36px',
               borderRadius: '14px',
               fontWeight: 800,
               fontSize: '1rem',
               cursor: !descriptiveInterests.trim() ? 'not-allowed' : 'pointer',
-              boxShadow: '0 4px 16px rgba(254, 105, 4, 0.3)',
+              boxShadow: '0 4px 16px rgba(254, 105, 4, 0.25)',
               transition: 'all 0.2s ease',
             }}
           >
-            <span>Proceed to AI Assessment (MCQ)</span>
+            <span>Start AI MCQ Assessment</span>
             <ArrowRight size={18} />
           </button>
         </div>

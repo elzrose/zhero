@@ -19,19 +19,17 @@ export function Stage2AiAssessmentMcq({ onProceedToMeet, onBackToStage1 }) {
   const [loadingText, setLoadingText] = useState('Evaluating cognitive dimensions...');
   const [apiStatus, setApiStatus] = useState({ configured: false, model: 'Checking...', provider: '' });
 
-  // Check Gemini Status
   useEffect(() => {
     aiAssessmentService.checkStatus().then((st) => setApiStatus(st));
   }, []);
 
-  const totalQuestions = 10; // 10 core questions for ideal hackathon pace
+  const totalQuestions = 10;
   const questionsToDisplay = ASSESSMENT_QUESTIONS.slice(0, totalQuestions);
   const currentQ = questionsToDisplay[currentIndex];
   const selectedOptionIndex = answers[currentQ.id];
   const answeredCount = Object.keys(answers).filter((k) => Number(k) <= totalQuestions).length;
   const progressPct = Math.round((answeredCount / totalQuestions) * 100);
 
-  // Calculate live dimension scores from answered questions
   const dimensionScores = {
     analytical: 0,
     creative: 0,
@@ -77,10 +75,9 @@ export function Stage2AiAssessmentMcq({ onProceedToMeet, onBackToStage1 }) {
 
   const handleSubmitAssessment = async () => {
     setIsSubmitting(true);
-    setLoadingText('Connecting student interests with Gemini 1.5 Flash...');
+    setLoadingText('Connecting student interests with Gemini 2.5 Flash...');
 
     try {
-      // Call Gemini MCQ analysis endpoint
       const res = await fetch('/api/gemini/analyze-mcq', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -98,7 +95,7 @@ export function Stage2AiAssessmentMcq({ onProceedToMeet, onBackToStage1 }) {
           finalAnalysis = {
             ...data.data,
             isAiPowered: true,
-            model: data.modelUsed || 'gemini-1.5-flash',
+            model: data.modelUsed || 'gemini-2.5-flash',
             careers: data.data.top5Careers || [],
             synthesis: {
               explicitInterests: [context.descriptiveInterests],
@@ -110,7 +107,6 @@ export function Stage2AiAssessmentMcq({ onProceedToMeet, onBackToStage1 }) {
       }
 
       if (!finalAnalysis) {
-        // Fallback analysis if network or key error
         finalAnalysis = aiAssessmentService.generateFallbackAnalysis(context, []);
       }
 
@@ -128,9 +124,9 @@ export function Stage2AiAssessmentMcq({ onProceedToMeet, onBackToStage1 }) {
   if (isSubmitting) {
     return (
       <div style={{
-        maxWidth: '700px',
-        margin: '4rem auto',
-        padding: '3rem 2rem',
+        maxWidth: '680px',
+        margin: '5rem auto',
+        padding: '3.5rem 2rem',
         backgroundColor: '#FFFFFF',
         borderRadius: '24px',
         border: '1px solid #EAE7E2',
@@ -152,7 +148,7 @@ export function Stage2AiAssessmentMcq({ onProceedToMeet, onBackToStage1 }) {
           <Sparkles size={32} style={{ animation: 'spin 2.5s linear infinite' }} />
         </div>
         <h2 style={{ fontSize: '1.6rem', fontWeight: 800, color: '#171717', margin: '0 0 8px 0' }}>
-          Gemini AI Assessment Synthesis
+          Gemini AI Career Analysis
         </h2>
         <p style={{ fontSize: '0.95rem', color: '#77736F', maxWidth: '440px', margin: '0 auto', lineHeight: '1.6' }}>
           {loadingText}
@@ -162,65 +158,43 @@ export function Stage2AiAssessmentMcq({ onProceedToMeet, onBackToStage1 }) {
   }
 
   return (
-    <div style={{ maxWidth: '880px', margin: '0 auto', paddingBottom: '3rem' }}>
-      {/* Top Banner with Engine Status */}
+    <div style={{ maxWidth: '820px', margin: '0 auto', paddingBottom: '3rem' }}>
+      {/* Top Header & Engine Status */}
       <div style={{
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        padding: '0.875rem 1.25rem',
-        backgroundColor: '#FFFFFF',
-        borderRadius: '14px',
-        border: '1px solid #EAE7E2',
-        marginBottom: '1.25rem',
-        boxShadow: '0 2px 6px rgba(23,23,23,0.02)',
+        marginBottom: '1rem',
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <div style={{
-            width: '10px',
-            height: '10px',
+            width: '8px',
+            height: '8px',
             borderRadius: '50%',
             backgroundColor: apiStatus.configured ? '#10B981' : '#F59E0B',
-            boxShadow: apiStatus.configured ? '0 0 8px #10B981' : '0 0 8px #F59E0B',
+            boxShadow: apiStatus.configured ? '0 0 6px #10B981' : 'none',
           }} />
-          <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#171717' }}>
-                AI Assessment Engine: {apiStatus.configured ? 'Gemini 2.5 Flash Connected' : 'Adaptive MCQ Evaluator'}
-              </span>
-              <span style={{
-                fontSize: '0.65rem',
-                fontWeight: 700,
-                padding: '2px 8px',
-                borderRadius: '999px',
-                backgroundColor: apiStatus.configured ? '#ECFDF5' : '#FEF3C7',
-                color: apiStatus.configured ? '#047857' : '#B45309',
-              }}>
-                {apiStatus.configured ? 'Live AI Mode' : 'Local Heuristic Mode'}
-              </span>
-            </div>
-            <div style={{ fontSize: '0.75rem', color: '#77736F' }}>
-              Student: {context.classGrade || 'Class 12'} • {context.courseStream || 'Science'}
-            </div>
-          </div>
+          <span style={{ fontSize: '0.8rem', fontWeight: 700, color: '#171717' }}>
+            {apiStatus.configured ? 'Gemini 2.5 Flash' : 'Local Heuristic Engine'}
+          </span>
+          <span style={{ fontSize: '0.75rem', color: '#77736F' }}>
+            • {context.courseStream || 'General Stream'}
+          </span>
         </div>
 
-        <div style={{ textAlign: 'right' }}>
-          <div style={{ fontSize: '0.725rem', color: '#77736F', fontWeight: 600 }}>Questions Answered</div>
-          <div style={{ fontSize: '0.95rem', fontWeight: 800, color: '#FE6904' }}>
-            {answeredCount} / {totalQuestions}
-          </div>
-        </div>
+        <span style={{ fontSize: '0.85rem', fontWeight: 800, color: '#FE6904' }}>
+          Question {currentIndex + 1} of {totalQuestions}
+        </span>
       </div>
 
       {/* Progress Bar */}
       <div style={{
         width: '100%',
-        height: '6px',
+        height: '4px',
         backgroundColor: '#EAE7E2',
         borderRadius: '999px',
         overflow: 'hidden',
-        marginBottom: '1.5rem',
+        marginBottom: '2rem',
       }}>
         <div style={{
           height: '100%',
@@ -230,51 +204,40 @@ export function Stage2AiAssessmentMcq({ onProceedToMeet, onBackToStage1 }) {
         }} />
       </div>
 
-      {/* MCQ Question Card */}
+      {/* Question Card */}
       <div style={{
         backgroundColor: '#FFFFFF',
-        borderRadius: '20px',
+        borderRadius: '24px',
         border: '1px solid #EAE7E2',
-        padding: '2rem',
+        padding: '2.5rem',
         boxShadow: '0 4px 20px rgba(23, 23, 23, 0.03)',
-        marginBottom: '1.5rem',
+        marginBottom: '2rem',
       }}>
-        {/* Question Category & Dimension Header */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem', flexWrap: 'wrap', gap: '8px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span style={{
-              fontSize: '0.75rem',
-              fontWeight: 800,
-              padding: '3px 10px',
-              borderRadius: '999px',
-              backgroundColor: '#FFE5CE',
-              color: '#FE6904',
-            }}>
-              Question {currentIndex + 1} of {totalQuestions}
-            </span>
-            <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#77736F' }}>
-              • {currentQ.category}
-            </span>
-          </div>
-
+        {/* Category tag */}
+        <div style={{ marginBottom: '1rem' }}>
           <span style={{
             fontSize: '0.75rem',
-            fontWeight: 600,
-            color: '#10B981',
-            backgroundColor: '#ECFDF5',
-            padding: '2px 8px',
-            borderRadius: '6px',
+            fontWeight: 800,
+            textTransform: 'uppercase',
+            letterSpacing: '0.04em',
+            color: '#FE6904',
           }}>
-            Evaluates: {currentQ.dimensionName}
+            {currentQ.category}
           </span>
         </div>
 
-        {/* Question Title */}
-        <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#171717', lineHeight: '1.5', margin: '0 0 1.5rem 0' }}>
+        {/* Question Text */}
+        <h3 style={{
+          fontSize: '1.35rem',
+          fontWeight: 800,
+          color: '#171717',
+          lineHeight: '1.5',
+          margin: '0 0 2rem 0',
+        }}>
           {currentQ.question}
         </h3>
 
-        {/* 4 Clickable Options */}
+        {/* 4 Clean Options */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
           {currentQ.options.map((opt, optIndex) => {
             const isSelected = selectedOptionIndex === optIndex;
@@ -284,20 +247,19 @@ export function Stage2AiAssessmentMcq({ onProceedToMeet, onBackToStage1 }) {
                 onClick={() => handleSelectOption(optIndex)}
                 style={{
                   padding: '1.25rem 1.5rem',
-                  borderRadius: '14px',
+                  borderRadius: '16px',
                   border: isSelected ? '2px solid #FE6904' : '1px solid #EAE7E2',
-                  backgroundColor: isSelected ? '#FFF8F4' : '#F8F8F7',
+                  backgroundColor: isSelected ? '#FFF8F4' : '#FBFBFA',
                   cursor: 'pointer',
                   display: 'flex',
                   alignItems: 'center',
                   gap: '14px',
                   transition: 'all 0.15s ease',
-                  boxShadow: isSelected ? '0 4px 12px rgba(254, 105, 4, 0.1)' : 'none',
                 }}
               >
                 <div style={{
-                  width: '24px',
-                  height: '24px',
+                  width: '22px',
+                  height: '22px',
                   borderRadius: '50%',
                   border: isSelected ? '6px solid #FE6904' : '2px solid #D1D5DB',
                   backgroundColor: '#FFFFFF',
@@ -338,7 +300,7 @@ export function Stage2AiAssessmentMcq({ onProceedToMeet, onBackToStage1 }) {
             gap: '8px',
             backgroundColor: 'transparent',
             border: '1px solid #EAE7E2',
-            padding: '10px 18px',
+            padding: '10px 20px',
             borderRadius: '12px',
             color: '#171717',
             fontWeight: 700,
@@ -347,7 +309,7 @@ export function Stage2AiAssessmentMcq({ onProceedToMeet, onBackToStage1 }) {
           }}
         >
           <ArrowLeft size={16} />
-          <span>{currentIndex === 0 ? 'Back to Intake' : 'Previous Question'}</span>
+          <span>{currentIndex === 0 ? 'Back to Intake' : 'Previous'}</span>
         </button>
 
         <button
@@ -360,7 +322,7 @@ export function Stage2AiAssessmentMcq({ onProceedToMeet, onBackToStage1 }) {
             backgroundColor: selectedOptionIndex === undefined ? '#EAE7E2' : '#FE6904',
             color: selectedOptionIndex === undefined ? '#77736F' : '#FFFFFF',
             border: 'none',
-            padding: '12px 24px',
+            padding: '12px 28px',
             borderRadius: '12px',
             fontWeight: 800,
             fontSize: '0.95rem',
@@ -369,7 +331,7 @@ export function Stage2AiAssessmentMcq({ onProceedToMeet, onBackToStage1 }) {
             transition: 'all 0.15s ease',
           }}
         >
-          <span>{currentIndex === totalQuestions - 1 ? 'Analyze & Proceed to Mentor Meet' : 'Next Question'}</span>
+          <span>{currentIndex === totalQuestions - 1 ? 'Analyze & Go to Meet' : 'Next Question'}</span>
           <ArrowRight size={16} />
         </button>
       </div>

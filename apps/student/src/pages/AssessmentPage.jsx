@@ -74,75 +74,53 @@ export function AssessmentPage({ onCompleteAssessment, onCancel }) {
 
   return (
     <div style={{ padding: '2rem 1.5rem', maxWidth: '1040px', margin: '0 auto' }}>
-      {/* Top Header & Stage Tracker */}
-      <div style={{ marginBottom: '1.5rem' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem', flexWrap: 'wrap', gap: '1rem' }}>
-          <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span style={{
-                fontSize: '0.75rem',
-                fontWeight: 800,
-                padding: '3px 10px',
-                borderRadius: '9999px',
-                background: '#FFE5CE',
-                color: '#FE6904',
-              }}>
-                ZHERO AI Career Guidance
-              </span>
-            </div>
-            <h1 style={{ fontSize: '1.85rem', fontWeight: 800, color: '#171717', letterSpacing: '-0.02em', margin: '4px 0 0 0' }}>
-              6-Stage Career Discovery & Human Mentorship
-            </h1>
-          </div>
+      {/* Top Header Actions */}
+      <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginBottom: '1rem', gap: '8px' }}>
+        <button
+          onClick={handleReset}
+          title="Restart from Stage 1"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '6px',
+            padding: '6px 14px',
+            borderRadius: '10px',
+            border: '1px solid #EAE7E2',
+            backgroundColor: '#FFFFFF',
+            fontSize: '0.8rem',
+            fontWeight: 600,
+            color: '#77736F',
+            cursor: 'pointer',
+          }}
+        >
+          <RotateCcw size={13} /> Restart
+        </button>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <button
-              onClick={handleReset}
-              title="Reset progress"
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '6px',
-                padding: '8px 14px',
-                borderRadius: '10px',
-                border: '1px solid #EAE7E2',
-                backgroundColor: '#FFFFFF',
-                fontSize: '0.8rem',
-                fontWeight: 600,
-                color: '#77736F',
-                cursor: 'pointer',
-              }}
-            >
-              <RotateCcw size={14} /> Restart
-            </button>
-
-            {onCancel && (
-              <button
-                onClick={onCancel}
-                style={{
-                  padding: '8px 14px',
-                  borderRadius: '10px',
-                  border: '1px solid #EAE7E2',
-                  backgroundColor: '#FFFFFF',
-                  fontSize: '0.8rem',
-                  fontWeight: 600,
-                  color: '#171717',
-                  cursor: 'pointer',
-                }}
-              >
-                Save & Exit
-              </button>
-            )}
-          </div>
-        </div>
-
-        {/* 6-Stage Breadcrumb Tracker */}
-        <AssessmentStageTracker
-          currentStage={currentStage}
-          completedStages={completedStages}
-          onStageClick={(num) => goToStage(num)}
-        />
+        {onCancel && (
+          <button
+            onClick={onCancel}
+            style={{
+              padding: '6px 14px',
+              borderRadius: '10px',
+              border: '1px solid #EAE7E2',
+              backgroundColor: '#FFFFFF',
+              fontSize: '0.8rem',
+              fontWeight: 600,
+              color: '#171717',
+              cursor: 'pointer',
+            }}
+          >
+            Save & Exit
+          </button>
+        )}
       </div>
+
+      {/* 6-Stage Progress Tracker */}
+      <AssessmentStageTracker
+        currentStage={currentStage}
+        completedStages={completedStages}
+        onStageClick={(num) => goToStage(num)}
+      />
 
       {/* Render Current Stage */}
       {currentStage === 1 && (

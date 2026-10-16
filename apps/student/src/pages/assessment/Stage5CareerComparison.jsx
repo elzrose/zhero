@@ -32,32 +32,17 @@ export function Stage5CareerComparison({ onProceedToChoose, onBackToStage4 }) {
   return (
     <div style={{ maxWidth: '1040px', margin: '0 auto', paddingBottom: '3rem' }}>
       {/* Header Banner */}
-      <div style={{
-        backgroundColor: '#FFFFFF',
-        borderRadius: '20px',
-        border: '1px solid #EAE7E2',
-        padding: '1.75rem 2rem',
-        marginBottom: '1.5rem',
-        boxShadow: '0 2px 10px rgba(23, 23, 23, 0.03)',
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
-          <span style={{
-            fontSize: '0.75rem',
-            fontWeight: 800,
-            padding: '3px 10px',
-            borderRadius: '999px',
-            backgroundColor: '#FFE5CE',
-            color: '#FE6904',
-          }}>
-            Stage 5 of 6
-          </span>
-          <span style={{ fontSize: '0.8rem', color: '#77736F' }}>Decision Evaluation</span>
-        </div>
-
-        <h2 style={{ fontSize: '1.6rem', fontWeight: 800, color: '#171717', margin: '0 0 6px 0' }}>
+      <div style={{ marginBottom: '2.5rem', textAlign: 'center' }}>
+        <h2 style={{
+          fontSize: '2rem',
+          fontWeight: 800,
+          color: '#171717',
+          letterSpacing: '-0.02em',
+          margin: '0 0 0.5rem 0',
+        }}>
           Side-by-Side Career Comparison
         </h2>
-        <p style={{ fontSize: '0.925rem', color: '#4B5563', lineHeight: '1.6', margin: 0 }}>
+        <p style={{ fontSize: '1rem', color: '#77736F', margin: 0, maxWidth: '600px', marginInline: 'auto', lineHeight: '1.6' }}>
           Compare compensation, industry growth, work environments, and required skills across your top choices before making your final selection.
         </p>
       </div>
@@ -65,20 +50,20 @@ export function Stage5CareerComparison({ onProceedToChoose, onBackToStage4 }) {
       {/* Comparison Grid */}
       <div style={{
         backgroundColor: '#FFFFFF',
-        borderRadius: '20px',
+        borderRadius: '24px',
         border: '1px solid #EAE7E2',
         overflowX: 'auto',
-        boxShadow: '0 4px 20px rgba(23, 23, 23, 0.03)',
+        boxShadow: '0 4px 20px rgba(23, 23, 23, 0.02)',
         marginBottom: '2rem',
       }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', minWidth: '700px' }}>
+        <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', minWidth: '720px' }}>
           <thead>
-            <tr style={{ backgroundColor: '#F8F8F7', borderBottom: '1.5px solid #EAE7E2' }}>
-              <th style={{ padding: '1.25rem 1.5rem', width: '220px', fontSize: '0.85rem', fontWeight: 800, color: '#77736F' }}>
-                Key Decision Criteria
+            <tr style={{ backgroundColor: '#FBFBFA', borderBottom: '1.5px solid #EAE7E2' }}>
+              <th style={{ padding: '1.5rem', width: '220px', fontSize: '0.85rem', fontWeight: 800, color: '#77736F' }}>
+                Decision Criteria
               </th>
               {comparedCareers.map((c) => (
-                <th key={c.id} style={{ padding: '1.25rem 1.5rem', fontSize: '1.05rem', fontWeight: 800, color: '#171717', minWidth: '220px' }}>
+                <th key={c.id} style={{ padding: '1.5rem', fontSize: '1.1rem', fontWeight: 800, color: '#171717', minWidth: '220px' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <span>{c.title}</span>
                     {comparedCareers.length > 1 && (
@@ -104,30 +89,30 @@ export function Stage5CareerComparison({ onProceedToChoose, onBackToStage4 }) {
             </tr>
           </thead>
           <tbody>
-            {/* Row: Compensation Range */}
+            {/* Compensation */}
             <tr style={{ borderBottom: '1px solid #EAE7E2' }}>
-              <td style={{ padding: '1.25rem 1.5rem', fontWeight: 700, fontSize: '0.85rem', color: '#171717' }}>
-                Salary Range (Entry → Senior)
+              <td style={{ padding: '1.5rem', fontWeight: 700, fontSize: '0.85rem', color: '#171717' }}>
+                Salary (Entry → Senior)
               </td>
               {comparedCareers.map((c) => (
-                <td key={c.id} style={{ padding: '1.25rem 1.5rem', fontSize: '0.875rem', color: '#10B981', fontWeight: 700 }}>
+                <td key={c.id} style={{ padding: '1.5rem', fontSize: '0.9rem', color: '#10B981', fontWeight: 700 }}>
                   {c.salaryRange?.entry || '₹5 LPA'} → {c.salaryRange?.senior || '₹22 LPA'}
                 </td>
               ))}
             </tr>
 
-            {/* Row: Market Growth */}
+            {/* Growth */}
             <tr style={{ borderBottom: '1px solid #EAE7E2' }}>
-              <td style={{ padding: '1.25rem 1.5rem', fontWeight: 700, fontSize: '0.85rem', color: '#171717' }}>
-                Industry Growth Outlook
+              <td style={{ padding: '1.5rem', fontWeight: 700, fontSize: '0.85rem', color: '#171717' }}>
+                Market Growth Outlook
               </td>
               {comparedCareers.map((c) => (
-                <td key={c.id} style={{ padding: '1.25rem 1.5rem', fontSize: '0.875rem', color: '#171717' }}>
+                <td key={c.id} style={{ padding: '1.5rem', fontSize: '0.875rem', color: '#171717' }}>
                   <span style={{
                     backgroundColor: '#ECFDF5',
                     color: '#047857',
-                    padding: '2px 8px',
-                    borderRadius: '6px',
+                    padding: '3px 10px',
+                    borderRadius: '8px',
                     fontWeight: 700,
                   }}>
                     {c.growthRate || '+20% YoY'}
@@ -136,32 +121,32 @@ export function Stage5CareerComparison({ onProceedToChoose, onBackToStage4 }) {
               ))}
             </tr>
 
-            {/* Row: Work Environment */}
+            {/* Setting */}
             <tr style={{ borderBottom: '1px solid #EAE7E2' }}>
-              <td style={{ padding: '1.25rem 1.5rem', fontWeight: 700, fontSize: '0.85rem', color: '#171717' }}>
+              <td style={{ padding: '1.5rem', fontWeight: 700, fontSize: '0.85rem', color: '#171717' }}>
                 Work Style & Setting
               </td>
               {comparedCareers.map((c) => (
-                <td key={c.id} style={{ padding: '1.25rem 1.5rem', fontSize: '0.85rem', color: '#4B5563', lineHeight: '1.5' }}>
+                <td key={c.id} style={{ padding: '1.5rem', fontSize: '0.875rem', color: '#4B5563', lineHeight: '1.6' }}>
                   {c.workEnvironment || 'Hybrid & Remote-friendly team collaboration'}
                 </td>
               ))}
             </tr>
 
-            {/* Row: Essential Skills */}
+            {/* Skills */}
             <tr style={{ borderBottom: '1px solid #EAE7E2' }}>
-              <td style={{ padding: '1.25rem 1.5rem', fontWeight: 700, fontSize: '0.85rem', color: '#171717' }}>
-                Key Industry Skills
+              <td style={{ padding: '1.5rem', fontWeight: 700, fontSize: '0.85rem', color: '#171717' }}>
+                Core Skills
               </td>
               {comparedCareers.map((c) => (
-                <td key={c.id} style={{ padding: '1.25rem 1.5rem', fontSize: '0.85rem', color: '#171717' }}>
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px' }}>
+                <td key={c.id} style={{ padding: '1.5rem', fontSize: '0.85rem', color: '#171717' }}>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
                     {c.skills?.slice(0, 4).map((s) => (
                       <span key={s} style={{
                         backgroundColor: '#F8F8F7',
                         border: '1px solid #EAE7E2',
-                        padding: '2px 8px',
-                        borderRadius: '6px',
+                        padding: '3px 10px',
+                        borderRadius: '8px',
                         fontSize: '0.75rem',
                       }}>
                         {s}
@@ -172,13 +157,13 @@ export function Stage5CareerComparison({ onProceedToChoose, onBackToStage4 }) {
               ))}
             </tr>
 
-            {/* Row: Starter Project */}
+            {/* Project */}
             <tr>
-              <td style={{ padding: '1.25rem 1.5rem', fontWeight: 700, fontSize: '0.85rem', color: '#171717' }}>
+              <td style={{ padding: '1.5rem', fontWeight: 700, fontSize: '0.85rem', color: '#171717' }}>
                 Hands-on Milestone Project
               </td>
               {comparedCareers.map((c) => (
-                <td key={c.id} style={{ padding: '1.25rem 1.5rem', fontSize: '0.85rem', color: '#4B5563', lineHeight: '1.5' }}>
+                <td key={c.id} style={{ padding: '1.5rem', fontSize: '0.875rem', color: '#4B5563', lineHeight: '1.6' }}>
                   {c.starterProjects?.[0]?.title || 'Starter portfolio case study'}
                 </td>
               ))}
@@ -191,9 +176,9 @@ export function Stage5CareerComparison({ onProceedToChoose, onBackToStage4 }) {
       {comparedCareers.length < 3 && (
         <div style={{
           backgroundColor: '#FFFFFF',
-          borderRadius: '16px',
+          borderRadius: '18px',
           border: '1px solid #EAE7E2',
-          padding: '1.25rem 1.5rem',
+          padding: '1.5rem',
           marginBottom: '2rem',
           display: 'flex',
           alignItems: 'center',
@@ -203,25 +188,25 @@ export function Stage5CareerComparison({ onProceedToChoose, onBackToStage4 }) {
         }}>
           <div>
             <div style={{ fontSize: '0.9rem', fontWeight: 800, color: '#171717' }}>
-              Want to compare an additional career?
+              Want to compare another career?
             </div>
             <div style={{ fontSize: '0.8rem', color: '#77736F' }}>
-              Select any career from the catalogue to add it to this side-by-side comparison (up to 3).
+              Add up to 3 paths for side-by-side comparison.
             </div>
           </div>
 
-          <div style={{ display: 'flex', gap: '8px' }}>
+          <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
             {CAREERS_DATA.filter((c) => !compareIds.includes(c.id)).slice(0, 3).map((c) => (
               <button
                 key={c.id}
                 type="button"
                 onClick={() => handleAddCareer(c.id)}
                 style={{
-                  backgroundColor: '#F8F8F7',
+                  backgroundColor: '#FBFBFA',
                   border: '1px solid #EAE7E2',
-                  padding: '6px 12px',
-                  borderRadius: '8px',
-                  fontSize: '0.78rem',
+                  padding: '6px 14px',
+                  borderRadius: '10px',
+                  fontSize: '0.8rem',
                   fontWeight: 700,
                   color: '#171717',
                   cursor: 'pointer',
@@ -250,8 +235,8 @@ export function Stage5CareerComparison({ onProceedToChoose, onBackToStage4 }) {
             gap: '8px',
             backgroundColor: 'transparent',
             border: '1px solid #EAE7E2',
-            padding: '10px 18px',
-            borderRadius: '10px',
+            padding: '10px 20px',
+            borderRadius: '12px',
             color: '#171717',
             fontWeight: 700,
             fontSize: '0.9rem',
@@ -270,15 +255,15 @@ export function Stage5CareerComparison({ onProceedToChoose, onBackToStage4 }) {
             backgroundColor: '#FE6904',
             color: '#FFFFFF',
             border: 'none',
-            padding: '12px 28px',
-            borderRadius: '12px',
+            padding: '14px 32px',
+            borderRadius: '14px',
             fontWeight: 800,
             fontSize: '1rem',
             cursor: 'pointer',
-            boxShadow: '0 4px 16px rgba(254, 105, 4, 0.3)',
+            boxShadow: '0 4px 16px rgba(254, 105, 4, 0.25)',
           }}
         >
-          <span>Choose Your Career (Final Stage 6)</span>
+          <span>Choose Your Career (Final Stage)</span>
           <ArrowRight size={18} />
         </button>
       </div>

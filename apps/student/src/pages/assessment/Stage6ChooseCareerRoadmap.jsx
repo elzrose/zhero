@@ -9,7 +9,6 @@ import { storageService } from '../../services/storageService';
 import { CAREERS_DATA } from '../../data/careersData';
 
 export function Stage6ChooseCareerRoadmap({ onFinalChoiceConfirmed, onBackToStage5 }) {
-  const context = storageService.getStage1Context() || {};
   const preliminary = storageService.getStage3Preliminary() || {};
   const mentorReview = storageService.getStage4MentorReview() || {};
 
@@ -24,13 +23,9 @@ export function Stage6ChooseCareerRoadmap({ onFinalChoiceConfirmed, onBackToStag
   const chosenCareer = CAREERS_DATA.find((c) => c.id === selectedCareerId) || CAREERS_DATA[0];
 
   const handleConfirmCareer = () => {
-    // 1. Update user profile target career
     storageService.updateCareerGoal(chosenCareer.title);
-
-    // 2. Set active roadmap
     const roadmap = storageService.setRoadmapForCareer(chosenCareer.id);
 
-    // 3. Complete Stage 6
     const finalReport = {
       primaryCareer: chosenCareer.title,
       careerId: chosenCareer.id,
@@ -46,33 +41,18 @@ export function Stage6ChooseCareerRoadmap({ onFinalChoiceConfirmed, onBackToStag
   return (
     <div style={{ maxWidth: '960px', margin: '0 auto', paddingBottom: '3rem' }}>
       {/* Header Banner */}
-      <div style={{
-        backgroundColor: '#FFFFFF',
-        borderRadius: '20px',
-        border: '1px solid #EAE7E2',
-        padding: '1.75rem 2rem',
-        marginBottom: '2rem',
-        boxShadow: '0 2px 10px rgba(23, 23, 23, 0.03)',
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
-          <span style={{
-            fontSize: '0.75rem',
-            fontWeight: 800,
-            padding: '3px 10px',
-            borderRadius: '999px',
-            backgroundColor: '#FFE5CE',
-            color: '#FE6904',
-          }}>
-            Stage 6 of 6: Career Commitment
-          </span>
-          <span style={{ fontSize: '0.8rem', color: '#77736F' }}>Final Decision</span>
-        </div>
-
-        <h2 style={{ fontSize: '1.7rem', fontWeight: 800, color: '#171717', margin: '0 0 8px 0' }}>
+      <div style={{ marginBottom: '2.5rem', textAlign: 'center' }}>
+        <h2 style={{
+          fontSize: '2rem',
+          fontWeight: 800,
+          color: '#171717',
+          letterSpacing: '-0.02em',
+          margin: '0 0 0.5rem 0',
+        }}>
           Choose Your Career Direction
         </h2>
-        <p style={{ fontSize: '0.95rem', color: '#4B5563', lineHeight: '1.6', margin: 0 }}>
-          You've explored your interests, completed your AI MCQ assessment, and discussed insights with a mentor. Now, pick the career pathway you want to pursue. ZHERO will immediately build your step-by-step learning roadmap!
+        <p style={{ fontSize: '1rem', color: '#77736F', margin: 0, maxWidth: '580px', marginInline: 'auto', lineHeight: '1.6' }}>
+          Select the career you want to commit to. ZHERO will instantly build and activate your personalized step-by-step learning roadmap.
         </p>
       </div>
 
@@ -80,8 +60,8 @@ export function Stage6ChooseCareerRoadmap({ onFinalChoiceConfirmed, onBackToStag
       <div style={{
         display: 'grid',
         gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-        gap: '1rem',
-        marginBottom: '2rem',
+        gap: '1.25rem',
+        marginBottom: '2.5rem',
       }}>
         {availableCareers.map((c) => {
           const isSelected = selectedCareerId === c.id;
@@ -91,20 +71,20 @@ export function Stage6ChooseCareerRoadmap({ onFinalChoiceConfirmed, onBackToStag
               onClick={() => setSelectedCareerId(c.id)}
               style={{
                 backgroundColor: '#FFFFFF',
-                borderRadius: '16px',
+                borderRadius: '18px',
                 border: isSelected ? '2.5px solid #FE6904' : '1px solid #EAE7E2',
-                padding: '1.25rem',
+                padding: '1.5rem',
                 cursor: 'pointer',
                 transition: 'all 0.15s ease',
-                boxShadow: isSelected ? '0 6px 20px rgba(254, 105, 4, 0.12)' : '0 2px 6px rgba(23, 23, 23, 0.02)',
+                boxShadow: isSelected ? '0 6px 20px rgba(254, 105, 4, 0.1)' : '0 2px 6px rgba(23, 23, 23, 0.02)',
                 position: 'relative',
               }}
             >
               {isSelected && (
                 <div style={{
                   position: 'absolute',
-                  top: '12px',
-                  right: '12px',
+                  top: '14px',
+                  right: '14px',
                   backgroundColor: '#FE6904',
                   color: '#FFFFFF',
                   width: '24px',
@@ -118,16 +98,16 @@ export function Stage6ChooseCareerRoadmap({ onFinalChoiceConfirmed, onBackToStag
                 </div>
               )}
 
-              <h4 style={{ margin: '0 0 4px 0', fontSize: '1.05rem', fontWeight: 800, color: '#171717' }}>
+              <h4 style={{ margin: '0 0 6px 0', fontSize: '1.1rem', fontWeight: 800, color: '#171717' }}>
                 {c.title}
               </h4>
-              <p style={{ margin: '0 0 10px 0', fontSize: '0.8rem', color: '#77736F', lineHeight: '1.4' }}>
+              <p style={{ margin: '0 0 12px 0', fontSize: '0.825rem', color: '#6B7280', lineHeight: '1.5' }}>
                 {c.description?.slice(0, 95)}...
               </p>
 
               <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                 <span style={{
-                  fontSize: '0.7rem',
+                  fontSize: '0.72rem',
                   fontWeight: 700,
                   padding: '2px 8px',
                   borderRadius: '999px',
@@ -142,76 +122,76 @@ export function Stage6ChooseCareerRoadmap({ onFinalChoiceConfirmed, onBackToStag
         })}
       </div>
 
-      {/* Selected Career Confirmation Showcase Card */}
+      {/* Selected Career Confirmation Card */}
       <div style={{
         backgroundColor: '#FFFFFF',
-        borderRadius: '20px',
+        borderRadius: '24px',
         border: '1.5px solid #FE6904',
-        padding: '2rem',
+        padding: '2.5rem',
         boxShadow: '0 8px 30px rgba(254, 105, 4, 0.08)',
-        marginBottom: '2rem',
+        marginBottom: '2.5rem',
       }}>
-        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem', marginBottom: '1.5rem' }}>
+        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem', marginBottom: '1.75rem' }}>
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
               <span style={{
                 fontSize: '0.75rem',
                 fontWeight: 800,
-                padding: '3px 10px',
+                padding: '3px 12px',
                 borderRadius: '999px',
                 backgroundColor: '#ECFDF5',
                 color: '#047857',
                 border: '1px solid #A7F3D0',
               }}>
-                ✓ Confirmed Career Target
+                Target Career Choice
               </span>
               <span style={{ fontSize: '0.8rem', color: '#77736F' }}>
                 {chosenCareer.category}
               </span>
             </div>
-            <h3 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#171717', margin: 0 }}>
+            <h3 style={{ fontSize: '1.6rem', fontWeight: 800, color: '#171717', margin: 0 }}>
               {chosenCareer.title}
             </h3>
-            <p style={{ fontSize: '0.9rem', color: '#4B5563', margin: '6px 0 0 0', maxWidth: '640px' }}>
+            <p style={{ fontSize: '0.925rem', color: '#4B5563', margin: '8px 0 0 0', maxWidth: '640px', lineHeight: '1.6' }}>
               {chosenCareer.description}
             </p>
           </div>
 
           <div style={{
             backgroundColor: '#FFE5CE',
-            padding: '12px 18px',
-            borderRadius: '14px',
+            padding: '14px 22px',
+            borderRadius: '16px',
             textAlign: 'center',
           }}>
             <div style={{ fontSize: '0.75rem', color: '#FE6904', fontWeight: 700 }}>Starting Compensation</div>
-            <div style={{ fontSize: '1.25rem', fontWeight: 800, color: '#171717' }}>
+            <div style={{ fontSize: '1.35rem', fontWeight: 800, color: '#171717' }}>
               {chosenCareer.salaryRange?.entry || '₹6.5 LPA'}
             </div>
           </div>
         </div>
 
-        {/* What Happens Next Checklist */}
+        {/* Immediate Roadmap Unlock Benefits */}
         <div style={{
-          backgroundColor: '#F8F8F7',
-          borderRadius: '14px',
-          padding: '1.25rem',
+          backgroundColor: '#FBFBFA',
+          borderRadius: '16px',
+          padding: '1.5rem',
           border: '1px solid #EAE7E2',
         }}>
-          <div style={{ fontSize: '0.85rem', fontWeight: 800, color: '#171717', marginBottom: '8px' }}>
-            What Happens When You Confirm:
+          <div style={{ fontSize: '0.875rem', fontWeight: 800, color: '#171717', marginBottom: '10px' }}>
+            What Happens Next:
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px', fontSize: '0.825rem', color: '#374151' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '12px', fontSize: '0.85rem', color: '#374151' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <CheckCircle2 size={16} color="#10B981" />
-              <span>Sets {chosenCareer.title} as your primary goal</span>
+              <span>Sets {chosenCareer.title} as active focus</span>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <CheckCircle2 size={16} color="#10B981" />
-              <span>Unlocks personalized milestones & projects</span>
+              <span>Unlocks step-by-step learning milestones</span>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <CheckCircle2 size={16} color="#10B981" />
-              <span>Generates Stage 6 dynamic learning roadmap</span>
+              <span>Tailors practical starter projects</span>
             </div>
           </div>
         </div>
@@ -233,15 +213,15 @@ export function Stage6ChooseCareerRoadmap({ onFinalChoiceConfirmed, onBackToStag
             gap: '8px',
             backgroundColor: 'transparent',
             border: '1px solid #EAE7E2',
-            padding: '10px 18px',
-            borderRadius: '10px',
+            padding: '10px 20px',
+            borderRadius: '12px',
             color: '#171717',
             fontWeight: 700,
             fontSize: '0.9rem',
             cursor: 'pointer',
           }}
         >
-          <ArrowLeft size={16} /> Back to Career Comparison
+          <ArrowLeft size={16} /> Back to Comparison
         </button>
 
         <button
@@ -253,7 +233,7 @@ export function Stage6ChooseCareerRoadmap({ onFinalChoiceConfirmed, onBackToStag
             backgroundColor: '#FE6904',
             color: '#FFFFFF',
             border: 'none',
-            padding: '14px 32px',
+            padding: '14px 36px',
             borderRadius: '14px',
             fontWeight: 800,
             fontSize: '1.05rem',

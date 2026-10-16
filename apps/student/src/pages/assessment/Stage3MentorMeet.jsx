@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
   Video,
-  Clock,
-  User,
-  CheckCircle2,
   ArrowRight,
   ArrowLeft,
   Mic,
@@ -11,8 +8,7 @@ import {
   CameraOff,
   MicOff,
   FileCheck,
-  ShieldCheck,
-  Sparkles,
+  CheckCircle2,
   Info
 } from 'lucide-react';
 import { storageService } from '../../services/storageService';
@@ -23,15 +19,15 @@ const MENTORS = [
     name: 'Ananya Sharma',
     role: 'Senior Software Engineer & STEM Mentor',
     specialty: 'Computer Science, AI, Systems Architecture',
-    bio: 'Guided 300+ students transitioning from school into technology careers. Specializes in clear milestone planning.',
+    bio: 'Guided 300+ students from school to engineering. Specializes in clear milestone roadmaps.',
     avatar: 'AS',
   },
   {
     id: 'mentor-2',
     name: 'Vikram Menon',
     role: 'Design Director & UX Strategist',
-    specialty: 'UI/UX Design, Product Strategy, Digital Media',
-    bio: '12+ years in consumer tech design. Passionate about helping creative and visual students find high-impact roles.',
+    specialty: 'UI/UX Design, Product Strategy, Creative Media',
+    bio: '12+ years in consumer tech. Helps visual & creative students discover high-impact careers.',
     avatar: 'VM',
   },
   {
@@ -39,14 +35,13 @@ const MENTORS = [
     name: 'Sarah Thomas',
     role: 'Data Scientist & Academic Advisor',
     specialty: 'Data Analytics, Research, Problem Solving',
-    bio: 'Former university faculty advising students on research-driven and analytical career pathways.',
+    bio: 'Former university faculty advising students on research-driven and analytical pathways.',
     avatar: 'ST',
   },
 ];
 
 export function Stage3MentorMeet({ onProceedToTop5, onBackToStage2 }) {
   const context = storageService.getStage1Context() || {};
-  const preliminary = storageService.getStage3Preliminary() || {};
 
   const [selectedMentor, setSelectedMentor] = useState(MENTORS[0]);
   const [inMeeting, setInMeeting] = useState(false);
@@ -101,68 +96,42 @@ export function Stage3MentorMeet({ onProceedToTop5, onBackToStage2 }) {
     <div style={{ maxWidth: '960px', margin: '0 auto', paddingBottom: '3rem' }}>
       {/* Header Banner */}
       <div style={{
-        backgroundColor: '#FFFFFF',
-        borderRadius: '20px',
-        border: '1px solid #EAE7E2',
-        padding: '1.5rem 2rem',
-        marginBottom: '1.5rem',
-        boxShadow: '0 2px 10px rgba(23, 23, 23, 0.03)',
+        marginBottom: '2rem',
+        textAlign: 'center',
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
-          <span style={{
-            fontSize: '0.75rem',
-            fontWeight: 800,
-            padding: '3px 10px',
-            borderRadius: '999px',
-            backgroundColor: '#FFE5CE',
-            color: '#FE6904',
-          }}>
-            Stage 3 of 6: Human Virtual Counselling
-          </span>
-          <span style={{ fontSize: '0.8rem', color: '#77736F' }}>1:1 Video Meet</span>
-        </div>
-
-        <h2 style={{ fontSize: '1.6rem', fontWeight: 800, color: '#171717', margin: '0 0 6px 0' }}>
+        <h2 style={{
+          fontSize: '2rem',
+          fontWeight: 800,
+          color: '#171717',
+          letterSpacing: '-0.02em',
+          margin: '0 0 0.5rem 0',
+        }}>
           Virtual Career Counselling Session
         </h2>
-        <p style={{ fontSize: '0.925rem', color: '#4B5563', lineHeight: '1.6', margin: 0 }}>
-          Meet with a dedicated career mentor to discuss your descriptive interests, review your AI MCQ assessment insights, and test your options before generating top career pathways.
+        <p style={{ fontSize: '1rem', color: '#77736F', margin: 0, maxWidth: '580px', marginInline: 'auto', lineHeight: '1.6' }}>
+          Connect with an experienced mentor to discuss your descriptive interests, review your AI MCQ results, and refine your options.
         </p>
       </div>
 
-      {/* Honest Demo Notice */}
-      <div style={{
-        padding: '0.85rem 1.25rem',
-        backgroundColor: '#EFF6FF',
-        border: '1px solid #BFDBFE',
-        borderRadius: '12px',
-        marginBottom: '1.5rem',
-        display: 'flex',
-        alignItems: 'center',
-        gap: '10px',
-        fontSize: '0.825rem',
-        color: '#1E40AF',
-      }}>
-        <Info size={18} flexShrink={0} />
-        <div>
-          <strong>Virtual Meet Room Simulation:</strong> Interactive counsellor session connects student intake and AI MCQ data to an encrypted video workspace for hackathon demonstration.
-        </div>
-      </div>
-
       {!inMeeting ? (
-        /* Mentor Selector & Launch Screen */
+        /* Mentor Selector Screen */
         <div style={{
           backgroundColor: '#FFFFFF',
-          borderRadius: '20px',
+          borderRadius: '24px',
           border: '1px solid #EAE7E2',
-          padding: '2rem',
-          boxShadow: '0 2px 10px rgba(23, 23, 23, 0.03)',
+          padding: '2.5rem',
+          boxShadow: '0 2px 12px rgba(23, 23, 23, 0.02)',
         }}>
-          <h3 style={{ fontSize: '1.15rem', fontWeight: 800, color: '#171717', margin: '0 0 1rem 0' }}>
+          <h3 style={{ fontSize: '1.15rem', fontWeight: 800, color: '#171717', margin: '0 0 1.5rem 0' }}>
             Choose Your Career Counsellor
           </h3>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1rem', marginBottom: '2rem' }}>
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
+            gap: '1.25rem',
+            marginBottom: '2.5rem',
+          }}>
             {MENTORS.map((m) => {
               const isSelected = selectedMentor.id === m.id;
               return (
@@ -170,26 +139,26 @@ export function Stage3MentorMeet({ onProceedToTop5, onBackToStage2 }) {
                   key={m.id}
                   onClick={() => setSelectedMentor(m)}
                   style={{
-                    padding: '1.25rem',
-                    borderRadius: '16px',
+                    padding: '1.5rem',
+                    borderRadius: '18px',
                     border: isSelected ? '2px solid #FE6904' : '1px solid #EAE7E2',
-                    backgroundColor: isSelected ? '#FFF8F4' : '#F8F8F7',
+                    backgroundColor: isSelected ? '#FFF8F4' : '#FBFBFA',
                     cursor: 'pointer',
                     transition: 'all 0.15s ease',
                   }}
                 >
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
                     <div style={{
-                      width: '44px',
-                      height: '44px',
-                      borderRadius: '12px',
+                      width: '46px',
+                      height: '46px',
+                      borderRadius: '14px',
                       backgroundColor: isSelected ? '#FE6904' : '#171717',
                       color: '#FFFFFF',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
                       fontWeight: 800,
-                      fontSize: '1rem',
+                      fontSize: '1.05rem',
                     }}>
                       {m.avatar}
                     </div>
@@ -198,7 +167,7 @@ export function Stage3MentorMeet({ onProceedToTop5, onBackToStage2 }) {
                       <div style={{ fontSize: '0.78rem', color: '#FE6904', fontWeight: 600 }}>{m.role}</div>
                     </div>
                   </div>
-                  <p style={{ fontSize: '0.825rem', color: '#77736F', margin: 0, lineHeight: '1.5' }}>
+                  <p style={{ fontSize: '0.85rem', color: '#6B7280', margin: 0, lineHeight: '1.5' }}>
                     {m.bio}
                   </p>
                 </div>
@@ -215,8 +184,8 @@ export function Stage3MentorMeet({ onProceedToTop5, onBackToStage2 }) {
                 gap: '8px',
                 backgroundColor: 'transparent',
                 border: '1px solid #EAE7E2',
-                padding: '10px 18px',
-                borderRadius: '10px',
+                padding: '10px 20px',
+                borderRadius: '12px',
                 color: '#171717',
                 fontWeight: 700,
                 fontSize: '0.9rem',
@@ -235,12 +204,12 @@ export function Stage3MentorMeet({ onProceedToTop5, onBackToStage2 }) {
                 backgroundColor: '#FE6904',
                 color: '#FFFFFF',
                 border: 'none',
-                padding: '12px 26px',
-                borderRadius: '12px',
+                padding: '14px 32px',
+                borderRadius: '14px',
                 fontWeight: 800,
                 fontSize: '1rem',
                 cursor: 'pointer',
-                boxShadow: '0 4px 16px rgba(254, 105, 4, 0.3)',
+                boxShadow: '0 4px 16px rgba(254, 105, 4, 0.25)',
               }}
             >
               <Video size={18} /> Launch 1:1 Virtual Meet
@@ -249,43 +218,43 @@ export function Stage3MentorMeet({ onProceedToTop5, onBackToStage2 }) {
         </div>
       ) : (
         /* Active Virtual Meet Room */
-        <div style={{ display: 'grid', gridTemplateColumns: '1.15fr 0.85fr', gap: '1.5rem' }}>
-          {/* Left: Video Feeds & Call Controls */}
+        <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 0.8fr', gap: '1.5rem' }}>
+          {/* Left: Video Feeds */}
           <div style={{
             backgroundColor: '#171717',
-            borderRadius: '20px',
-            padding: '1.5rem',
+            borderRadius: '24px',
+            padding: '1.75rem',
             color: '#FFFFFF',
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'space-between',
             minHeight: '480px',
           }}>
-            {/* Top Bar inside Call */}
+            {/* Call Header */}
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#10B981', animation: 'pulse 1s infinite' }} />
                 <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#A7F3D0' }}>
-                  Live Meet Session ({formatTimer(meetingSeconds)})
+                  Live Session ({formatTimer(meetingSeconds)})
                 </span>
               </div>
               <span style={{ fontSize: '0.75rem', color: '#9CA3AF' }}>
-                ZHERO Secure Meet Room
+                ZHERO Secure Meet
               </span>
             </div>
 
-            {/* Video Feeds Simulation */}
+            {/* Video Panels */}
             <div style={{
               display: 'grid',
               gridTemplateColumns: '1fr 1fr',
               gap: '1rem',
               margin: '2rem 0',
             }}>
-              {/* Mentor Video Box */}
+              {/* Mentor Tile */}
               <div style={{
                 backgroundColor: '#262626',
-                borderRadius: '14px',
-                height: '180px',
+                borderRadius: '18px',
+                height: '190px',
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
@@ -306,7 +275,7 @@ export function Stage3MentorMeet({ onProceedToTop5, onBackToStage2 }) {
                 }}>
                   {selectedMentor.avatar}
                 </div>
-                <div style={{ marginTop: '8px', fontSize: '0.85rem', fontWeight: 700 }}>
+                <div style={{ marginTop: '8px', fontSize: '0.875rem', fontWeight: 700 }}>
                   {selectedMentor.name}
                 </div>
                 <div style={{
@@ -319,15 +288,15 @@ export function Stage3MentorMeet({ onProceedToTop5, onBackToStage2 }) {
                   fontSize: '0.65rem',
                   color: '#10B981',
                 }}>
-                  Speaking • Counsellor
+                  Speaking • Mentor
                 </div>
               </div>
 
-              {/* Student Video Box */}
+              {/* Student Tile */}
               <div style={{
                 backgroundColor: '#262626',
-                borderRadius: '14px',
-                height: '180px',
+                borderRadius: '18px',
+                height: '190px',
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
@@ -348,7 +317,7 @@ export function Stage3MentorMeet({ onProceedToTop5, onBackToStage2 }) {
                 }}>
                   YOU
                 </div>
-                <div style={{ marginTop: '8px', fontSize: '0.85rem', fontWeight: 700 }}>
+                <div style={{ marginTop: '8px', fontSize: '0.875rem', fontWeight: 700 }}>
                   Student Feed
                 </div>
                 <div style={{
@@ -361,7 +330,7 @@ export function Stage3MentorMeet({ onProceedToTop5, onBackToStage2 }) {
                   fontSize: '0.65rem',
                   color: isCameraOn ? '#10B981' : '#EF4444',
                 }}>
-                  {isCameraOn ? 'Camera On' : 'Camera Off'}
+                  {isCameraOn ? 'Camera Active' : 'Camera Muted'}
                 </div>
               </div>
             </div>
@@ -417,11 +386,11 @@ export function Stage3MentorMeet({ onProceedToTop5, onBackToStage2 }) {
                   backgroundColor: '#10B981',
                   color: '#FFFFFF',
                   border: 'none',
-                  padding: '0 20px',
+                  padding: '0 22px',
                   height: '42px',
                   borderRadius: '12px',
                   fontWeight: 800,
-                  fontSize: '0.85rem',
+                  fontSize: '0.875rem',
                   cursor: 'pointer',
                   display: 'flex',
                   alignItems: 'center',
@@ -429,51 +398,51 @@ export function Stage3MentorMeet({ onProceedToTop5, onBackToStage2 }) {
                   boxShadow: '0 4px 14px rgba(16, 185, 129, 0.25)',
                 }}
               >
-                <FileCheck size={16} /> Conclude Meet & View Top 5 Careers
+                <FileCheck size={16} /> Conclude & View Top 5 Careers
               </button>
             </div>
           </div>
 
-          {/* Right: Real-Time Mentor Discussion & Context Panel */}
+          {/* Right: Mentor Context & Live Guide */}
           <div style={{
             backgroundColor: '#FFFFFF',
-            borderRadius: '20px',
+            borderRadius: '24px',
             border: '1px solid #EAE7E2',
-            padding: '1.5rem',
+            padding: '1.75rem',
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'space-between',
-            boxShadow: '0 2px 10px rgba(23, 23, 23, 0.03)',
+            boxShadow: '0 2px 10px rgba(23, 23, 23, 0.02)',
           }}>
             <div>
-              {/* Student Context Snapshot for Mentor */}
+              {/* Student Context Snapshot */}
               <div style={{
-                backgroundColor: '#F8F8F7',
-                borderRadius: '12px',
+                backgroundColor: '#FBFBFA',
+                borderRadius: '14px',
                 padding: '1rem',
                 border: '1px solid #EAE7E2',
-                marginBottom: '1rem',
+                marginBottom: '1.25rem',
               }}>
                 <div style={{ fontSize: '0.75rem', fontWeight: 800, color: '#FE6904', textTransform: 'uppercase', marginBottom: '4px' }}>
-                  Student Context Profile
+                  Student Background
                 </div>
-                <div style={{ fontSize: '0.85rem', fontWeight: 700, color: '#171717' }}>
-                  {context.classGrade || '12th Standard'} • {context.courseStream || 'Computer Science'}
+                <div style={{ fontSize: '0.9rem', fontWeight: 700, color: '#171717' }}>
+                  {context.classGrade || 'Class 12'} • {context.courseStream || 'Science'}
                 </div>
-                <p style={{ fontSize: '0.8rem', color: '#4B5563', margin: '4px 0 0 0', lineHeight: '1.4' }}>
-                  "{context.descriptiveInterests || 'Passionate about technology and problem solving.'}"
+                <p style={{ fontSize: '0.8rem', color: '#4B5563', margin: '6px 0 0 0', lineHeight: '1.4' }}>
+                  "{context.descriptiveInterests || 'Exploring passions'}"
                 </p>
               </div>
 
               {/* Discussion Checklist */}
-              <div style={{ marginBottom: '1rem' }}>
-                <div style={{ fontSize: '0.8rem', fontWeight: 800, color: '#171717', marginBottom: '8px' }}>
+              <div style={{ marginBottom: '1.25rem' }}>
+                <div style={{ fontSize: '0.85rem', fontWeight: 800, color: '#171717', marginBottom: '8px' }}>
                   Discussion Checklist:
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
                   {[
-                    { key: 'discussedInterests', label: 'Explored stated interests & favorite topics' },
-                    { key: 'reviewedMcqProfile', label: 'Reviewed AI MCQ cognitive dimension patterns' },
+                    { key: 'discussedInterests', label: 'Explored student stated interests & topics' },
+                    { key: 'reviewedMcqProfile', label: 'Reviewed AI MCQ dimension patterns' },
                     { key: 'addressedCareerDoubts', label: 'Addressed workload, exam pressure, or career doubts' },
                     { key: 'verifiedPathways', label: 'Aligned on practical starter milestones' },
                   ].map((chk) => (
@@ -483,7 +452,7 @@ export function Stage3MentorMeet({ onProceedToTop5, onBackToStage2 }) {
                       style={{
                         padding: '8px 10px',
                         borderRadius: '8px',
-                        backgroundColor: checklist[chk.key] ? '#ECFDF5' : '#F8F8F7',
+                        backgroundColor: checklist[chk.key] ? '#ECFDF5' : '#FBFBFA',
                         border: `1px solid ${checklist[chk.key] ? '#A7F3D0' : '#EAE7E2'}`,
                         display: 'flex',
                         alignItems: 'center',
@@ -509,7 +478,7 @@ export function Stage3MentorMeet({ onProceedToTop5, onBackToStage2 }) {
               {/* Mentor Notes */}
               <div>
                 <label style={{ fontSize: '0.8rem', fontWeight: 700, color: '#171717', display: 'block', marginBottom: '4px' }}>
-                  Counsellor Observations & Feedback:
+                  Mentor Observations:
                 </label>
                 <textarea
                   rows={3}
@@ -517,13 +486,14 @@ export function Stage3MentorMeet({ onProceedToTop5, onBackToStage2 }) {
                   onChange={(e) => setMentorNotes(e.target.value)}
                   style={{
                     width: '100%',
-                    padding: '8px 10px',
-                    borderRadius: '8px',
+                    padding: '8px 12px',
+                    borderRadius: '10px',
                     border: '1px solid #EAE7E2',
                     fontSize: '0.8rem',
                     color: '#171717',
                     outline: 'none',
-                    backgroundColor: '#F8F8F7',
+                    backgroundColor: '#FBFBFA',
+                    boxSizing: 'border-box',
                   }}
                 />
               </div>
@@ -532,14 +502,14 @@ export function Stage3MentorMeet({ onProceedToTop5, onBackToStage2 }) {
             <button
               onClick={handleConcludeMeet}
               style={{
-                marginTop: '1rem',
+                marginTop: '1.25rem',
                 backgroundColor: '#171717',
                 color: '#FFFFFF',
                 border: 'none',
-                padding: '10px 16px',
-                borderRadius: '10px',
-                fontSize: '0.85rem',
-                fontWeight: 700,
+                padding: '12px 18px',
+                borderRadius: '12px',
+                fontSize: '0.875rem',
+                fontWeight: 800,
                 cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',
@@ -547,7 +517,7 @@ export function Stage3MentorMeet({ onProceedToTop5, onBackToStage2 }) {
                 gap: '8px',
               }}
             >
-              Finish Meet & Generate Career Suggestions <ArrowRight size={14} />
+              Finish Meet & See Career Suggestions <ArrowRight size={14} />
             </button>
           </div>
         </div>

@@ -1,112 +1,140 @@
 import React from 'react';
-import { CheckCircle2, UserCheck, ListChecks, Video, Award, GitCompare, Map } from 'lucide-react';
+import { Check } from 'lucide-react';
 
 export function AssessmentStageTracker({ currentStage = 1, onStageClick, completedStages = [] }) {
   const stages = [
-    { num: 1, label: 'Class & Interests', icon: UserCheck },
-    { num: 2, label: 'AI Assessment (MCQ)', icon: ListChecks },
-    { num: 3, label: 'Mentor Meet', icon: Video },
-    { num: 4, label: 'Top 5 Suggestions', icon: Award },
-    { num: 5, label: 'Career Comparison', icon: GitCompare },
-    { num: 6, label: 'Choose Career & Roadmap', icon: Map },
+    { num: 1, label: 'Intake' },
+    { num: 2, label: 'AI MCQ Assessment' },
+    { num: 3, label: 'Mentor Meet' },
+    { num: 4, label: 'Top 5 Careers' },
+    { num: 5, label: 'Comparison' },
+    { num: 6, label: 'Roadmap' },
   ];
+
+  const currentInfo = stages.find((s) => s.num === currentStage) || stages[0];
 
   return (
     <div style={{
       backgroundColor: '#FFFFFF',
       borderRadius: '16px',
       border: '1px solid #EAE7E2',
-      padding: '1.25rem 1.5rem',
-      marginBottom: '2rem',
-      boxShadow: '0 2px 8px rgba(23, 23, 23, 0.03)',
+      padding: '1.25rem 2rem',
+      marginBottom: '2.5rem',
+      boxShadow: '0 2px 12px rgba(23, 23, 23, 0.02)',
     }}>
+      {/* Top stage title info */}
       <div style={{
         display: 'flex',
-        alignItems: 'center',
         justifyContent: 'space-between',
-        flexWrap: 'wrap',
-        gap: '0.75rem',
+        alignItems: 'center',
+        marginBottom: '1.25rem',
       }}>
-        {stages.map((st, idx) => {
-          const Icon = st.icon;
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <span style={{
+            fontSize: '0.75rem',
+            fontWeight: 800,
+            padding: '3px 10px',
+            borderRadius: '999px',
+            backgroundColor: '#FFE5CE',
+            color: '#FE6904',
+            letterSpacing: '0.02em',
+          }}>
+            STAGE {currentStage} OF 6
+          </span>
+          <span style={{ fontSize: '1rem', fontWeight: 800, color: '#171717' }}>
+            {currentInfo.label}
+          </span>
+        </div>
+
+        <div style={{ fontSize: '0.8rem', color: '#77736F' }}>
+          {Math.round(((currentStage - 1) / (stages.length - 1)) * 100)}% Complete
+        </div>
+      </div>
+
+      {/* Stepper Dots & Connector Line */}
+      <div style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        {/* Continuous background bar */}
+        <div style={{
+          position: 'absolute',
+          top: '50%',
+          left: '12px',
+          right: '12px',
+          height: '2px',
+          backgroundColor: '#EAE7E2',
+          transform: 'translateY(-50%)',
+          zIndex: 1,
+        }} />
+
+        {/* Active progress fill */}
+        <div style={{
+          position: 'absolute',
+          top: '50%',
+          left: '12px',
+          width: `${((currentStage - 1) / (stages.length - 1)) * 100}%`,
+          height: '2.5px',
+          backgroundColor: '#FE6904',
+          transform: 'translateY(-50%)',
+          transition: 'width 0.3s ease',
+          zIndex: 2,
+        }} />
+
+        {/* Step Nodes */}
+        {stages.map((st) => {
           const isCurrent = currentStage === st.num;
-          const isCompleted = completedStages.includes(st.num) || currentStage > st.num;
-          const isClickable = isCompleted || isCurrent;
+          const isDone = completedStages.includes(st.num) || currentStage > st.num;
+          const isClickable = isDone || isCurrent;
 
           return (
-            <React.Fragment key={st.num}>
-              <div
-                onClick={() => {
-                  if (isClickable && onStageClick) onStageClick(st.num);
-                }}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                  cursor: isClickable ? 'pointer' : 'default',
-                  opacity: isCurrent ? 1 : isCompleted ? 0.9 : 0.45,
-                  transition: 'all 0.2s ease',
-                }}
-              >
-                <div style={{
-                  width: '32px',
-                  height: '32px',
-                  borderRadius: '10px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontSize: '0.8rem',
-                  fontWeight: 800,
-                  backgroundColor: isCompleted
-                    ? '#E8F5E9'
-                    : isCurrent
-                    ? '#FFE5CE'
-                    : '#F1F0ED',
-                  color: isCompleted
-                    ? '#2E7D32'
-                    : isCurrent
-                    ? '#FE6904'
-                    : '#77736F',
-                  border: isCurrent
-                    ? '2px solid #FE6904'
-                    : isCompleted
-                    ? '1px solid #C8E6C9'
-                    : '1px solid #EAE7E2',
-                }}>
-                  {isCompleted ? <CheckCircle2 size={16} /> : <Icon size={16} />}
-                </div>
-
-                <div>
-                  <div style={{
-                    fontSize: '0.7rem',
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.04em',
-                    fontWeight: 700,
-                    color: isCurrent ? '#FE6904' : '#77736F',
-                  }}>
-                    Stage {st.num}
-                  </div>
-                  <div style={{
-                    fontSize: '0.85rem',
-                    fontWeight: isCurrent ? 700 : 600,
-                    color: isCurrent ? '#171717' : '#77736F',
-                    whiteSpace: 'nowrap',
-                  }}>
-                    {st.label}
-                  </div>
-                </div>
+            <div
+              key={st.num}
+              onClick={() => {
+                if (isClickable && onStageClick) onStageClick(st.num);
+              }}
+              style={{
+                zIndex: 3,
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                cursor: isClickable ? 'pointer' : 'default',
+              }}
+            >
+              <div style={{
+                width: isCurrent ? '30px' : '24px',
+                height: isCurrent ? '30px' : '24px',
+                borderRadius: '50%',
+                backgroundColor: isDone
+                  ? '#10B981'
+                  : isCurrent
+                  ? '#FE6904'
+                  : '#FFFFFF',
+                border: isDone
+                  ? 'none'
+                  : isCurrent
+                  ? '3px solid #FFE5CE'
+                  : '2px solid #D1D5DB',
+                color: isDone || isCurrent ? '#FFFFFF' : '#9CA3AF',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '0.75rem',
+                fontWeight: 800,
+                boxShadow: isCurrent ? '0 0 0 3px rgba(254, 105, 4, 0.2)' : 'none',
+                transition: 'all 0.2s ease',
+              }}>
+                {isDone ? <Check size={14} strokeWidth={3} /> : st.num}
               </div>
 
-              {idx < stages.length - 1 && (
-                <div style={{
-                  flex: '1 1 20px',
-                  height: '2px',
-                  backgroundColor: currentStage > st.num ? '#2E7D32' : '#EAE7E2',
-                  minWidth: '15px',
-                  maxWidth: '40px',
-                }} />
-              )}
-            </React.Fragment>
+              <div style={{
+                fontSize: '0.72rem',
+                fontWeight: isCurrent ? 800 : 500,
+                color: isCurrent ? '#FE6904' : isDone ? '#171717' : '#9CA3AF',
+                marginTop: '6px',
+                whiteSpace: 'nowrap',
+                display: 'none', // clean minimal view on mobile; or use media query
+              }}>
+                {st.label}
+              </div>
+            </div>
           );
         })}
       </div>
