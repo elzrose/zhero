@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 import { CAREERS_DATA } from '../data/careersData';
 import { calibrationService } from '../services/calibrationService';
+import { DailyWorkloadPlannerView } from '../components/DailyWorkloadPlannerView';
 
 export function DashboardPage({
   userProfile,
@@ -206,6 +207,12 @@ export function DashboardPage({
           <ArrowRight size={14} />
         </button>
       </div>
+
+      {/* Adaptive Daily Workload & Academic Syllabus Protection Planner */}
+      <DailyWorkloadPlannerView
+        onNavigateToRoadmap={() => onNavigate('roadmap')}
+        onNavigateToInterview={() => onNavigate('interview')}
+      />
 
       {/* 4 Summary Stats */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1.25rem', marginBottom: '2rem' }}>

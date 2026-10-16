@@ -23,6 +23,8 @@ import { VerbalCheckpointModal } from '../components/VerbalCheckpointModal';
 import { DailyRevisionQueue } from '../components/DailyRevisionQueue';
 import { LearningCalibrationView } from '../components/LearningCalibrationView';
 import { calibrationService } from '../services/calibrationService';
+import { DailyWorkloadPlannerView } from '../components/DailyWorkloadPlannerView';
+import { dailyPlannerService } from '../services/dailyPlannerService';
 
 export function RoadmapPage({
   activeRoadmap,
@@ -258,9 +260,48 @@ export function RoadmapPage({
             </span>
           )}
         </button>
+
+        {/* 4. Today's Adaptive Plan Tab */}
+        <button
+          type="button"
+          onClick={() => setActiveTab('daily_plan')}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            padding: '12px 4px',
+            border: 'none',
+            borderBottom: activeTab === 'daily_plan' ? '3px solid #FE6904' : '3px solid transparent',
+            backgroundColor: 'transparent',
+            color: activeTab === 'daily_plan' ? '#FE6904' : '#77736F',
+            fontSize: '1rem',
+            fontWeight: 800,
+            cursor: 'pointer',
+            marginBottom: '-2px',
+            transition: 'all 0.15s ease',
+          }}
+        >
+          <Clock size={18} />
+          <span>Today's Adaptive Plan</span>
+          <span style={{
+            fontSize: '0.75rem',
+            fontWeight: 800,
+            padding: '2px 8px',
+            borderRadius: '999px',
+            backgroundColor: activeTab === 'daily_plan' ? '#FFE5CE' : '#F4F4F3',
+            color: activeTab === 'daily_plan' ? '#FE6904' : '#77736F',
+          }}>
+            {dailyPlannerService.getDailyPlanState().effectiveAvailableMinutes}m
+          </span>
+        </button>
       </div>
 
-      {activeTab === 'calibration' ? (
+      {activeTab === 'daily_plan' ? (
+        /* Adaptive Daily Workload & Academic Syllabus Protection Planner */
+        <DailyWorkloadPlannerView
+          onNavigateToRoadmap={() => setActiveTab('roadmap')}
+        />
+      ) : activeTab === 'calibration' ? (
         /* 7-Day Adaptive Learning Calibration View */
         <LearningCalibrationView
           onNavigateToRoadmap={() => setActiveTab('roadmap')}
