@@ -75,7 +75,7 @@ export function Stage2AiAssessmentMcq({ onProceedToMeet, onBackToStage1 }) {
 
   const handleSubmitAssessment = async () => {
     setIsSubmitting(true);
-    setLoadingText('Connecting student interests with Gemini 2.5 Flash...');
+    setLoadingText('Correlating your cognitive dimensions and passions with industry career pathways...');
 
     try {
       const res = await fetch('/api/gemini/analyze-mcq', {
@@ -148,7 +148,7 @@ export function Stage2AiAssessmentMcq({ onProceedToMeet, onBackToStage1 }) {
           <Sparkles size={32} style={{ animation: 'spin 2.5s linear infinite' }} />
         </div>
         <h2 style={{ fontSize: '1.6rem', fontWeight: 800, color: '#171717', margin: '0 0 8px 0' }}>
-          Gemini AI Career Analysis
+          Evaluating Career Affinity
         </h2>
         <p style={{ fontSize: '0.95rem', color: '#77736F', maxWidth: '440px', margin: '0 auto', lineHeight: '1.6' }}>
           {loadingText}
@@ -175,7 +175,7 @@ export function Stage2AiAssessmentMcq({ onProceedToMeet, onBackToStage1 }) {
             boxShadow: apiStatus.configured ? '0 0 6px #10B981' : 'none',
           }} />
           <span style={{ fontSize: '0.8rem', fontWeight: 700, color: '#171717' }}>
-            {apiStatus.configured ? 'Gemini 2.5 Flash' : 'Local Heuristic Engine'}
+            Cognitive Assessment Active
           </span>
           <span style={{ fontSize: '0.75rem', color: '#77736F' }}>
             • {context.courseStream || 'General Stream'}

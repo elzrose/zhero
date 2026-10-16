@@ -127,7 +127,7 @@ export function RoadmapPage({
                 Stage 6 Adaptive Roadmap: Tailored by 6-Stage Guidance Journey
               </div>
               <div style={{ fontSize: '0.78rem', color: '#77736F', marginTop: '2px' }}>
-                Synthesized from Gemini AI assessment dialogue • Validated by {finalEvidence.counsellorName || 'Human Career Mentor'}
+                Synthesized from comprehensive career assessment • Validated by {finalEvidence.counsellorName || 'Human Career Mentor'}
               </div>
             </div>
           </div>
