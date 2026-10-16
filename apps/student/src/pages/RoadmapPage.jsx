@@ -11,7 +11,8 @@ import {
   BookOpen,
   Mic,
   ExternalLink,
-  Zap
+  Zap,
+  ArrowRight
 } from 'lucide-react';
 import { CAREERS_DATA } from '../data/careersData';
 import { Modal } from '../components/Modal';
@@ -500,14 +501,14 @@ export function RoadmapPage({
 
                   {/* Task Items (Clicking expands resources & AI checkpoint) */}
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
-                    {phase.tasks.map((task) => {
+                    {phase.tasks.map((task, tIdx) => {
                       const isExpanded = expandedTaskId === task.id;
                       const resources = checkpointService.getCuratedResourcesForMilestone(task, activeRoadmap?.careerId);
                       const keyConcepts = checkpointService.getKeyConcepts(task);
 
                       return (
                         <div
-                          key={task.id}
+                          key={`${task.id || 'task'}-${tIdx}`}
                           style={{
                             borderRadius: '16px',
                             backgroundColor: task.isAdaptiveRemediation ? '#FFFDF5' : '#FFFFFF',
