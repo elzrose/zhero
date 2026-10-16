@@ -1,14 +1,14 @@
 import React from 'react';
-import { CheckCircle2, UserCheck, MessageSquare, FileText, Video, Award, Map } from 'lucide-react';
+import { CheckCircle2, UserCheck, ListChecks, Video, Award, GitCompare, Map } from 'lucide-react';
 
 export function AssessmentStageTracker({ currentStage = 1, onStageClick, completedStages = [] }) {
   const stages = [
-    { num: 1, label: 'Context & Consent', icon: UserCheck },
-    { num: 2, label: 'AI Conversation', icon: MessageSquare },
-    { num: 3, label: 'Preliminary Report', icon: FileText },
-    { num: 4, label: 'Virtual Counselling', icon: Video },
-    { num: 5, label: 'Final Recommendations', icon: Award },
-    { num: 6, label: 'Adaptive Roadmap', icon: Map },
+    { num: 1, label: 'Class & Interests', icon: UserCheck },
+    { num: 2, label: 'AI Assessment (MCQ)', icon: ListChecks },
+    { num: 3, label: 'Mentor Meet', icon: Video },
+    { num: 4, label: 'Top 5 Suggestions', icon: Award },
+    { num: 5, label: 'Career Comparison', icon: GitCompare },
+    { num: 6, label: 'Choose Career & Roadmap', icon: Map },
   ];
 
   return (

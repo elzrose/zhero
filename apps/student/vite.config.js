@@ -2,7 +2,7 @@ import { defineConfig, loadEnv } from 'vite'
 import react from '@vitejs/plugin-react'
 import path from 'path'
 import { fileURLToPath } from 'url'
-import { handleGeminiChat, handleGeminiAnalysis } from './server/geminiHandler.js'
+import { handleGeminiChat, handleGeminiAnalysis, handleGeminiMcqAnalysis } from './server/geminiHandler.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
@@ -32,7 +32,7 @@ function geminiServerPlugin(env) {
           res.setHeader('Content-Type', 'application/json');
           res.end(JSON.stringify({
             configured: isConfigured,
-            model: 'gemini-1.5-flash',
+            model: 'gemini-2.5-flash',
             provider: 'Google Gen AI SDK',
           }));
           return;
@@ -47,10 +47,10 @@ function geminiServerPlugin(env) {
           return;
         }
 
-        // 3. Structured Assessment Analysis
-        if (req.url === '/api/gemini/analyze' && req.method === 'POST') {
+        // 3. Structured Assessment Analysis & MCQ Evaluation
+        if ((req.url === '/api/gemini/analyze' || req.url === '/api/gemini/analyze-mcq') && req.method === 'POST') {
           const body = await readBody();
-          const result = await handleGeminiAnalysis(body);
+          const result = await handleGeminiMcqAnalysis(body);
           res.setHeader('Content-Type', 'application/json');
           res.end(JSON.stringify(result));
           return;

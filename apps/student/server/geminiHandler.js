@@ -4,112 +4,37 @@
  */
 
 import { GoogleGenerativeAI } from '@google/generative-ai';
-
-// System prompt enforcing ZHERO's conversational guidance requirements
-const SYSTEM_INSTRUCTION = `
-You are the empathetic, thoughtful, and evidence-based AI Career Counselor for ZHERO, an educational support and career guidance platform.
-Your objective is to conduct a genuine conversational assessment with a student exploring their future education and career pathways.
-
-Guiding Principles:
-1. Ask ONE primary question at a time.
-2. Ask meaningful, personalized follow-up questions based directly on what the student just shared.
-3. If a student expresses self-doubt (e.g. "I love design but I'm not creative enough"), explore what they enjoy designing and what makes them doubt themselves. Encourage them without being patronizing. Never diagnose mental health conditions or make unsupported psychological claims.
-4. Do not rush to recommend a career in the first 2-3 turns. Build an authentic picture of their curiosity, learning habits, problem decomposition style, and preferred work environment.
-5. Use warm, accessible, age-appropriate, non-judgmental language.
-6. Keep questions grounded in concrete experiences (e.g., projects they enjoyed, times they solved a tough puzzle, subjects that made time fly).
-`;
+import fs from 'fs';
+import path from 'path';
 
 function getApiKey() {
-  return process.env.GEMINI_API_KEY || process.env.VITE_GEMINI_API_KEY || '';
-}
-
-export async function handleGeminiChat(body) {
-  const apiKey = getApiKey();
-  if (!apiKey || apiKey === 'your_gemini_api_key_here') {
-    return {
-      success: false,
-      isAiPowered: false,
-      error: 'GEMINI_API_KEY is not configured in server environment.',
-    };
+  if (process.env.GEMINI_API_KEY && process.env.GEMINI_API_KEY !== 'your_gemini_api_key_here') {
+    return process.env.GEMINI_API_KEY;
   }
-
   try {
-    const genAI = new GoogleGenerativeAI(apiKey);
-    // Use gemini-1.5-flash for responsive, high-quality conversational turns
-    const model = genAI.getGenerativeModel({
-      model: 'gemini-1.5-flash',
-      systemInstruction: SYSTEM_INSTRUCTION,
-    });
-
-    const { messages = [], context = {} } = body;
-
-    // Convert prior conversation turns into Gemini format
-    const chatHistory = [];
-
-    // Provide initial context grounding
-    if (context && Object.keys(context).length > 0) {
-      chatHistory.push({
-        role: 'user',
-        parts: [{
-          text: `Here is the student's preliminary background context:
-- Education level: ${context.educationLevel || 'Not specified'}
-- Stream / Focus: ${context.stream || 'Not specified'}
-- Activities/Subjects enjoyed: ${(context.enjoyedSubjects || []).join(', ') || 'Exploring'}
-- Skills practiced or curious about: ${(context.curiousSkills || []).join(', ') || 'Exploring'}
-- Working style preference: ${context.workEnvironment || 'Flexible'}
-- In their own words: "${context.selfDescription || 'Excited to discover where my strengths lead.'}"
-Please open the conversation warmly with an engaging, accessible opening question.`
-        }]
-      });
-      chatHistory.push({
-        role: 'model',
-        parts: [{
-          text: `Welcome! I'm your ZHERO AI Career Guide. I'm here to listen, explore what energizes you, and help you map out real possibilities—without any pressure or rigid tests. What's one activity or subject recently where you found yourself genuinely absorbed in what you were doing?`
-        }]
-      });
+    const candidatePaths = [
+      path.resolve(process.cwd(), '.env'),
+      path.resolve(process.cwd(), 'apps/student/.env'),
+      path.resolve(process.cwd(), '../.env'),
+      path.resolve(process.cwd(), '../../.env'),
+    ];
+    for (const p of candidatePaths) {
+      if (fs.existsSync(p)) {
+        const content = fs.readFileSync(p, 'utf8');
+        const match = content.match(/GEMINI_API_KEY=([^\r\n]+)/);
+        if (match && match[1] && match[1].trim() && match[1].trim() !== 'your_gemini_api_key_here') {
+          process.env.GEMINI_API_KEY = match[1].trim();
+          return match[1].trim();
+        }
+      }
     }
-
-    // Append prior conversational messages
-    messages.forEach((msg) => {
-      chatHistory.push({
-        role: msg.sender === 'user' ? 'user' : 'model',
-        parts: [{ text: msg.text }],
-      });
-    });
-
-    // Extract the latest user message
-    const latestMessage = chatHistory.pop();
-    if (!latestMessage || latestMessage.role !== 'user') {
-      return {
-        success: false,
-        isAiPowered: false,
-        error: 'No active user message provided.',
-      };
-    }
-
-    const chat = model.startChat({ history: chatHistory });
-    const result = await chat.sendMessage(latestMessage.parts[0].text);
-    const responseText = result.response.text();
-
-    return {
-      success: true,
-      isAiPowered: true,
-      reply: responseText,
-      modelUsed: 'gemini-1.5-flash',
-    };
-  } catch (err) {
-    console.error('Gemini API Error:', err);
-    return {
-      success: false,
-      isAiPowered: false,
-      error: err.message || 'Gemini API call failed',
-    };
-  }
+  } catch {}
+  return '';
 }
 
-export async function handleGeminiAnalysis(body) {
+export async function handleGeminiMcqAnalysis(body) {
   const apiKey = getApiKey();
-  if (!apiKey || apiKey === 'your_gemini_api_key_here') {
+  if (!apiKey) {
     return {
       success: false,
       isAiPowered: false,
@@ -120,48 +45,50 @@ export async function handleGeminiAnalysis(body) {
   try {
     const genAI = new GoogleGenerativeAI(apiKey);
     const model = genAI.getGenerativeModel({
-      model: 'gemini-1.5-flash',
+      model: 'gemini-2.5-flash',
       generationConfig: { responseMimeType: 'application/json' },
     });
 
-    const { context = {}, conversation = [] } = body;
-
-    const transcript = conversation
-      .map((m) => `${m.sender.toUpperCase()}: ${m.text}`)
-      .join('\n');
+    const { studentInfo = {}, mcqAnswers = [], dimensionScores = {} } = body;
 
     const prompt = `
-Analyze the following student career guidance conversation and context.
-Generate a strictly validated JSON object summarizing the student's profile and preliminary career matches.
+You are the expert, empathetic Career Guidance Engine for ZHERO.
+Evaluate the following student's profile, including their current class, course, descriptive interests, and scenario-based MCQ assessment results.
+Produce a strictly validated JSON object containing the top 5 personalized career matches and holistic insights.
 
-STUDENT CONTEXT:
-${JSON.stringify(context, null, 2)}
+STUDENT INTAKE:
+- Current Class / Grade: ${studentInfo.classGrade || 'Not specified'}
+- Course / Stream: ${studentInfo.courseStream || 'Not specified'}
+- Stated Interests in their own words: "${studentInfo.descriptiveInterests || 'Exploring passions'}"
 
-CONVERSATION TRANSCRIPT:
-${transcript}
+MCQ COGNITIVE DIMENSION BREAKDOWN:
+- Analytical: ${dimensionScores.analytical || 0} / 100
+- Creative: ${dimensionScores.creative || 0} / 100
+- Technical: ${dimensionScores.technical || 0} / 100
+- Social & Mentorship: ${dimensionScores.social || 0} / 100
+- Practical & Hands-On: ${dimensionScores.practical || 0} / 100
+- Organizational: ${dimensionScores.organizational || 0} / 100
 
-JSON Schema required:
+REQUIRED JSON SCHEMA:
 {
-  "expressedInterests": ["string"],
-  "statedMotivations": ["string"],
-  "preferredActivities": ["string"],
-  "reportedSkills": ["string"],
-  "demonstratedSkills": ["string"],
-  "preferredEnvironments": ["string"],
-  "statedConcerns": ["string"],
-  "careerPreferences": ["string"],
-  "remainingUncertainties": ["string"],
-  "aiHypotheses": ["string (clearly distinguish AI inferences from explicit student statements)"],
-  "dimensionScores": {
-    "analytical": number (0-100),
-    "creative": number (0-100),
-    "technical": number (0-100),
-    "social": number (0-100),
-    "practical": number (0-100),
-    "organizational": number (0-100)
-  },
-  "summaryNarrative": "A warm, 2-3 paragraph synthesis explaining what makes this student unique, highlighting their natural curiosities and where their strengths point.",
-  "suggestedDiscussionTopicsForMentor": ["string"]
+  "top5Careers": [
+    {
+      "id": "slug-string",
+      "title": "Career Title",
+      "matchScore": number (75-98),
+      "description": "Clear 2-sentence description of the career",
+      "whyFit": "Explain why this career matches their specific descriptive interests AND their MCQ cognitive traits",
+      "keyStrengths": ["string"],
+      "skillsToDevelop": ["string"],
+      "workExample": "Realistic day-in-the-life task or project",
+      "mentorDiscussionQuestions": "1 key doubt or question to discuss with the human career mentor in the upcoming Meet"
+    }
+  ],
+  "holisticProfile": {
+    "keyTheme": "A concise headline capturing their unique profile (e.g., Creative Problem Solver with High Technical Curiosity)",
+    "strengthSummary": "2-3 sentences summarizing their natural strengths based on their descriptive interests and MCQ patterns",
+    "recommendedFocusForMeet": "Specific advice on what the student should ask their mentor in the upcoming live video Meet"
+  }
 }
 `;
 
@@ -176,11 +103,43 @@ JSON Schema required:
       modelUsed: 'gemini-1.5-flash',
     };
   } catch (err) {
-    console.error('Gemini Analysis Error:', err);
+    console.error('Gemini MCQ Analysis Error:', err);
     return {
       success: false,
       isAiPowered: false,
-      error: err.message || 'Gemini analysis failed',
+      error: err.message || 'Gemini MCQ analysis failed',
     };
   }
+}
+
+// Backward compatibility for conversational chat if needed
+export async function handleGeminiChat(body) {
+  const apiKey = getApiKey();
+  if (!apiKey) {
+    return {
+      success: false,
+      isAiPowered: false,
+      error: 'GEMINI_API_KEY is not configured in server environment.',
+    };
+  }
+
+  try {
+    const genAI = new GoogleGenerativeAI(apiKey);
+    const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
+    const { messages = [] } = body;
+    const lastMsg = messages[messages.length - 1]?.text || 'Hello';
+    const result = await model.generateContent(`You are an empathetic ZHERO career guide. Respond thoughtfully to: ${lastMsg}`);
+    return {
+      success: true,
+      isAiPowered: true,
+      reply: result.response.text(),
+      modelUsed: 'gemini-2.5-flash',
+    };
+  } catch (err) {
+    return { success: false, isAiPowered: false, error: err.message };
+  }
+}
+
+export async function handleGeminiAnalysis(body) {
+  return handleGeminiMcqAnalysis(body);
 }
