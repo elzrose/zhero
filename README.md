@@ -43,7 +43,7 @@ zhero/
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/<your-username>/zhero.git
+git clone https://github.com/elzrose/zhero.git
 cd zhero
 ```
 

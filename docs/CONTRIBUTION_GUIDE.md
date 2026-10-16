@@ -48,7 +48,7 @@ main ──┴─────────── feature/tuition-centre ───
 
 ### Step 1: Clone and Set Up Workspace
 ```bash
-git clone https://github.com/<your-username-or-org>/zhero.git
+git clone https://github.com/elzrose/zhero.git
 cd zhero
 npm install
 ```
