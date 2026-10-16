@@ -2,7 +2,7 @@ import { defineConfig, loadEnv } from 'vite'
 import react from '@vitejs/plugin-react'
 import path from 'path'
 import { fileURLToPath } from 'url'
-import { handleGeminiChat, handleGeminiAnalysis, handleGeminiMcqAnalysis, handleGeminiCheckpointEvaluation } from './server/geminiHandler.js'
+import { handleGeminiChat, handleGeminiAnalysis, handleGeminiMcqAnalysis, handleGeminiCheckpointEvaluation, handleGeminiLiveInterviewTurn, handleGeminiLiveInterviewEvaluation } from './server/geminiHandler.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
@@ -60,6 +60,24 @@ function geminiServerPlugin(env) {
         if (req.url === '/api/gemini/evaluate-checkpoint' && req.method === 'POST') {
           const body = await readBody();
           const result = await handleGeminiCheckpointEvaluation(body);
+          res.setHeader('Content-Type', 'application/json');
+          res.end(JSON.stringify(result));
+          return;
+        }
+
+        // 5. Live AI Verbal Assessment Turn
+        if (req.url === '/api/gemini/live-interview-turn' && req.method === 'POST') {
+          const body = await readBody();
+          const result = await handleGeminiLiveInterviewTurn(body);
+          res.setHeader('Content-Type', 'application/json');
+          res.end(JSON.stringify(result));
+          return;
+        }
+
+        // 6. Live AI Verbal Assessment Evaluation Report
+        if (req.url === '/api/gemini/live-interview-evaluate' && req.method === 'POST') {
+          const body = await readBody();
+          const result = await handleGeminiLiveInterviewEvaluation(body);
           res.setHeader('Content-Type', 'application/json');
           res.end(JSON.stringify(result));
           return;

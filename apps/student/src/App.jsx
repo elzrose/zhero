@@ -16,6 +16,7 @@ import { RoadmapPage } from './pages/RoadmapPage';
 import { ResourcesPage } from './pages/ResourcesPage';
 import { ProgressPage } from './pages/ProgressPage';
 import { ProfilePage } from './pages/ProfilePage';
+import LiveInterviewPage from './pages/LiveInterviewPage';
 import { storageService } from './services/storageService';
 import { CAREERS_DATA } from './data/careersData';
 
@@ -157,6 +158,7 @@ export default function App() {
   const pageTitles = {
     dashboard: { title: 'Student Dashboard', subtitle: 'Personalized career intelligence & roadmap tracking' },
     assessment: { title: 'Career Interest Assessment', subtitle: '16 psychometric scenario questions' },
+    interview: { title: 'Live AI Verbal Assessment', subtitle: 'Real-time spoken conversational interview with adaptive Gemini reasoning' },
     results: { title: 'Assessment Results', subtitle: 'Your top 5 aligned career pathways' },
     careers: { title: 'Career Catalogue', subtitle: '18+ emerging & core professional disciplines' },
     'career-detail': { title: 'Career Profile', subtitle: 'Comprehensive skill & pathway breakdown' },
@@ -259,6 +261,10 @@ export default function App() {
                   onCompleteAssessment={handleCompleteAssessment}
                   onCancel={() => handleNavigate('dashboard')}
                 />
+              )}
+
+              {currentPage === 'interview' && (
+                <LiveInterviewPage onNavigate={handleNavigate} />
               )}
 
               {currentPage === 'results' && (

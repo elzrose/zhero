@@ -6,7 +6,8 @@ import {
   CheckCircle2,
   Bookmark,
   Building,
-  Clock
+  Clock,
+  Mic
 } from 'lucide-react';
 import { CAREERS_DATA } from '../data/careersData';
 
@@ -70,7 +71,27 @@ export function DashboardPage({
           </p>
         </div>
 
-        <div style={{ display: 'flex', gap: '0.75rem' }}>
+        <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+          <button
+            onClick={() => onNavigate('interview')}
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '6px',
+              padding: '0.65rem 1.15rem',
+              borderRadius: '10px',
+              background: '#0F172A',
+              color: '#818CF8',
+              border: '1px solid #4F46E5',
+              fontWeight: 700,
+              fontSize: '0.875rem',
+              cursor: 'pointer',
+              boxShadow: '0 2px 8px rgba(79, 70, 229, 0.25)',
+            }}
+          >
+            <Mic size={16} />
+            <span>Live AI Interview</span>
+          </button>
           <button
             onClick={() => onNavigate('assessment')}
             style={{

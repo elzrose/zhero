@@ -10,7 +10,8 @@ import {
   BookOpen,
   TrendingUp,
   User,
-  LogOut
+  LogOut,
+  Mic
 } from 'lucide-react';
 
 export function StudentSidebar({
@@ -23,7 +24,8 @@ export function StudentSidebar({
 }) {
   const navItems = [
     { id: 'dashboard', label: 'Overview', icon: LayoutDashboard },
-    { id: 'assessment', label: 'My Assessment', icon: Sparkles, badge: 'Interactive' },
+    { id: 'assessment', label: 'My Assessment', icon: Sparkles, badge: 'Stage 1-6' },
+    { id: 'interview', label: 'Live AI Interview', icon: Mic, badge: 'Live Voice' },
     { id: 'results', label: 'Career Matches', icon: Target },
     { id: 'careers', label: 'Explore Careers', icon: Compass },
     { id: 'compare', label: 'Compare Careers', icon: GitCompare },
