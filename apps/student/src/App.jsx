@@ -17,6 +17,7 @@ import { ResourcesPage } from './pages/ResourcesPage';
 import { ProgressPage } from './pages/ProgressPage';
 import { ProfilePage } from './pages/ProfilePage';
 import { storageService } from './services/storageService';
+import { CAREERS_DATA } from './data/careersData';
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState('landing');
@@ -103,8 +104,15 @@ export default function App() {
 
   const handleCompleteAssessment = (results) => {
     setAssessmentResults(results);
-    showToast('Assessment scored and top matches updated!');
-    setCurrentPage('results');
+    if (results?.primaryCareer) {
+      const match = CAREERS_DATA.find((c) => c.title.toLowerCase() === results.primaryCareer.toLowerCase()) || CAREERS_DATA[0];
+      const updatedRoadmap = storageService.setRoadmapForCareer(match.id);
+      setActiveRoadmap(updatedRoadmap);
+      showToast(`Roadmap dynamically tailored to ${match.title}!`);
+    } else {
+      showToast('Career assessment & guidance finalized!');
+    }
+    setCurrentPage('roadmap');
   };
 
   const handleResetAssessment = () => {

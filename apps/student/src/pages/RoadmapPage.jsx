@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { CheckCircle2, Clock, Plus, Map } from 'lucide-react';
+import { CheckCircle2, Clock, Plus, Map, UserCheck, Sparkles } from 'lucide-react';
 import { CAREERS_DATA } from '../data/careersData';
 import { Modal } from '../components/Modal';
+import { storageService } from '../services/storageService';
 
 export function RoadmapPage({
   activeRoadmap,
@@ -13,6 +14,7 @@ export function RoadmapPage({
   const [selectedPhaseIndex, setSelectedPhaseIndex] = useState(0);
   const [customTaskTitle, setCustomTaskTitle] = useState('');
   const [customTaskDuration, setCustomTaskDuration] = useState('1 week');
+  const finalEvidence = storageService.getStage5Final();
 
   const phases = activeRoadmap?.phases || [];
 
@@ -91,6 +93,57 @@ export function RoadmapPage({
           </select>
         </div>
       </div>
+
+      {/* Guidance Evidence Connection Banner */}
+      {finalEvidence && (
+        <div style={{
+          backgroundColor: '#FFFFFF',
+          border: '1px solid #EAE7E2',
+          borderLeft: '4px solid #10B981',
+          borderRadius: '14px',
+          padding: '1rem 1.25rem',
+          marginBottom: '1.5rem',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          gap: '1rem',
+          flexWrap: 'wrap',
+          boxShadow: '0 2px 8px rgba(23, 23, 23, 0.02)',
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <div style={{
+              padding: '8px',
+              backgroundColor: '#ECFDF5',
+              borderRadius: '10px',
+              color: '#047857',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}>
+              <UserCheck size={20} />
+            </div>
+            <div>
+              <div style={{ fontSize: '0.875rem', fontWeight: 800, color: '#171717' }}>
+                Stage 6 Adaptive Roadmap: Tailored by 6-Stage Guidance Journey
+              </div>
+              <div style={{ fontSize: '0.78rem', color: '#77736F', marginTop: '2px' }}>
+                Synthesized from Gemini AI assessment dialogue • Validated by {finalEvidence.counsellorName || 'Human Career Mentor'}
+              </div>
+            </div>
+          </div>
+          <span style={{
+            fontSize: '0.7rem',
+            fontWeight: 700,
+            padding: '3px 10px',
+            borderRadius: '999px',
+            backgroundColor: '#ECFDF5',
+            color: '#047857',
+            border: '1px solid #A7F3D0',
+          }}>
+            Stage 6 Active
+          </span>
+        </div>
+      )}
 
       {/* Progress Metric Card */}
       <div style={{

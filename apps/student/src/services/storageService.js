@@ -18,6 +18,15 @@ const STORAGE_KEYS = {
   BOOKMARKED_RESOURCES: 'zhero_bookmarked_resources',
   COMPLETED_RESOURCES: 'zhero_completed_resources',
   ACTIVITY_LOG: 'zhero_activity_log',
+  // 6-Stage Journey Keys
+  ASSESSMENT_STAGE: 'zhero_assessment_stage',
+  STAGE1_CONTEXT: 'zhero_stage1_context',
+  STAGE2_CONVERSATION: 'zhero_stage2_conversation',
+  STAGE3_PRELIMINARY: 'zhero_stage3_preliminary',
+  STAGE4_COUNSELLING: 'zhero_stage4_counselling',
+  STAGE4_MENTOR_REVIEW: 'zhero_stage4_mentor_review',
+  STAGE5_FINAL: 'zhero_stage5_final',
+  SIMULATION_RESULTS: 'zhero_simulation_results',
 };
 
 // Default seed data for demo student
@@ -76,6 +85,18 @@ export const storageService = {
     return updated;
   },
 
+  updateCareerGoal(careerTitle) {
+    try {
+      const current = this.getUserProfile();
+      const updated = { ...current, targetCareer: careerTitle };
+      localStorage.setItem(STORAGE_KEYS.USER_PROFILE, JSON.stringify(updated));
+      this.logActivity(`Updated career focus goal to ${careerTitle}.`);
+      return updated;
+    } catch {
+      return null;
+    }
+  },
+
   // --- Assessment State ---
   getAssessmentAnswers() {
     try {
@@ -128,10 +149,222 @@ export const storageService = {
     try {
       localStorage.removeItem(STORAGE_KEYS.ASSESSMENT_ANSWERS);
       localStorage.removeItem(STORAGE_KEYS.ASSESSMENT_RESULTS);
-      this.logActivity('Reset Career Assessment progress.');
+      localStorage.removeItem(STORAGE_KEYS.ASSESSMENT_STAGE);
+      localStorage.removeItem(STORAGE_KEYS.STAGE1_CONTEXT);
+      localStorage.removeItem(STORAGE_KEYS.STAGE2_CONVERSATION);
+      localStorage.removeItem(STORAGE_KEYS.STAGE3_PRELIMINARY);
+      localStorage.removeItem(STORAGE_KEYS.STAGE4_COUNSELLING);
+      localStorage.removeItem(STORAGE_KEYS.STAGE4_MENTOR_REVIEW);
+      localStorage.removeItem(STORAGE_KEYS.STAGE5_FINAL);
+      localStorage.removeItem(STORAGE_KEYS.SIMULATION_RESULTS);
+      this.logActivity('Reset Career Guidance Journey progress.');
     } catch (e) {
       console.error(e);
     }
+  },
+
+  // --- 6-Stage Journey Methods ---
+  getAssessmentStage() {
+    try {
+      const stage = localStorage.getItem(STORAGE_KEYS.ASSESSMENT_STAGE);
+      return stage ? Number(stage) : 1;
+    } catch {
+      return 1;
+    }
+  },
+
+  setAssessmentStage(stageNum) {
+    try {
+      localStorage.setItem(STORAGE_KEYS.ASSESSMENT_STAGE, String(stageNum));
+      return stageNum;
+    } catch {
+      return stageNum;
+    }
+  },
+
+  getStage1Context() {
+    try {
+      const data = localStorage.getItem(STORAGE_KEYS.STAGE1_CONTEXT);
+      return data ? JSON.parse(data) : {
+        educationLevel: 'Undergraduate (2nd Year)',
+        stream: 'Computer Science & Engineering',
+        enjoyedSubjects: ['Web Development', 'Problem Solving', 'Visual Design'],
+        curiousSkills: ['JavaScript / React', 'UI/UX Prototyping', 'System Design'],
+        curiousCareers: ['Full Stack Software Engineer', 'UI/UX Product Designer'],
+        workEnvironment: 'Balanced collaborative and focused quiet workspaces',
+        shortTermAspirations: 'Build a standout portfolio project and land a summer internship',
+        longTermAspirations: 'Lead creative technology projects that improve education and productivity',
+        constraints: 'Balancing college exam preparation with self-paced learning time',
+        concerns: 'Wondering if I have enough practical project experience compared to senior peers',
+        selfDescription: 'I enjoy seeing ideas become working software that real people can use. When I hit a bug, I get stubborn until I figure it out.',
+        consentGiven: true,
+      };
+    } catch {
+      return null;
+    }
+  },
+
+  saveStage1Context(context) {
+    try {
+      localStorage.setItem(STORAGE_KEYS.STAGE1_CONTEXT, JSON.stringify(context));
+      this.logActivity('Saved Stage 1: Student Context & Privacy Consent.');
+      return context;
+    } catch {
+      return context;
+    }
+  },
+
+  getStage2Conversation() {
+    try {
+      const data = localStorage.getItem(STORAGE_KEYS.STAGE2_CONVERSATION);
+      return data ? JSON.parse(data) : [
+        {
+          id: 'init-1',
+          sender: 'ai',
+          text: `Welcome! I'm your ZHERO AI Career Guide. I'm here to listen, explore what energizes you, and help you map out real possibilities—without any pressure or rigid tests. What's one activity or subject recently where you found yourself genuinely absorbed in what you were doing?`,
+          timestamp: 'Just now',
+          isAiPowered: true,
+        }
+      ];
+    } catch {
+      return [];
+    }
+  },
+
+  saveStage2Conversation(messages) {
+    try {
+      localStorage.setItem(STORAGE_KEYS.STAGE2_CONVERSATION, JSON.stringify(messages));
+      return messages;
+    } catch {
+      return messages;
+    }
+  },
+
+  getStage3PreliminaryAnalysis() {
+    try {
+      const data = localStorage.getItem(STORAGE_KEYS.STAGE3_PRELIMINARY);
+      return data ? JSON.parse(data) : null;
+    } catch {
+      return null;
+    }
+  },
+
+  saveStage3PreliminaryAnalysis(analysis) {
+    try {
+      localStorage.setItem(STORAGE_KEYS.STAGE3_PRELIMINARY, JSON.stringify(analysis));
+      this.logActivity('Generated Stage 3: Preliminary Career Analysis (Awaiting Human Review).');
+      return analysis;
+    } catch {
+      return analysis;
+    }
+  },
+
+  getStage4Counselling() {
+    try {
+      const data = localStorage.getItem(STORAGE_KEYS.STAGE4_COUNSELLING);
+      return data ? JSON.parse(data) : {
+        status: 'unbooked', // 'unbooked' | 'scheduled' | 'in_session' | 'reviewed'
+        mentorId: 'mentor-1',
+        mentorName: 'Dr. Radhika Nair',
+        mentorRole: 'Senior STEM & EdTech Counselor (Former IISc Academic Advisor)',
+        mentorAvatar: '👩‍🏫',
+        slot: 'Tomorrow, 4:00 PM – 4:45 PM (IST)',
+        format: 'Virtual Video Call',
+        studentQuestions: 'How should I balance learning modern frontend frameworks with core data structures?',
+        isDemoBooking: true,
+      };
+    } catch {
+      return null;
+    }
+  },
+
+  saveStage4Counselling(counselling) {
+    try {
+      localStorage.setItem(STORAGE_KEYS.STAGE4_COUNSELLING, JSON.stringify(counselling));
+      return counselling;
+    } catch {
+      return counselling;
+    }
+  },
+
+  getStage4MentorReview() {
+    try {
+      const data = localStorage.getItem(STORAGE_KEYS.STAGE4_MENTOR_REVIEW);
+      return data ? JSON.parse(data) : null;
+    } catch {
+      return null;
+    }
+  },
+
+  saveStage4MentorReview(review) {
+    try {
+      localStorage.setItem(STORAGE_KEYS.STAGE4_MENTOR_REVIEW, JSON.stringify(review));
+      this.logActivity('Submitted Stage 4: Virtual Mentor Review & Guidance Notes.');
+      return review;
+    } catch {
+      return review;
+    }
+  },
+
+  getStage5FinalRecommendations() {
+    try {
+      const data = localStorage.getItem(STORAGE_KEYS.STAGE5_FINAL);
+      return data ? JSON.parse(data) : null;
+    } catch {
+      return null;
+    }
+  },
+
+  saveStage5FinalRecommendations(finalData) {
+    try {
+      localStorage.setItem(STORAGE_KEYS.STAGE5_FINAL, JSON.stringify(finalData));
+      this.logActivity('Finalized Stage 5: Verified Career Recommendations.');
+      return finalData;
+    } catch {
+      return finalData;
+    }
+  },
+
+  getSimulationResults() {
+    try {
+      const data = localStorage.getItem(STORAGE_KEYS.SIMULATION_RESULTS);
+      return data ? JSON.parse(data) : {};
+    } catch {
+      return {};
+    }
+  },
+
+  recordSimulationResult(careerId, result) {
+    try {
+      const current = this.getSimulationResults();
+      current[careerId] = result;
+      localStorage.setItem(STORAGE_KEYS.SIMULATION_RESULTS, JSON.stringify(current));
+      this.logActivity(`Completed career micro-simulation for ${careerId}.`);
+      return current;
+    } catch {
+      return {};
+    }
+  },
+
+  // Stage aliases for flexible usage
+  saveSimulationResult(careerId, result) {
+    return this.recordSimulationResult(careerId, result);
+  },
+
+  getStage3Preliminary() {
+    return this.getStage3PreliminaryAnalysis();
+  },
+
+  saveStage3Preliminary(data) {
+    return this.saveStage3PreliminaryAnalysis(data);
+  },
+
+  getStage5Final() {
+    return this.getStage5FinalRecommendations();
+  },
+
+  saveStage5Final(data) {
+    return this.saveStage5FinalRecommendations(data);
   },
 
   // --- Saved Careers ---

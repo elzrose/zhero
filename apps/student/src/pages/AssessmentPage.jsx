@@ -1,262 +1,245 @@
-import React, { useState } from 'react';
-import { Sparkles, ArrowRight, ArrowLeft, CheckCircle2 } from 'lucide-react';
-import { ASSESSMENT_QUESTIONS } from '../data/assessmentQuestions';
+import React, { useState, useEffect } from 'react';
+import { Sparkles, ArrowLeft, RotateCcw, CheckCircle2 } from 'lucide-react';
+import { AssessmentStageTracker } from '../components/AssessmentStageTracker';
+import { Stage1ContextConsent } from './assessment/Stage1ContextConsent';
+import { Stage2GeminiConversation } from './assessment/Stage2GeminiConversation';
+import { Stage3PreliminaryAnalysis } from './assessment/Stage3PreliminaryAnalysis';
+import { Stage4VirtualCounselling } from './assessment/Stage4VirtualCounselling';
+import { Stage5FinalRecommendations } from './assessment/Stage5FinalRecommendations';
 import { storageService } from '../services/storageService';
 
 export function AssessmentPage({ onCompleteAssessment, onCancel }) {
-  const [answers, setAnswers] = useState(() => storageService.getAssessmentAnswers());
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [loadingStepText, setLoadingStepText] = useState('Scoring cognitive dimensions...');
+  const [currentStage, setCurrentStage] = useState(() => storageService.getAssessmentStage() || 1);
+  const [completedStages, setCompletedStages] = useState(() => {
+    const list = [];
+    if (storageService.getStage1Context()) list.push(1);
+    const conv = storageService.getStage2Conversation();
+    if (conv && conv.filter((m) => m.sender === 'user').length >= 2) list.push(2);
+    if (storageService.getStage3Preliminary()) list.push(3);
+    const rev = storageService.getStage4MentorReview();
+    if (rev && rev.isCompleted) list.push(4);
+    if (storageService.getStage5Final()) list.push(5);
+    return list;
+  });
 
-  const currentQ = ASSESSMENT_QUESTIONS[currentIndex];
-  const totalQ = ASSESSMENT_QUESTIONS.length;
-  const progressPct = Math.round(((currentIndex + 1) / totalQ) * 100);
-  const selectedOptionIndex = answers[currentQ.id];
-
-  const handleSelectOption = (optIndex) => {
-    const updated = { ...answers, [currentQ.id]: optIndex };
-    setAnswers(updated);
-    storageService.saveAssessmentAnswer(currentQ.id, optIndex);
+  const goToStage = (num) => {
+    setCurrentStage(num);
+    storageService.setAssessmentStage(num);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const handleNext = () => {
-    if (currentIndex < totalQ - 1) {
-      setCurrentIndex(currentIndex + 1);
-    } else {
-      // Final submission
-      handleSubmit();
+  const handleStage1Complete = (context) => {
+    setCompletedStages((prev) => Array.from(new Set([...prev, 1])));
+    goToStage(2);
+  };
+
+  const handleStage2Complete = () => {
+    setCompletedStages((prev) => Array.from(new Set([...prev, 2])));
+    goToStage(3);
+  };
+
+  const handleStage3Complete = () => {
+    setCompletedStages((prev) => Array.from(new Set([...prev, 3])));
+    goToStage(4);
+  };
+
+  const handleStage4Complete = () => {
+    setCompletedStages((prev) => Array.from(new Set([...prev, 4])));
+    goToStage(5);
+  };
+
+  const handleStage5Complete = (finalReport) => {
+    setCompletedStages((prev) => Array.from(new Set([...prev, 5, 6])));
+    storageService.setAssessmentStage(6);
+
+    // If caller provided callback, notify with results
+    if (onCompleteAssessment) {
+      onCompleteAssessment(finalReport);
     }
   };
 
-  const handlePrev = () => {
-    if (currentIndex > 0) {
-      setCurrentIndex(currentIndex - 1);
+  const handleReset = () => {
+    if (window.confirm('Are you sure you want to restart your Career Assessment Journey from Stage 1?')) {
+      storageService.resetAssessment();
+      setCompletedStages([]);
+      setCurrentStage(1);
     }
   };
-
-  const handleSubmit = () => {
-    setIsSubmitting(true);
-    setLoadingStepText('Evaluating analytical, creative, and technical weightings...');
-
-    setTimeout(() => {
-      setLoadingStepText('Cross-referencing 18+ emerging career taxonomies...');
-    }, 600);
-
-    setTimeout(() => {
-      const results = storageService.completeAssessment(answers);
-      setIsSubmitting(false);
-      onCompleteAssessment(results);
-    }, 1400);
-  };
-
-  if (isSubmitting) {
-    return (
-      <div style={{
-        minHeight: '60vh',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        textAlign: 'center',
-        padding: '2rem',
-      }}>
-        <div style={{
-          width: '64px',
-          height: '64px',
-          borderRadius: '20px',
-          background: 'linear-gradient(135deg, #FE6904 0%, #FA9B2A 100%)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          color: '#FFFFFF',
-          marginBottom: '1.5rem',
-          boxShadow: '0 8px 24px rgba(254, 105, 4, 0.35)',
-          animation: 'pulse 1.5s infinite',
-        }}>
-          <Sparkles size={32} />
-        </div>
-        <h2 style={{ fontSize: '1.75rem', fontWeight: 800, color: '#171717', letterSpacing: '-0.02em', margin: 0 }}>
-          Calculating Career Affinity
-        </h2>
-        <p style={{ fontSize: '1rem', color: '#77736F', marginTop: '0.5rem', maxWidth: '400px' }}>
-          {loadingStepText}
-        </p>
-      </div>
-    );
-  }
 
   return (
-    <div style={{ padding: '2rem 1.5rem', maxWidth: '800px', margin: '0 auto' }}>
-      {/* Top Header & Progress */}
-      <div style={{ marginBottom: '2rem' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span style={{
-              fontSize: '0.75rem',
-              fontWeight: 700,
-              padding: '3px 10px',
-              borderRadius: '9999px',
-              background: '#FFE5CE',
-              color: '#FE6904',
-            }}>
-              {currentQ.category}
-            </span>
-            <span style={{ fontSize: '0.8rem', color: '#77736F' }}>
-              • {currentQ.dimensionName}
-            </span>
+    <div style={{ padding: '2rem 1.5rem', maxWidth: '1040px', margin: '0 auto' }}>
+      {/* Top Bar with Stage Tracker and Reset action */}
+      <div style={{ marginBottom: '1.5rem' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span style={{
+                fontSize: '0.75rem',
+                fontWeight: 800,
+                padding: '3px 10px',
+                borderRadius: '9999px',
+                background: '#FFE5CE',
+                color: '#FE6904',
+              }}>
+                Evidence-Based Career Guidance
+              </span>
+            </div>
+            <h1 style={{ fontSize: '1.85rem', fontWeight: 800, color: '#171717', letterSpacing: '-0.02em', margin: '4px 0 0 0' }}>
+              AI Assessment & Virtual Counselling Journey
+            </h1>
           </div>
 
-          <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#171717' }}>
-            Question {currentIndex + 1} of {totalQ}
-          </span>
-        </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <button
+              onClick={handleReset}
+              title="Reset assessment progress"
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+                padding: '8px 14px',
+                borderRadius: '10px',
+                border: '1px solid #EAE7E2',
+                backgroundColor: '#FFFFFF',
+                fontSize: '0.8rem',
+                fontWeight: 600,
+                color: '#77736F',
+                cursor: 'pointer',
+              }}
+            >
+              <RotateCcw size={14} /> Restart Journey
+            </button>
 
-        {/* Progress Bar */}
-        <div style={{ width: '100%', height: '8px', background: '#EAE7E2', borderRadius: '9999px', overflow: 'hidden' }}>
-          <div style={{
-            width: `${progressPct}%`,
-            height: '100%',
-            background: 'linear-gradient(90deg, #FE6904 0%, #FA9B2A 100%)',
-            borderRadius: '9999px',
-            transition: 'width 0.3s ease',
-          }} />
-        </div>
-      </div>
-
-      {/* Question Card */}
-      <div style={{
-        background: '#FFFFFF',
-        borderRadius: '20px',
-        border: '1px solid #EAE7E2',
-        padding: '2.25rem',
-        boxShadow: '0 4px 24px rgba(23, 23, 23, 0.04)',
-        marginBottom: '2rem',
-      }}>
-        <h2 style={{
-          fontSize: '1.35rem',
-          fontWeight: 700,
-          color: '#171717',
-          lineHeight: 1.45,
-          marginBottom: '1.75rem',
-        }}>
-          {currentQ.question}
-        </h2>
-
-        {/* 4 Interactive Options */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
-          {currentQ.options.map((opt, oIdx) => {
-            const isSelected = selectedOptionIndex === oIdx;
-            return (
-              <div
-                key={oIdx}
-                onClick={() => handleSelectOption(oIdx)}
+            {onCancel && (
+              <button
+                onClick={onCancel}
                 style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '12px',
-                  padding: '1.1rem 1.25rem',
-                  borderRadius: '12px',
-                  border: isSelected ? '2px solid #FE6904' : '1px solid #EAE7E2',
-                  background: isSelected ? '#FFE5CE' : '#FFFFFF',
+                  padding: '8px 14px',
+                  borderRadius: '10px',
+                  border: '1px solid #EAE7E2',
+                  backgroundColor: '#FFFFFF',
+                  fontSize: '0.8rem',
+                  fontWeight: 600,
+                  color: '#171717',
                   cursor: 'pointer',
-                  transition: 'all 0.15s ease',
-                  boxShadow: isSelected ? '0 2px 10px rgba(254, 105, 4, 0.15)' : 'none',
                 }}
               >
-                <div style={{
-                  width: '24px',
-                  height: '24px',
-                  borderRadius: '50%',
-                  border: isSelected ? 'none' : '2px solid #D6D2CC',
-                  backgroundColor: isSelected ? '#FE6904' : '#FFFFFF',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: '#FFFFFF',
-                  fontWeight: 700,
-                  fontSize: '0.75rem',
-                  flexShrink: 0,
-                }}>
-                  {isSelected ? <CheckCircle2 size={16} /> : String.fromCharCode(65 + oIdx)}
-                </div>
-
-                <div style={{
-                  fontSize: '0.95rem',
-                  fontWeight: isSelected ? 600 : 500,
-                  color: isSelected ? '#171717' : '#333333',
-                  lineHeight: 1.4,
-                }}>
-                  {opt.text}
-                </div>
-              </div>
-            );
-          })}
+                Save & Exit
+              </button>
+            )}
+          </div>
         </div>
+
+        {/* 6-Stage Progress Tracker */}
+        <AssessmentStageTracker
+          currentStage={currentStage}
+          completedStages={completedStages}
+          onStageClick={(num) => goToStage(num)}
+        />
       </div>
 
-      {/* Navigation Controls */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <button
-          onClick={handlePrev}
-          disabled={currentIndex === 0}
-          style={{
-            display: 'inline-flex',
+      {/* Render Stage Component */}
+      {currentStage === 1 && (
+        <Stage1ContextConsent
+          onProceed={handleStage1Complete}
+        />
+      )}
+
+      {currentStage === 2 && (
+        <Stage2GeminiConversation
+          onProceedToStage3={handleStage2Complete}
+          onBackToStage1={() => goToStage(1)}
+        />
+      )}
+
+      {currentStage === 3 && (
+        <Stage3PreliminaryAnalysis
+          onProceedToStage4={handleStage3Complete}
+          onBackToStage2={() => goToStage(2)}
+        />
+      )}
+
+      {currentStage === 4 && (
+        <Stage4VirtualCounselling
+          onProceedToStage5={handleStage4Complete}
+          onBackToStage3={() => goToStage(3)}
+        />
+      )}
+
+      {currentStage === 5 && (
+        <Stage5FinalRecommendations
+          onProceedToRoadmap={handleStage5Complete}
+          onBackToStage4={() => goToStage(4)}
+        />
+      )}
+
+      {currentStage === 6 && (
+        <div style={{
+          backgroundColor: '#FFFFFF',
+          borderRadius: '24px',
+          border: '1px solid #EAE7E2',
+          padding: '3rem 2rem',
+          textAlign: 'center',
+          boxShadow: '0 4px 20px rgba(23, 23, 23, 0.04)',
+        }}>
+          <div style={{
+            width: '64px',
+            height: '64px',
+            borderRadius: '20px',
+            backgroundColor: '#ECFDF5',
+            color: '#047857',
+            display: 'flex',
             alignItems: 'center',
-            gap: '6px',
-            padding: '0.75rem 1.25rem',
-            borderRadius: '10px',
-            border: '1px solid #EAE7E2',
-            background: '#FFFFFF',
-            color: currentIndex === 0 ? '#C4C0BA' : '#171717',
-            cursor: currentIndex === 0 ? 'not-allowed' : 'pointer',
-            fontSize: '0.9rem',
-            fontWeight: 600,
-          }}
-        >
-          <ArrowLeft size={16} />
-          <span>Previous</span>
-        </button>
+            justifyContent: 'center',
+            margin: '0 auto 1.5rem auto',
+          }}>
+            <CheckCircle2 size={36} />
+          </div>
 
-        <div style={{ display: 'flex', gap: '0.75rem' }}>
-          <button
-            onClick={onCancel}
-            style={{
-              padding: '0.75rem 1rem',
-              borderRadius: '10px',
-              border: 'none',
-              background: 'transparent',
-              color: '#77736F',
-              fontSize: '0.85rem',
-              cursor: 'pointer',
-            }}
-          >
-            Save & Exit
-          </button>
+          <h2 style={{ fontSize: '1.75rem', fontWeight: 800, color: '#171717', marginBottom: '0.5rem' }}>
+            Stage 6: Dynamic Roadmap Connected!
+          </h2>
+          <p style={{ fontSize: '0.95rem', color: '#77736F', maxWidth: '520px', margin: '0 auto 2rem auto', lineHeight: '1.6' }}>
+            Your career preferences, Gemini AI assessment dialogue, simulation results, and counsellor feedback are now actively shaping your step-by-step milestones.
+          </p>
 
-          <button
-            onClick={handleNext}
-            disabled={selectedOptionIndex === undefined}
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '6px',
-              padding: '0.75rem 1.5rem',
-              borderRadius: '10px',
-              border: 'none',
-              background: selectedOptionIndex === undefined ? '#EAE7E2' : '#FE6904',
-              color: selectedOptionIndex === undefined ? '#77736F' : '#FFFFFF',
-              cursor: selectedOptionIndex === undefined ? 'not-allowed' : 'pointer',
-              fontSize: '0.9rem',
-              fontWeight: 700,
-              boxShadow: selectedOptionIndex === undefined ? 'none' : '0 4px 14px rgba(254, 105, 4, 0.3)',
-            }}
-          >
-            <span>{currentIndex === totalQ - 1 ? 'Finish Assessment' : 'Next Question'}</span>
-            <ArrowRight size={16} />
-          </button>
+          <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', flexWrap: 'wrap' }}>
+            <button
+              onClick={() => goToStage(5)}
+              style={{
+                padding: '10px 20px',
+                borderRadius: '12px',
+                border: '1px solid #EAE7E2',
+                backgroundColor: '#FFFFFF',
+                fontSize: '0.9rem',
+                fontWeight: 700,
+                color: '#171717',
+                cursor: 'pointer',
+              }}
+            >
+              Review Recommendations
+            </button>
+            <button
+              onClick={() => {
+                if (onCompleteAssessment) onCompleteAssessment();
+              }}
+              style={{
+                padding: '10px 24px',
+                borderRadius: '12px',
+                border: 'none',
+                backgroundColor: '#FE6904',
+                color: '#FFFFFF',
+                fontSize: '0.9rem',
+                fontWeight: 800,
+                cursor: 'pointer',
+                boxShadow: '0 4px 14px rgba(254, 105, 4, 0.25)',
+              }}
+            >
+              Open Active Roadmap →
+            </button>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }
