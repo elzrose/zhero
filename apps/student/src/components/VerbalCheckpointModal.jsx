@@ -2,15 +2,12 @@ import React, { useState, useEffect, useRef } from 'react';
 import {
   Mic,
   MicOff,
-  Sparkles,
   CheckCircle2,
   AlertCircle,
   HelpCircle,
   RotateCcw,
-  BookOpen,
   ArrowRight,
-  X,
-  Volume2
+  X
 } from 'lucide-react';
 import { checkpointService } from '../services/checkpointService';
 import { spacedRepetitionService } from '../services/spacedRepetitionService';
@@ -23,9 +20,6 @@ export function VerbalCheckpointModal({
   careerTitle,
   onMilestoneVerified
 }) {
-  if (!isOpen || !task) return null;
-
-  const checkpointData = checkpointService.getCheckpointPrompt(task);
   const [studentResponse, setStudentResponse] = useState('');
   const [isRecording, setIsRecording] = useState(false);
   const [speechSupported, setSpeechSupported] = useState(true);
@@ -92,6 +86,10 @@ export function VerbalCheckpointModal({
       }
     };
   }, []);
+
+  if (!isOpen || !task) return null;
+
+  const checkpointData = checkpointService.getCheckpointPrompt(task);
 
   const toggleRecording = () => {
     if (!recognitionRef.current) return;
@@ -178,8 +176,7 @@ export function VerbalCheckpointModal({
     <div style={{
       position: 'fixed',
       inset: 0,
-      backgroundColor: 'rgba(23, 23, 23, 0.6)',
-      backdropFilter: 'blur(5px)',
+      backgroundColor: 'rgba(23, 23, 23, 0.5)',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
@@ -188,57 +185,44 @@ export function VerbalCheckpointModal({
     }}>
       <div style={{
         backgroundColor: '#FFFFFF',
-        borderRadius: '24px',
+        borderRadius: '12px',
         border: '1px solid #EAE7E2',
-        boxShadow: '0 25px 50px -12px rgba(23, 23, 23, 0.25)',
+        boxShadow: '0 1px 3px rgba(23, 23, 23, 0.04)',
         width: '100%',
-        maxWidth: '720px',
-        maxHeight: '92vh',
+        maxWidth: '680px',
+        maxHeight: '90vh',
         overflowY: 'auto',
         display: 'flex',
         flexDirection: 'column',
       }}>
         {/* Header */}
         <div style={{
-          padding: '1.5rem 2rem',
+          padding: '1.25rem 1.5rem',
           borderBottom: '1px solid #EAE7E2',
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
-          backgroundColor: '#FBFBFA',
-          borderTopLeftRadius: '24px',
-          borderTopRightRadius: '24px',
+          backgroundColor: '#FFFFFF',
         }}>
           <div>
-            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', marginBottom: '4px' }}>
-              <span style={{
-                fontSize: '0.72rem',
-                fontWeight: 800,
-                padding: '3px 10px',
-                borderRadius: '999px',
-                backgroundColor: '#FFE5CE',
-                color: '#FE6904',
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '4px',
-              }}>
-                <Sparkles size={12} /> Verbal AI Course Checkpoint
-              </span>
+            <div style={{ fontSize: '0.75rem', fontWeight: 600, color: '#FE6904', marginBottom: '2px' }}>
+              Verbal checkpoint
             </div>
-            <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#171717', margin: 0 }}>
+            <h3 style={{ fontSize: '1.125rem', fontWeight: 600, color: '#171717', margin: 0 }}>
               {task.title}
             </h3>
           </div>
 
           <button
             onClick={onClose}
+            aria-label="Close"
             style={{
-              background: '#F8F8F7',
-              border: '1px solid #EAE7E2',
+              background: 'none',
+              border: 'none',
               cursor: 'pointer',
               color: '#77736F',
               padding: '6px',
-              borderRadius: '10px',
+              borderRadius: '8px',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -249,42 +233,40 @@ export function VerbalCheckpointModal({
         </div>
 
         {/* Content Body */}
-        <div style={{ padding: '2rem', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+        <div style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
           {/* Checkpoint Scenario Prompt */}
           <div style={{
-            backgroundColor: '#FAFAF9',
-            borderRadius: '18px',
+            backgroundColor: '#F8F8F7',
+            borderRadius: '12px',
             border: '1px solid #EAE7E2',
-            padding: '1.5rem',
+            padding: '1.25rem',
           }}>
-            <div style={{ fontSize: '0.78rem', fontWeight: 800, color: '#FE6904', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '6px' }}>
-              Practical Scenario Question
-            </div>
-            <p style={{ margin: 0, fontSize: '0.98rem', fontWeight: 600, color: '#171717', lineHeight: '1.6' }}>
+            <p style={{ margin: 0, fontSize: '0.95rem', fontWeight: 600, color: '#171717', lineHeight: '1.5' }}>
               "{checkpointData.prompt}"
             </p>
 
             {/* Concepts to address */}
-            <div style={{ marginTop: '1rem', display: 'flex', flexWrap: 'wrap', gap: '6px', alignItems: 'center' }}>
-              <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#77736F' }}>Key concepts:</span>
-              {checkpointData.concepts.map((c, i) => (
-                <span key={i} style={{
-                  fontSize: '0.75rem',
-                  fontWeight: 600,
-                  backgroundColor: '#FFFFFF',
-                  border: '1px solid #EAE7E2',
-                  padding: '2px 8px',
-                  borderRadius: '6px',
-                  color: '#4B5563',
-                }}>
-                  {c}
-                </span>
-              ))}
-            </div>
+            {checkpointData.concepts && checkpointData.concepts.length > 0 && (
+              <div style={{ marginTop: '0.75rem', display: 'flex', flexWrap: 'wrap', gap: '6px', alignItems: 'center' }}>
+                <span style={{ fontSize: '0.75rem', color: '#77736F' }}>Key concepts:</span>
+                {checkpointData.concepts.map((c, i) => (
+                  <span key={i} style={{
+                    fontSize: '0.75rem',
+                    backgroundColor: '#FFFFFF',
+                    border: '1px solid #EAE7E2',
+                    padding: '2px 8px',
+                    borderRadius: '9999px',
+                    color: '#171717',
+                  }}>
+                    {c}
+                  </span>
+                ))}
+              </div>
+            )}
 
-            {/* Hint Accordion */}
+            {/* Hint */}
             {checkpointData.hint && (
-              <div style={{ marginTop: '1rem', paddingTop: '0.75rem', borderTop: '1px dashed #EAE7E2' }}>
+              <div style={{ marginTop: '0.75rem', paddingTop: '0.5rem', borderTop: '1px solid #EAE7E2' }}>
                 <button
                   type="button"
                   onClick={() => setShowHint(!showHint)}
@@ -293,7 +275,6 @@ export function VerbalCheckpointModal({
                     border: 'none',
                     padding: 0,
                     fontSize: '0.8rem',
-                    fontWeight: 700,
                     color: '#FE6904',
                     cursor: 'pointer',
                     display: 'flex',
@@ -302,11 +283,11 @@ export function VerbalCheckpointModal({
                   }}
                 >
                   <HelpCircle size={14} />
-                  <span>{showHint ? 'Hide scaffolding hint' : 'Need a hint?'}</span>
+                  <span>{showHint ? 'Hide hint' : 'Need a hint?'}</span>
                 </button>
                 {showHint && (
-                  <p style={{ margin: '8px 0 0 0', fontSize: '0.825rem', color: '#6B7280', lineHeight: '1.5', backgroundColor: '#FFFFFF', padding: '10px 12px', borderRadius: '8px', border: '1px solid #EAE7E2' }}>
-                    💡 <strong>Guiding Hint:</strong> {checkpointData.hint}
+                  <p style={{ margin: '6px 0 0 0', fontSize: '0.8rem', color: '#77736F', lineHeight: '1.4' }}>
+                    {checkpointData.hint}
                   </p>
                 )}
               </div>
@@ -314,131 +295,91 @@ export function VerbalCheckpointModal({
           </div>
 
           {!evaluationResult ? (
-            /* Student Input Section (Speech + Text) */
+            /* Student Input Section */
             <div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-                <label style={{ fontSize: '0.85rem', fontWeight: 700, color: '#171717' }}>
-                  Your Explanation (Speak or Type):
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
+                <label style={{ fontSize: '0.85rem', fontWeight: 600, color: '#171717' }}>
+                  Your explanation
                 </label>
                 <div style={{ fontSize: '0.75rem', color: '#77736F' }}>
                   {studentResponse.split(/\s+/).filter(Boolean).length} words
                 </div>
               </div>
 
-              {/* Textarea with voice integration */}
+              {/* Textarea */}
               <div style={{ position: 'relative' }}>
                 <textarea
                   value={studentResponse}
                   onChange={(e) => setStudentResponse(e.target.value)}
-                  placeholder="Explain your technical reasoning in your own words. Click the microphone to speak aloud or type directly..."
-                  rows={6}
+                  placeholder="Explain your technical reasoning here or click the microphone to speak..."
+                  rows={5}
                   style={{
                     width: '100%',
-                    padding: '1rem',
+                    padding: '0.75rem',
                     paddingRight: '3.5rem',
-                    borderRadius: '16px',
-                    border: isRecording ? '2px solid #FE6904' : '1.5px solid #EAE7E2',
-                    fontSize: '0.925rem',
+                    borderRadius: '8px',
+                    border: isRecording ? '1px solid #FE6904' : '1px solid #EAE7E2',
+                    fontSize: '0.9rem',
                     fontFamily: 'inherit',
-                    lineHeight: '1.6',
+                    lineHeight: '1.5',
                     outline: 'none',
                     boxSizing: 'border-box',
-                    transition: 'all 0.15s ease',
-                    boxShadow: isRecording ? '0 0 0 4px rgba(254, 105, 4, 0.1)' : 'none',
                   }}
                 />
 
-                {/* Speech Button */}
                 {speechSupported && (
                   <button
                     type="button"
                     onClick={toggleRecording}
-                    title={isRecording ? 'Stop Recording' : 'Speak into Microphone'}
+                    title={isRecording ? 'Stop recording' : 'Speak'}
                     style={{
                       position: 'absolute',
-                      top: '12px',
-                      right: '12px',
-                      width: '40px',
-                      height: '40px',
-                      borderRadius: '12px',
+                      top: '10px',
+                      right: '10px',
+                      width: '36px',
+                      height: '36px',
+                      borderRadius: '8px',
                       backgroundColor: isRecording ? '#FE6904' : '#F8F8F7',
                       color: isRecording ? '#FFFFFF' : '#171717',
-                      border: isRecording ? 'none' : '1px solid #EAE7E2',
+                      border: '1px solid #EAE7E2',
                       cursor: 'pointer',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      transition: 'all 0.2s ease',
-                      boxShadow: isRecording ? '0 4px 12px rgba(254, 105, 4, 0.35)' : 'none',
                     }}
                   >
-                    {isRecording ? <MicOff size={20} /> : <Mic size={20} />}
+                    {isRecording ? <MicOff size={16} /> : <Mic size={16} />}
                   </button>
                 )}
               </div>
 
-              {/* Live Listening Indicator */}
               {isRecording && (
                 <div style={{
                   display: 'flex',
                   alignItems: 'center',
-                  gap: '8px',
-                  marginTop: '8px',
+                  gap: '6px',
+                  marginTop: '6px',
                   color: '#FE6904',
                   fontSize: '0.8rem',
-                  fontWeight: 700,
                 }}>
-                  <span style={{
-                    width: '8px',
-                    height: '8px',
-                    borderRadius: '50%',
-                    backgroundColor: '#FE6904',
-                    animation: 'pulse 1s infinite',
-                  }} />
-                  <span>Listening... Speak clearly. Text appears automatically.</span>
+                  <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: '#FE6904' }} />
+                  <span>Listening... Speak clearly.</span>
                 </div>
               )}
 
               {speechError && (
-                <div style={{ marginTop: '8px', fontSize: '0.8rem', color: '#B91C1C' }}>
+                <div style={{ marginTop: '6px', fontSize: '0.8rem', color: '#171717' }}>
                   {speechError}
                 </div>
               )}
 
-              {/* Transparent Rubric Preview Note */}
-              <div style={{
-                marginTop: '1rem',
-                padding: '10px 14px',
-                borderRadius: '12px',
-                backgroundColor: '#FBFBFA',
-                border: '1px solid #EAE7E2',
-                fontSize: '0.78rem',
-                color: '#77736F',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-              }}>
-                <Volume2 size={16} color="#FE6904" style={{ flexShrink: 0 }} />
-                <span>
-                  <strong>Transparent Rubric:</strong> Gemini evaluates Conceptual Accuracy (40%), Practical Justification (40%), and Absence of Misconceptions (20%). Score ≥ 70% required to complete.
-                </span>
-              </div>
-
-              {/* Evaluation Action Button */}
-              <div style={{ marginTop: '1.5rem', display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
+              {/* Actions */}
+              <div style={{ marginTop: '1.25rem', display: 'flex', justifyContent: 'flex-end', gap: '8px' }}>
                 <button
                   type="button"
                   onClick={onClose}
-                  style={{
-                    padding: '10px 18px',
-                    borderRadius: '12px',
-                    backgroundColor: '#FFFFFF',
-                    border: '1px solid #EAE7E2',
-                    fontSize: '0.9rem',
-                    fontWeight: 700,
-                    color: '#77736F',
-                    cursor: 'pointer',
-                  }}
+                  className="btn-secondary"
+                  style={{ padding: '8px 16px', borderRadius: '8px', fontSize: '0.85rem' }}
                 >
                   Cancel
                 </button>
@@ -447,90 +388,66 @@ export function VerbalCheckpointModal({
                   type="button"
                   disabled={!studentResponse.trim() || isEvaluating}
                   onClick={handleEvaluate}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '8px',
-                    padding: '12px 24px',
-                    borderRadius: '12px',
-                    backgroundColor: studentResponse.trim() ? '#FE6904' : '#D6D2CC',
-                    color: '#FFFFFF',
-                    border: 'none',
-                    fontSize: '0.95rem',
-                    fontWeight: 800,
-                    cursor: studentResponse.trim() ? 'pointer' : 'not-allowed',
-                    boxShadow: studentResponse.trim() ? '0 4px 16px rgba(254, 105, 4, 0.25)' : 'none',
-                  }}
+                  className="btn-primary"
+                  style={{ padding: '8px 18px', borderRadius: '8px', fontSize: '0.85rem', opacity: !studentResponse.trim() || isEvaluating ? 0.6 : 1 }}
                 >
-                  {isEvaluating ? (
-                    <>
-                      <span style={{ display: 'inline-block', width: '14px', height: '14px', border: '2px solid #FFFFFF', borderTopColor: 'transparent', borderRadius: '50%', animation: 'spin 1s linear infinite' }} />
-                      <span>Evaluating Understanding...</span>
-                    </>
-                  ) : (
-                    <>
-                      <Sparkles size={16} />
-                      <span>Submit for Evaluation</span>
-                    </>
-                  )}
+                  {isEvaluating ? 'Evaluating…' : 'Submit explanation'}
                 </button>
               </div>
             </div>
           ) : (
-            /* Evaluation Results & Rubric Card */
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+            /* Results */
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
               <div style={{
-                backgroundColor: evaluationResult.passed ? '#ECFDF5' : '#FFFBEB',
-                borderRadius: '18px',
-                border: evaluationResult.passed ? '1.5px solid #A7F3D0' : '1.5px solid #FDE68A',
-                padding: '1.5rem',
+                backgroundColor: '#F8F8F7',
+                borderRadius: '12px',
+                border: '1px solid #EAE7E2',
+                padding: '1.25rem',
               }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                     {evaluationResult.passed ? (
-                      <CheckCircle2 size={24} color="#047857" />
+                      <CheckCircle2 size={20} color="#FE6904" />
                     ) : (
-                      <AlertCircle size={24} color="#D97706" />
+                      <AlertCircle size={20} color="#77736F" />
                     )}
-                    <h4 style={{ margin: 0, fontSize: '1.2rem', fontWeight: 800, color: evaluationResult.passed ? '#047857' : '#B45309' }}>
-                      {evaluationResult.passed ? 'Understanding Verified!' : 'Needs Conceptual Clarification'}
+                    <h4 style={{ margin: 0, fontSize: '1rem', fontWeight: 600, color: '#171717' }}>
+                      {evaluationResult.passed ? 'Understanding verified' : 'Needs clarification'}
                     </h4>
                   </div>
 
-                  <span style={{
-                    fontSize: '1.1rem',
-                    fontWeight: 900,
-                    padding: '4px 12px',
-                    borderRadius: '999px',
-                    backgroundColor: evaluationResult.passed ? '#047857' : '#D97706',
-                    color: '#FFFFFF',
+                  <span className="badge" style={{
+                    backgroundColor: evaluationResult.passed ? '#FFE5CE' : '#F8F8F7',
+                    color: evaluationResult.passed ? '#FE6904' : '#77736F',
+                    border: '1px solid #EAE7E2',
+                    fontWeight: 600,
                   }}>
                     {evaluationResult.score}%
                   </span>
                 </div>
 
-                <p style={{ margin: '0 0 1rem 0', fontSize: '0.925rem', color: '#374151', lineHeight: '1.6' }}>
+                <p style={{ margin: '0 0 0.75rem 0', fontSize: '0.875rem', color: '#171717', lineHeight: '1.5' }}>
                   {evaluationResult.feedback}
                 </p>
 
-                {/* 3-Part Rubric Breakdown */}
+                {/* Rubric Breakdown */}
                 {evaluationResult.rubricScores && (
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: '10px', marginTop: '1rem', paddingTop: '1rem', borderTop: '1px solid rgba(0,0,0,0.06)' }}>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px', marginTop: '0.75rem', paddingTop: '0.75rem', borderTop: '1px solid #EAE7E2' }}>
                     <div>
-                      <div style={{ fontSize: '0.72rem', color: '#6B7280', fontWeight: 700 }}>Conceptual Accuracy</div>
-                      <div style={{ fontSize: '1rem', fontWeight: 800, color: '#171717' }}>
+                      <div style={{ fontSize: '0.75rem', color: '#77736F' }}>Conceptual accuracy</div>
+                      <div style={{ fontSize: '0.9rem', fontWeight: 600, color: '#171717' }}>
                         {evaluationResult.rubricScores.conceptualAccuracy}%
                       </div>
                     </div>
                     <div>
-                      <div style={{ fontSize: '0.72rem', color: '#6B7280', fontWeight: 700 }}>Practical Justification</div>
-                      <div style={{ fontSize: '1rem', fontWeight: 800, color: '#171717' }}>
+                      <div style={{ fontSize: '0.75rem', color: '#77736F' }}>Practical justification</div>
+                      <div style={{ fontSize: '0.9rem', fontWeight: 600, color: '#171717' }}>
                         {evaluationResult.rubricScores.practicalJustification}%
                       </div>
                     </div>
                     <div>
-                      <div style={{ fontSize: '0.72rem', color: '#6B7280', fontWeight: 700 }}>Absence of Misconceptions</div>
-                      <div style={{ fontSize: '1rem', fontWeight: 800, color: '#171717' }}>
+                      <div style={{ fontSize: '0.75rem', color: '#77736F' }}>Absence of misconceptions</div>
+                      <div style={{ fontSize: '0.9rem', fontWeight: 600, color: '#171717' }}>
                         {evaluationResult.rubricScores.absenceOfMisconceptions}%
                       </div>
                     </div>
@@ -538,13 +455,13 @@ export function VerbalCheckpointModal({
                 )}
               </div>
 
-              {/* Identified Strengths */}
+              {/* Skills shown */}
               {evaluationResult.identifiedStrengths?.length > 0 && (
-                <div style={{ backgroundColor: '#FBFBFA', padding: '1rem 1.25rem', borderRadius: '14px', border: '1px solid #EAE7E2' }}>
-                  <div style={{ fontSize: '0.78rem', fontWeight: 800, color: '#047857', marginBottom: '6px' }}>
-                    Demonstrated Competencies:
+                <div style={{ backgroundColor: '#F8F8F7', padding: '1rem', borderRadius: '12px', border: '1px solid #EAE7E2' }}>
+                  <div style={{ fontSize: '0.8rem', fontWeight: 600, color: '#171717', marginBottom: '4px' }}>
+                    Skills shown:
                   </div>
-                  <ul style={{ margin: 0, paddingLeft: '1.2rem', fontSize: '0.85rem', color: '#374151', lineHeight: '1.5' }}>
+                  <ul style={{ margin: 0, paddingLeft: '1.2rem', fontSize: '0.85rem', color: '#77736F', lineHeight: '1.5' }}>
                     {evaluationResult.identifiedStrengths.map((s, idx) => (
                       <li key={idx}>{s}</li>
                     ))}
@@ -554,11 +471,11 @@ export function VerbalCheckpointModal({
 
               {/* Follow-up question if close */}
               {evaluationResult.followUpQuestion && !evaluationResult.passed && (
-                <div style={{ backgroundColor: '#FFFBEB', padding: '1.25rem', borderRadius: '14px', border: '1px solid #FDE68A' }}>
-                  <div style={{ fontSize: '0.8rem', fontWeight: 800, color: '#B45309', marginBottom: '6px' }}>
-                    Quick Follow-up Question:
+                <div style={{ backgroundColor: '#F8F8F7', padding: '1rem', borderRadius: '12px', border: '1px solid #EAE7E2' }}>
+                  <div style={{ fontSize: '0.8rem', fontWeight: 600, color: '#171717', marginBottom: '4px' }}>
+                    Follow-up question:
                   </div>
-                  <p style={{ margin: '0 0 10px 0', fontSize: '0.88rem', color: '#92400E', fontWeight: 600 }}>
+                  <p style={{ margin: '0 0 8px 0', fontSize: '0.85rem', color: '#171717' }}>
                     "{evaluationResult.followUpQuestion}"
                   </p>
                   <textarea
@@ -568,10 +485,10 @@ export function VerbalCheckpointModal({
                     rows={3}
                     style={{
                       width: '100%',
-                      padding: '8px 12px',
-                      borderRadius: '10px',
-                      border: '1px solid #FDE68A',
-                      fontSize: '0.875rem',
+                      padding: '8px 10px',
+                      borderRadius: '8px',
+                      border: '1px solid #EAE7E2',
+                      fontSize: '0.85rem',
                       fontFamily: 'inherit',
                       outline: 'none',
                       boxSizing: 'border-box',
@@ -580,79 +497,61 @@ export function VerbalCheckpointModal({
                   <button
                     type="button"
                     onClick={handleEvaluate}
-                    style={{
-                      marginTop: '8px',
-                      padding: '8px 16px',
-                      borderRadius: '8px',
-                      backgroundColor: '#B45309',
-                      color: '#FFFFFF',
-                      border: 'none',
-                      fontSize: '0.825rem',
-                      fontWeight: 700,
-                      cursor: 'pointer',
-                    }}
+                    className="btn-primary"
+                    style={{ marginTop: '8px', padding: '6px 14px', borderRadius: '8px', fontSize: '0.8rem' }}
                   >
-                    Submit Clarification
+                    Submit clarification
                   </button>
                 </div>
               )}
 
-              {/* Remediation Recommendation if struggled */}
+              {/* Remediation recommendation */}
               {evaluationResult.remediationRecommendation && (
-                <div style={{ backgroundColor: '#FEF2F2', padding: '1rem 1.25rem', borderRadius: '14px', border: '1px solid #FECACA' }}>
-                  <div style={{ fontSize: '0.78rem', fontWeight: 800, color: '#B91C1C', marginBottom: '4px' }}>
-                    Recommended Remediation:
+                <div style={{ backgroundColor: '#F8F8F7', padding: '1rem', borderRadius: '12px', border: '1px solid #EAE7E2' }}>
+                  <div style={{ fontSize: '0.8rem', fontWeight: 600, color: '#171717', marginBottom: '4px' }}>
+                    Recommended review:
                   </div>
-                  <p style={{ margin: 0, fontSize: '0.85rem', color: '#991B1B', lineHeight: '1.5' }}>
+                  <p style={{ margin: 0, fontSize: '0.85rem', color: '#77736F', lineHeight: '1.5' }}>
                     {evaluationResult.remediationRecommendation}
                   </p>
                 </div>
               )}
 
               {/* Action Buttons */}
-              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px', marginTop: '0.5rem' }}>
+              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '8px', marginTop: '0.5rem' }}>
                 {!evaluationResult.passed ? (
                   <button
                     type="button"
                     onClick={handleRetry}
+                    className="btn-secondary"
                     style={{
                       display: 'flex',
                       alignItems: 'center',
                       gap: '6px',
-                      padding: '10px 20px',
-                      borderRadius: '12px',
-                      backgroundColor: '#FFFFFF',
-                      border: '1px solid #EAE7E2',
-                      fontSize: '0.9rem',
-                      fontWeight: 700,
-                      color: '#171717',
-                      cursor: 'pointer',
+                      padding: '8px 16px',
+                      borderRadius: '8px',
+                      fontSize: '0.85rem',
                     }}
                   >
-                    <RotateCcw size={16} />
-                    <span>Review & Retry</span>
+                    <RotateCcw size={14} />
+                    <span>Review and retry</span>
                   </button>
                 ) : (
                   <button
                     type="button"
                     onClick={handleConfirmCompletion}
+                    className="btn-primary"
                     style={{
                       display: 'flex',
                       alignItems: 'center',
-                      gap: '8px',
-                      padding: '12px 28px',
-                      borderRadius: '14px',
-                      backgroundColor: '#047857',
-                      color: '#FFFFFF',
-                      border: 'none',
-                      fontSize: '0.95rem',
-                      fontWeight: 800,
-                      cursor: 'pointer',
-                      boxShadow: '0 4px 16px rgba(4, 120, 87, 0.25)',
+                      gap: '6px',
+                      padding: '8px 20px',
+                      borderRadius: '8px',
+                      fontSize: '0.85rem',
                     }}
                   >
-                    <span>Confirm Milestone Complete</span>
-                    <ArrowRight size={16} />
+                    <span>Complete milestone</span>
+                    <ArrowRight size={14} />
                   </button>
                 )}
               </div>

@@ -1,21 +1,14 @@
 import React, { useState } from 'react';
 import {
   Mic,
-  Brain,
-  Sparkles,
   Award,
   History,
-  BookOpen,
-  ArrowRight,
-  ShieldCheck,
-  CheckCircle2,
-  Calendar,
-  MessageSquare,
+  ArrowRight
 } from 'lucide-react';
 import LiveAiInterviewRoom from '../components/LiveAiInterviewRoom';
 import { liveInterviewService } from '../services/liveInterviewService';
 
-export default function LiveInterviewPage({ onNavigate = () => {} }) {
+export default function LiveInterviewPage({ onNavigate: _onNavigate = () => {} }) {
   const [activeTab, setActiveTab] = useState('interview'); // 'interview' | 'history'
   const [selectedMode, setSelectedMode] = useState('career_discovery'); // 'career_discovery' | 'learning_checkpoint'
   const [selectedCheckpoint, setSelectedCheckpoint] = useState({
@@ -46,211 +39,173 @@ export default function LiveInterviewPage({ onNavigate = () => {} }) {
     },
   ];
 
-  const handleInterviewComplete = (report) => {
-    // Refresh saved reports
+  const handleInterviewComplete = (_report) => {
     setSavedReports(liveInterviewService.getSavedReports());
   };
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-8 space-y-8 animate-fade-in">
-      {/* ── HEADER ────────────────────────────────────────── */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div className="page">
+      {/* Header */}
+      <div className="page-header">
         <div>
-          <div className="flex items-center gap-2 mb-1">
-            <div className="p-2 rounded-xl bg-indigo-500/10 text-indigo-400">
-              <Mic className="w-6 h-6" />
-            </div>
-            <h1 className="text-2xl font-bold text-white tracking-tight">Live AI Verbal Assessment</h1>
-            <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-              Real-Time Voice
-            </span>
-          </div>
-          <p className="text-slate-400 text-sm">
-            Live spoken interview with adaptive AI reasoning. Evaluates depth, thought process, and concrete examples.
-          </p>
+          <h1 className="page-title">Interview</h1>
+          <p className="page-subtitle">Spoken technical assessment and discussion.</p>
         </div>
 
-        {/* Tab navigation */}
-        <div className="flex items-center p-1 bg-slate-900 border border-slate-800 rounded-2xl">
+        <div style={{ display: 'flex', gap: '8px' }}>
           <button
+            type="button"
             onClick={() => {
               setActiveTab('interview');
               setInActiveInterview(false);
             }}
-            className={`px-4 py-2 rounded-xl text-xs font-semibold transition ${
-              activeTab === 'interview'
-                ? 'bg-indigo-600 text-white shadow-md'
-                : 'text-slate-400 hover:text-slate-200'
-            }`}
+            className={activeTab === 'interview' ? 'btn-primary' : 'btn-secondary'}
+            style={{ padding: '6px 14px', borderRadius: '8px', fontSize: '0.85rem' }}
           >
-            Interview Room
+            Interview
           </button>
           <button
+            type="button"
             onClick={() => {
               setActiveTab('history');
               setSavedReports(liveInterviewService.getSavedReports());
             }}
-            className={`px-4 py-2 rounded-xl text-xs font-semibold transition flex items-center gap-1.5 ${
-              activeTab === 'history'
-                ? 'bg-indigo-600 text-white shadow-md'
-                : 'text-slate-400 hover:text-slate-200'
-            }`}
+            className={activeTab === 'history' ? 'btn-primary' : 'btn-secondary'}
+            style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '6px 14px', borderRadius: '8px', fontSize: '0.85rem' }}
           >
-            <History className="w-3.5 h-3.5" />
-            <span>Past Reports ({savedReports.length})</span>
+            <History size={14} />
+            <span>Past reports ({savedReports.length})</span>
           </button>
         </div>
       </div>
 
-      {/* ── MAIN CONTENT ──────────────────────────────────── */}
       {activeTab === 'interview' && (
-        <div className="space-y-6">
+        <div>
           {!inActiveInterview ? (
-            <>
-              {/* Mode Selection Grid */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* Mode 1: Career Discovery */}
-                <div
-                  onClick={() => setSelectedMode('career_discovery')}
-                  className={`cursor-pointer p-6 rounded-3xl border transition relative overflow-hidden group ${
-                    selectedMode === 'career_discovery'
-                      ? 'bg-gradient-to-b from-indigo-950/40 to-slate-900 border-indigo-500 shadow-xl shadow-indigo-500/10'
-                      : 'bg-slate-900/60 border-slate-800 hover:border-slate-700'
-                  }`}
-                >
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="w-12 h-12 rounded-2xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center">
-                      <Sparkles className="w-6 h-6" />
-                    </div>
-                    <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-slate-800 text-slate-300">
-                      4 Turns • ~6 mins
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '1.5rem' }}>
+              {/* Mode 1: Career Discovery */}
+              <div
+                onClick={() => setSelectedMode('career_discovery')}
+                className="card"
+                style={{
+                  cursor: 'pointer',
+                  border: selectedMode === 'career_discovery' ? '2px solid #FE6904' : '1px solid #EAE7E2',
+                  backgroundColor: selectedMode === 'career_discovery' ? '#FFFFFF' : '#FFFFFF',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
+                }}
+              >
+                <div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
+                    <span className="badge" style={{ backgroundColor: '#FFE5CE', color: '#FE6904', border: '1px solid #EAE7E2' }}>
+                      Career discovery
+                    </span>
+                    <span style={{ fontSize: '0.8rem', color: '#77736F' }}>
+                      4 turns • ~6 mins
                     </span>
                   </div>
 
-                  <h3 className="text-lg font-bold text-white mb-2 group-hover:text-indigo-300 transition">
+                  <h3 style={{ fontSize: '1.1rem', fontWeight: 600, color: '#171717', margin: '0 0 0.5rem 0' }}>
                     Career Discovery Interview
                   </h3>
-                  <p className="text-slate-400 text-xs leading-relaxed mb-4">
-                    Explore your natural motivations, problem-solving mindset under ambiguity, preferred working
-                    environments, and real-world project scenarios.
+                  <p style={{ fontSize: '0.875rem', color: '#77736F', lineHeight: 1.5, margin: '0 0 1.25rem 0' }}>
+                    Discuss your interests, problem-solving habits, and project scenarios to refine your career direction.
                   </p>
-
-                  <div className="space-y-2 text-xs text-slate-300 mb-6">
-                    <div className="flex items-center gap-2">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                      <span>Adaptive reasoning questions tailored to your answers</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                      <span>Synchronizes with your Preliminary Career Report</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                      <span>Generates targeted discussion points for your human mentor meet</span>
-                    </div>
-                  </div>
-
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setSelectedMode('career_discovery');
-                      setInActiveInterview(true);
-                    }}
-                    className="w-full py-3 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-xs transition flex items-center justify-center gap-2 shadow-lg shadow-indigo-600/20"
-                  >
-                    <Mic className="w-4 h-4" />
-                    <span>Enter Career Interview</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </button>
                 </div>
 
-                {/* Mode 2: Learning Checkpoint */}
-                <div
-                  onClick={() => setSelectedMode('learning_checkpoint')}
-                  className={`cursor-pointer p-6 rounded-3xl border transition relative overflow-hidden group ${
-                    selectedMode === 'learning_checkpoint'
-                      ? 'bg-gradient-to-b from-purple-950/40 to-slate-900 border-purple-500 shadow-xl shadow-purple-500/10'
-                      : 'bg-slate-900/60 border-slate-800 hover:border-slate-700'
-                  }`}
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setSelectedMode('career_discovery');
+                    setInActiveInterview(true);
+                  }}
+                  className="btn-primary"
+                  style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', padding: '10px 16px', borderRadius: '8px', fontSize: '0.85rem' }}
                 >
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="w-12 h-12 rounded-2xl bg-purple-500/10 text-purple-400 flex items-center justify-center">
-                      <Brain className="w-6 h-6" />
-                    </div>
-                    <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-slate-800 text-slate-300">
-                      3 Turns • ~5 mins
+                  <Mic size={16} />
+                  <span>Start interview</span>
+                  <ArrowRight size={14} />
+                </button>
+              </div>
+
+              {/* Mode 2: Learning Checkpoint */}
+              <div
+                onClick={() => setSelectedMode('learning_checkpoint')}
+                className="card"
+                style={{
+                  cursor: 'pointer',
+                  border: selectedMode === 'learning_checkpoint' ? '2px solid #FE6904' : '1px solid #EAE7E2',
+                  backgroundColor: '#FFFFFF',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
+                }}
+              >
+                <div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
+                    <span className="badge" style={{ backgroundColor: '#F8F8F7', color: '#171717', border: '1px solid #EAE7E2' }}>
+                      Checkpoint
+                    </span>
+                    <span style={{ fontSize: '0.8rem', color: '#77736F' }}>
+                      3 turns • ~5 mins
                     </span>
                   </div>
 
-                  <h3 className="text-lg font-bold text-white mb-2 group-hover:text-purple-300 transition">
+                  <h3 style={{ fontSize: '1.1rem', fontWeight: 600, color: '#171717', margin: '0 0 0.5rem 0' }}>
                     Verbal Learning Checkpoint
                   </h3>
-                  <p className="text-slate-400 text-xs leading-relaxed mb-4">
-                    Orally explain concepts, justify architectural trade-offs, and solve realistic problems to unlock
-                    adaptive roadmap mastery gates.
+                  <p style={{ fontSize: '0.875rem', color: '#77736F', lineHeight: 1.5, margin: '0 0 1rem 0' }}>
+                    Orally explain technical concepts and trade-offs on a selected topic.
                   </p>
 
                   {/* Module Picker */}
-                  <div className="space-y-2 mb-6">
-                    <p className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
-                      Select Topic to Defend:
-                    </p>
-                    <div className="space-y-1.5">
-                      {learningModules.map((mod) => (
-                        <div
-                          key={mod.id}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setSelectedCheckpoint(mod);
-                            setSelectedMode('learning_checkpoint');
-                          }}
-                          className={`p-2.5 rounded-xl border text-xs transition flex items-center justify-between ${
-                            selectedCheckpoint.id === mod.id && selectedMode === 'learning_checkpoint'
-                              ? 'bg-purple-900/30 border-purple-500/60 text-white'
-                              : 'bg-slate-800/60 border-slate-700/50 text-slate-300 hover:border-slate-600'
-                          }`}
-                        >
-                          <span className="font-medium truncate">{mod.title}</span>
-                          <span className="text-[10px] text-slate-400 shrink-0">{mod.duration}</span>
-                        </div>
-                      ))}
-                    </div>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', marginBottom: '1.25rem' }}>
+                    {learningModules.map((mod) => (
+                      <div
+                        key={mod.id}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setSelectedCheckpoint(mod);
+                          setSelectedMode('learning_checkpoint');
+                        }}
+                        style={{
+                          padding: '8px 10px',
+                          borderRadius: '8px',
+                          border: selectedCheckpoint.id === mod.id && selectedMode === 'learning_checkpoint' ? '1px solid #FE6904' : '1px solid #EAE7E2',
+                          backgroundColor: selectedCheckpoint.id === mod.id && selectedMode === 'learning_checkpoint' ? '#FFE5CE' : '#F8F8F7',
+                          color: '#171717',
+                          fontSize: '0.8rem',
+                          display: 'flex',
+                          justifyContent: 'space-between',
+                          alignItems: 'center',
+                        }}
+                      >
+                        <span style={{ fontWeight: 500 }}>{mod.title}</span>
+                        <span style={{ fontSize: '0.75rem', color: '#77736F' }}>{mod.duration}</span>
+                      </div>
+                    ))}
                   </div>
-
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setSelectedMode('learning_checkpoint');
-                      setInActiveInterview(true);
-                    }}
-                    className="w-full py-3 rounded-2xl bg-purple-600 hover:bg-purple-700 text-white font-semibold text-xs transition flex items-center justify-center gap-2 shadow-lg shadow-purple-600/20"
-                  >
-                    <Mic className="w-4 h-4" />
-                    <span>Enter Checkpoint Interview</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </button>
                 </div>
-              </div>
 
-              {/* Informational Guidance Banner */}
-              <div className="p-5 rounded-2xl bg-slate-900/60 border border-slate-800 flex items-start gap-4">
-                <ShieldCheck className="w-5 h-5 text-indigo-400 shrink-0 mt-0.5" />
-                <div className="text-xs text-slate-300 space-y-1">
-                  <p className="font-semibold text-white">How the Live AI Interview operates:</p>
-                  <p className="text-slate-400 leading-relaxed">
-                    1. When you enter, the AI interviewer will verbally speak the first question aloud using speech synthesis.
-                    <br />
-                    2. Speak your answer into your microphone naturally. Your words will appear live in the transcript.
-                    <br />
-                    3. Gemini evaluates your reasoning substance and dynamically replies with a relevant follow-up question.
-                    <br />
-                    4. At the conclusion, you will receive a transparent rubric report detailing verified strengths, growth areas, and mentor talking points.
-                  </p>
-                </div>
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setSelectedMode('learning_checkpoint');
+                    setInActiveInterview(true);
+                  }}
+                  className="btn-primary"
+                  style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', padding: '10px 16px', borderRadius: '8px', fontSize: '0.85rem' }}
+                >
+                  <Mic size={16} />
+                  <span>Start checkpoint</span>
+                  <ArrowRight size={14} />
+                </button>
               </div>
-            </>
+            </div>
           ) : (
-            /* Active Live Interview Room Container */
             <LiveAiInterviewRoom
               mode={selectedMode}
               checkpointContext={selectedMode === 'learning_checkpoint' ? selectedCheckpoint : null}
@@ -261,80 +216,56 @@ export default function LiveInterviewPage({ onNavigate = () => {} }) {
         </div>
       )}
 
-      {/* ── HISTORY / PAST EVALUATION REPORTS TAB ─────────── */}
+      {/* History */}
       {activeTab === 'history' && (
-        <div className="space-y-4">
+        <div>
           {savedReports.length === 0 ? (
-            <div className="p-12 text-center bg-slate-900 border border-slate-800 rounded-3xl">
-              <History className="w-12 h-12 text-slate-600 mx-auto mb-3" />
-              <h3 className="text-base font-semibold text-white mb-1">No Completed Interviews Yet</h3>
-              <p className="text-slate-400 text-xs mb-4">
-                Start your first live voice interview to generate verified oral assessment reports.
-              </p>
-              <button
-                onClick={() => {
-                  setActiveTab('interview');
-                  setInActiveInterview(true);
-                }}
-                className="px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold transition"
-              >
-                Start an Interview Now
-              </button>
-            </div>
+            <p style={{ fontSize: '0.9rem', color: '#77736F' }}>
+              No completed interviews yet.
+            </p>
           ) : (
-            <div className="space-y-4">
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
               {savedReports.map((entry) => (
-                <div
-                  key={entry.id}
-                  className="p-6 rounded-3xl bg-slate-900 border border-slate-800 hover:border-slate-700 transition space-y-4"
-                >
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800 pb-3">
-                    <div className="flex items-center gap-2">
-                      <Award className="w-4 h-4 text-indigo-400" />
-                      <span className="font-semibold text-white text-sm">
-                        {entry.mode === 'career_discovery'
-                          ? 'Career Discovery Live Interview'
-                          : 'Verbal Learning Checkpoint'}
+                <div key={entry.id} className="card">
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem', borderBottom: '1px solid #EAE7E2', paddingBottom: '0.5rem' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <Award size={16} color="#FE6904" />
+                      <span style={{ fontSize: '0.95rem', fontWeight: 600, color: '#171717' }}>
+                        {entry.mode === 'career_discovery' ? 'Career discovery interview' : 'Verbal checkpoint'}
                       </span>
-                      <span className="px-2 py-0.5 rounded-full text-[10px] bg-slate-800 text-slate-300">
-                        {new Date(entry.timestamp).toLocaleDateString()} at{' '}
-                        {new Date(entry.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                      <span style={{ fontSize: '0.8rem', color: '#77736F' }}>
+                        {new Date(entry.timestamp).toLocaleDateString()}
                       </span>
                     </div>
 
-                    <div className="flex items-center gap-2">
-                      <span className="text-xs text-slate-400">Mastery:</span>
-                      <span className="text-sm font-bold text-indigo-400">
-                        {entry.report.conceptualMasteryScore || 88}/100
-                      </span>
-                    </div>
+                    <span className="badge" style={{ backgroundColor: '#FFE5CE', color: '#FE6904', border: '1px solid #EAE7E2' }}>
+                      Score: {entry.report.conceptualMasteryScore || 88}%
+                    </span>
                   </div>
 
-                  <p className="text-xs text-slate-300 leading-relaxed bg-slate-950/40 p-3 rounded-xl border border-slate-800/60">
+                  <p style={{ fontSize: '0.875rem', color: '#171717', lineHeight: 1.5, margin: '0 0 1rem 0' }}>
                     {entry.report.overallSummary}
                   </p>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
-                    <div className="p-3 rounded-xl bg-slate-800/40 border border-slate-800">
-                      <span className="font-semibold text-emerald-400 block mb-1">Demonstrated Strengths</span>
-                      <ul className="space-y-1 text-slate-300">
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1rem' }}>
+                    <div style={{ padding: '0.75rem', borderRadius: '8px', backgroundColor: '#F8F8F7', border: '1px solid #EAE7E2' }}>
+                      <span style={{ fontSize: '0.8rem', fontWeight: 600, color: '#171717', display: 'block', marginBottom: '4px' }}>
+                        Skills shown
+                      </span>
+                      <ul style={{ margin: 0, paddingLeft: '1.2rem', fontSize: '0.8rem', color: '#77736F', lineHeight: 1.5 }}>
                         {(entry.report.demonstratedStrengths || []).slice(0, 3).map((st, i) => (
-                          <li key={i} className="flex items-center gap-1.5">
-                            <span className="w-1 h-1 rounded-full bg-emerald-400" />
-                            <span>{st}</span>
-                          </li>
+                          <li key={i}>{st}</li>
                         ))}
                       </ul>
                     </div>
 
-                    <div className="p-3 rounded-xl bg-slate-800/40 border border-slate-800">
-                      <span className="font-semibold text-purple-400 block mb-1">Mentor Discussion Points</span>
-                      <ul className="space-y-1 text-slate-300">
+                    <div style={{ padding: '0.75rem', borderRadius: '8px', backgroundColor: '#F8F8F7', border: '1px solid #EAE7E2' }}>
+                      <span style={{ fontSize: '0.8rem', fontWeight: 600, color: '#171717', display: 'block', marginBottom: '4px' }}>
+                        Discussion points
+                      </span>
+                      <ul style={{ margin: 0, paddingLeft: '1.2rem', fontSize: '0.8rem', color: '#77736F', lineHeight: 1.5 }}>
                         {(entry.report.actionableMentorDiscussionPoints || []).slice(0, 2).map((pt, i) => (
-                          <li key={i} className="flex items-center gap-1.5">
-                            <span className="w-1 h-1 rounded-full bg-purple-400" />
-                            <span>{pt}</span>
-                          </li>
+                          <li key={i}>{pt}</li>
                         ))}
                       </ul>
                     </div>

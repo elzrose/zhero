@@ -40,7 +40,7 @@ export function DecorativeWave({ className = '', style = {} }) {
             <stop offset="0%" stopColor="#FFE5CE" stopOpacity="0.4" />
             <stop offset="35%" stopColor="#FA9B2A" stopOpacity="0.7" />
             <stop offset="70%" stopColor="#FE6904" stopOpacity="0.9" />
-            <stop offset="100%" stopColor="#F39E2A" stopOpacity="0.6" />
+            <stop offset="100%" stopColor="#FA9B2A" stopOpacity="0.6" />
           </linearGradient>
 
           <linearGradient id="waveGrad2" x1="0" y1="200" x2="800" y2="400" gradientUnits="userSpaceOnUse">

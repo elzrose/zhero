@@ -114,12 +114,12 @@ export function DailyWorkloadPlannerView({ onNavigateToRoadmap, onNavigateToInte
       {successMessage && (
         <div
           style={{
-            backgroundColor: '#ECFDF5',
-            border: '1px solid #A7F3D0',
+            backgroundColor: '#FFE5CE',
+            border: '1px solid #EAE7E2',
             borderRadius: '12px',
             padding: '0.75rem 1rem',
             marginBottom: '1.25rem',
-            color: '#065F46',
+            color: '#171717',
             fontSize: '0.85rem',
             fontWeight: 600,
             display: 'flex',
@@ -127,7 +127,7 @@ export function DailyWorkloadPlannerView({ onNavigateToRoadmap, onNavigateToInte
             gap: '8px',
           }}
         >
-          <CheckCircle2 size={16} color="#059669" />
+          <CheckCircle2 size={16} color="#FE6904" />
           <span>{successMessage}</span>
         </div>
       )}
@@ -140,7 +140,7 @@ export function DailyWorkloadPlannerView({ onNavigateToRoadmap, onNavigateToInte
           alignItems: 'flex-start',
           flexWrap: 'wrap',
           gap: '1rem',
-          borderBottom: '1px solid #F0EEEB',
+          borderBottom: '1px solid #EAE7E2',
           paddingBottom: '1.25rem',
           marginBottom: '1.5rem',
         }}
@@ -187,9 +187,9 @@ export function DailyWorkloadPlannerView({ onNavigateToRoadmap, onNavigateToInte
               gap: '6px',
               padding: '0.55rem 0.95rem',
               borderRadius: '10px',
-              backgroundColor: '#FFF7ED',
-              border: '1px solid #FDBA74',
-              color: '#C2410C',
+              backgroundColor: '#FFE5CE',
+              border: '1px solid #FA9B2A',
+              color: '#FE6904',
               fontSize: '0.8rem',
               fontWeight: 700,
               cursor: 'pointer',
@@ -207,8 +207,8 @@ export function DailyWorkloadPlannerView({ onNavigateToRoadmap, onNavigateToInte
       {planState.materialChangeReason && (
         <div
           style={{
-            backgroundColor: planState.scheduleMode === 'exam_week' ? '#FEF2F2' : '#FFFBEB',
-            border: `1px solid ${planState.scheduleMode === 'exam_week' ? '#FECACA' : '#FDE68A'}`,
+            backgroundColor: planState.scheduleMode === 'exam_week' ? '#F8F8F7' : '#F8F8F7',
+            border: `1px solid ${planState.scheduleMode === 'exam_week' ? '#EAE7E2' : '#EAE7E2'}`,
             borderRadius: '12px',
             padding: '0.85rem 1.15rem',
             marginBottom: '1.5rem',
@@ -219,10 +219,10 @@ export function DailyWorkloadPlannerView({ onNavigateToRoadmap, onNavigateToInte
         >
           <Sparkles
             size={18}
-            color={planState.scheduleMode === 'exam_week' ? '#DC2626' : '#D97706'}
+            color={planState.scheduleMode === 'exam_week' ? '#171717' : '#FE6904'}
             style={{ flexShrink: 0 }}
           />
-          <div style={{ fontSize: '0.85rem', color: planState.scheduleMode === 'exam_week' ? '#991B1B' : '#92400E' }}>
+          <div style={{ fontSize: '0.85rem', color: planState.scheduleMode === 'exam_week' ? '#171717' : '#171717' }}>
             <strong>Adaptive Adjustment:</strong> {planState.materialChangeReason}
           </div>
         </div>
@@ -234,7 +234,7 @@ export function DailyWorkloadPlannerView({ onNavigateToRoadmap, onNavigateToInte
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
           gap: '1.25rem',
-          backgroundColor: '#FAF8F5',
+          backgroundColor: '#F8F8F7',
           borderRadius: '14px',
           padding: '1.25rem',
           marginBottom: '1.75rem',
@@ -258,9 +258,9 @@ export function DailyWorkloadPlannerView({ onNavigateToRoadmap, onNavigateToInte
                     borderRadius: '8px',
                     fontSize: '0.8rem',
                     fontWeight: 700,
-                    border: isSelected ? '1px solid #FE6904' : '1px solid #E5E1DA',
+                    border: isSelected ? '1px solid #FE6904' : '1px solid #EAE7E2',
                     backgroundColor: isSelected ? '#FE6904' : '#FFFFFF',
-                    color: isSelected ? '#FFFFFF' : '#44403C',
+                    color: isSelected ? '#FFFFFF' : '#171717',
                     cursor: 'pointer',
                     boxShadow: isSelected ? '0 2px 6px rgba(254, 105, 4, 0.2)' : 'none',
                     transition: 'all 0.15s ease',
@@ -283,10 +283,10 @@ export function DailyWorkloadPlannerView({ onNavigateToRoadmap, onNavigateToInte
           </label>
           <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
             {[
-              { id: 'normal', label: 'Regular Week' },
-              { id: 'exam_week', label: '📝 Exam Week (Priority)' },
-              { id: 'holiday', label: '🎉 Holiday' },
-              { id: 'rest_day', label: '☕ Rest Day' },
+              { id: 'normal', label: 'Regular week' },
+              { id: 'exam_week', label: 'Exam week' },
+              { id: 'holiday', label: 'Holiday' },
+              { id: 'rest_day', label: 'Rest day' },
             ].map((m) => {
               const isSelected = planState.scheduleMode === m.id;
               return (
@@ -299,9 +299,9 @@ export function DailyWorkloadPlannerView({ onNavigateToRoadmap, onNavigateToInte
                     borderRadius: '8px',
                     fontSize: '0.75rem',
                     fontWeight: 700,
-                    border: isSelected ? '1px solid #FE6904' : '1px solid #E5E1DA',
+                    border: isSelected ? '1px solid #FE6904' : '1px solid #EAE7E2',
                     backgroundColor: isSelected ? '#FFE5CE' : '#FFFFFF',
-                    color: isSelected ? '#C2410C' : '#44403C',
+                    color: isSelected ? '#FE6904' : '#171717',
                     cursor: 'pointer',
                     transition: 'all 0.15s ease',
                   }}
@@ -340,9 +340,9 @@ export function DailyWorkloadPlannerView({ onNavigateToRoadmap, onNavigateToInte
                     borderRadius: '8px',
                     fontSize: '0.75rem',
                     fontWeight: 700,
-                    border: isSelected ? '1px solid #FA9B2A' : '1px solid #E5E1DA',
-                    backgroundColor: isSelected ? '#FFF7ED' : '#FFFFFF',
-                    color: isSelected ? '#EA580C' : '#57534E',
+                    border: isSelected ? '1px solid #FA9B2A' : '1px solid #EAE7E2',
+                    backgroundColor: isSelected ? '#FFE5CE' : '#FFFFFF',
+                    color: isSelected ? '#FE6904' : '#77736F',
                     cursor: 'pointer',
                     transition: 'all 0.15s ease',
                   }}
@@ -374,12 +374,12 @@ export function DailyWorkloadPlannerView({ onNavigateToRoadmap, onNavigateToInte
             style={{
               padding: '2rem',
               textAlign: 'center',
-              backgroundColor: '#FAF8F5',
+              backgroundColor: '#F8F8F7',
               borderRadius: '12px',
-              border: '1px dashed #DDD8D0',
+              border: '1px dashed #EAE7E2',
             }}
           >
-            <CheckCircle2 size={32} color="#10B981" style={{ margin: '0 auto 0.5rem' }} />
+            <CheckCircle2 size={32} color="#FE6904" style={{ margin: '0 auto 0.5rem' }} />
             <h4 style={{ margin: 0, fontSize: '1rem', color: '#171717' }}>All set for today!</h4>
             <p style={{ margin: '0.25rem 0 0', fontSize: '0.85rem', color: '#77736F' }}>
               No remaining career learning tasks scheduled for today. Rest up or focus on your core syllabus!
@@ -392,21 +392,21 @@ export function DailyWorkloadPlannerView({ onNavigateToRoadmap, onNavigateToInte
               const isDeferred = task.status === 'deferred';
 
               // Type badge styling
-              let badgeBg = '#E0F2FE';
-              let badgeColor = '#0369A1';
-              let badgeLabel = 'Roadmap Milestone';
+              let badgeBg = '#F8F8F7';
+              let badgeColor = '#171717';
+              let badgeLabel = 'Roadmap milestone';
               if (task.type === 'revision') {
-                badgeBg = '#FEF3C7';
-                badgeColor = '#B45309';
-                badgeLabel = '⚡ Due Revision (SM-2)';
+                badgeBg = '#FFE5CE';
+                badgeColor = '#FE6904';
+                badgeLabel = 'Revision';
               } else if (task.type === 'remediation') {
-                badgeBg = '#FEE2E2';
-                badgeColor = '#B91C1C';
-                badgeLabel = '🎯 Targeted Remediation';
+                badgeBg = '#F8F8F7';
+                badgeColor = '#171717';
+                badgeLabel = 'Practice';
               } else if (task.type === 'enrichment') {
-                badgeBg = '#EDE9FE';
-                badgeColor = '#6D28D9';
-                badgeLabel = '🌟 Optional Practical';
+                badgeBg = '#F8F8F7';
+                badgeColor = '#77736F';
+                badgeLabel = 'Optional practical';
               }
 
               return (
@@ -414,11 +414,11 @@ export function DailyWorkloadPlannerView({ onNavigateToRoadmap, onNavigateToInte
                   key={task.id || idx}
                   style={{
                     border: isCompleted
-                      ? '1px solid #D1FAE5'
+                      ? '1px solid #FFE5CE'
                       : isDeferred
-                      ? '1px solid #E5E5E5'
+                      ? '1px solid #EAE7E2'
                       : '1px solid #EAE7E2',
-                    backgroundColor: isCompleted ? '#F0FDF4' : isDeferred ? '#F9FAFB' : '#FFFFFF',
+                    backgroundColor: isCompleted ? '#F8F8F7' : isDeferred ? '#F8F8F7' : '#FFFFFF',
                     borderRadius: '14px',
                     padding: '1.15rem 1.25rem',
                     opacity: isDeferred ? 0.65 : 1,
@@ -456,7 +456,7 @@ export function DailyWorkloadPlannerView({ onNavigateToRoadmap, onNavigateToInte
                             gap: '4px',
                             fontSize: '0.75rem',
                             fontWeight: 700,
-                            color: '#57534E',
+                            color: '#77736F',
                           }}
                         >
                           <Clock size={12} />
@@ -470,8 +470,8 @@ export function DailyWorkloadPlannerView({ onNavigateToRoadmap, onNavigateToInte
                               fontWeight: 700,
                               padding: '1px 6px',
                               borderRadius: '4px',
-                              backgroundColor: '#FEF08A',
-                              color: '#854D0E',
+                              backgroundColor: '#FFE5CE',
+                              color: '#171717',
                             }}
                           >
                             Micro-Check
@@ -484,7 +484,7 @@ export function DailyWorkloadPlannerView({ onNavigateToRoadmap, onNavigateToInte
                           margin: 0,
                           fontSize: '0.95rem',
                           fontWeight: 800,
-                          color: isCompleted ? '#065F46' : '#171717',
+                          color: isCompleted ? '#171717' : '#171717',
                           textDecoration: isCompleted ? 'line-through' : 'none',
                         }}
                       >
@@ -536,9 +536,9 @@ export function DailyWorkloadPlannerView({ onNavigateToRoadmap, onNavigateToInte
                               style={{
                                 padding: '0.5rem 0.75rem',
                                 borderRadius: '8px',
-                                backgroundColor: '#FAF8F5',
-                                border: '1px solid #DDD8D0',
-                                color: '#44403C',
+                                backgroundColor: '#F8F8F7',
+                                border: '1px solid #EAE7E2',
+                                color: '#171717',
                                 fontSize: '0.78rem',
                                 fontWeight: 600,
                                 cursor: 'pointer',
@@ -555,8 +555,8 @@ export function DailyWorkloadPlannerView({ onNavigateToRoadmap, onNavigateToInte
                             style={{
                               padding: '0.5rem 0.75rem',
                               borderRadius: '8px',
-                              backgroundColor: '#FAF8F5',
-                              border: '1px solid #DDD8D0',
+                              backgroundColor: '#F8F8F7',
+                              border: '1px solid #EAE7E2',
                               color: '#77736F',
                               fontSize: '0.78rem',
                               fontWeight: 600,
@@ -577,8 +577,8 @@ export function DailyWorkloadPlannerView({ onNavigateToRoadmap, onNavigateToInte
                             gap: '4px',
                             fontSize: '0.8rem',
                             fontWeight: 700,
-                            color: '#059669',
-                            backgroundColor: '#D1FAE5',
+                            color: '#FE6904',
+                            backgroundColor: '#FFE5CE',
                             padding: '4px 10px',
                             borderRadius: '8px',
                           }}
@@ -592,8 +592,8 @@ export function DailyWorkloadPlannerView({ onNavigateToRoadmap, onNavigateToInte
                           style={{
                             fontSize: '0.8rem',
                             fontWeight: 600,
-                            color: '#9CA3AF',
-                            backgroundColor: '#F3F4F6',
+                            color: '#77736F',
+                            backgroundColor: '#F8F8F7',
                             padding: '4px 10px',
                             borderRadius: '8px',
                           }}
@@ -613,7 +613,7 @@ export function DailyWorkloadPlannerView({ onNavigateToRoadmap, onNavigateToInte
       {/* Calm Weekly Progress Tracker (Planned vs Completed) */}
       <div
         style={{
-          borderTop: '1px solid #F0EEEB',
+          borderTop: '1px solid #EAE7E2',
           paddingTop: '1.25rem',
           display: 'flex',
           justifyContent: 'space-between',
@@ -644,7 +644,7 @@ export function DailyWorkloadPlannerView({ onNavigateToRoadmap, onNavigateToInte
                 borderRadius: '8px',
                 backgroundColor: '#FFE5CE',
                 border: '1px solid #FA9B2A',
-                color: '#C2410C',
+                color: '#FE6904',
                 fontSize: '0.8rem',
                 fontWeight: 700,
                 cursor: 'pointer',
