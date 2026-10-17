@@ -1,10 +1,12 @@
 import React from 'react';
 
 export function BrandNavbar({ currentApp = 'student', badgeText = 'Preview' }) {
+  const isDev = typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+
   const apps = [
-    { id: 'student', name: 'Student Portal', port: 3001, url: 'http://localhost:3001' },
-    { id: 'tuition-centre', name: 'Tuition Centre Portal', port: 3002, url: 'http://localhost:3002' },
-    { id: 'admin', name: 'Platform Admin', port: 3003, url: 'http://localhost:3003' },
+    { id: 'student', name: 'Student Portal', port: 3001, url: isDev ? 'http://localhost:3001' : '/' },
+    { id: 'tuition-centre', name: 'Tuition Centre Portal', port: 3002, url: isDev ? 'http://localhost:3002' : '/tuition-centre/' },
+    { id: 'admin', name: 'Platform Admin', port: 3003, url: isDev ? 'http://localhost:3003' : '/admin/' },
   ];
 
   return (
@@ -59,23 +61,40 @@ export function BrandNavbar({ currentApp = 'student', badgeText = 'Preview' }) {
         <span style={{ fontSize: '0.8rem', color: '#77736F', marginRight: '6px' }}>Apps:</span>
         {apps.map((app) => {
           const isActive = app.id === currentApp;
+          const isInternal = !isDev && app.id !== 'student';
           return (
             <a
               key={app.id}
-              href={app.url}
+              href={isInternal ? undefined : app.url}
+              title={isInternal ? `${app.name} is configured as an internal service on Vercel` : undefined}
               style={{
                 fontSize: '0.85rem',
                 padding: '0.4rem 0.85rem',
                 borderRadius: '8px',
                 textDecoration: 'none',
                 fontWeight: isActive ? 600 : 500,
-                color: isActive ? '#FE6904' : '#77736F',
+                color: isActive ? '#FE6904' : isInternal ? '#A8A29E' : '#77736F',
                 backgroundColor: isActive ? '#FFE5CE' : 'transparent',
                 border: isActive ? '1px solid #FE6904' : '1px solid transparent',
+                cursor: isInternal ? 'default' : 'pointer',
+                opacity: isInternal ? 0.6 : 1,
                 transition: 'all 0.2s',
               }}
             >
               {app.name}
+              {isInternal && (
+                <span style={{
+                  fontSize: '0.7rem',
+                  marginLeft: '6px',
+                  padding: '1px 5px',
+                  borderRadius: '4px',
+                  background: '#EAE7E2',
+                  color: '#77736F',
+                  fontWeight: 500,
+                }}>
+                  Internal
+                </span>
+              )}
             </a>
           );
         })}

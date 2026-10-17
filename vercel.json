@@ -1,0 +1,25 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "services": {
+    "student": {
+      "root": "apps/student",
+      "framework": "vite"
+    },
+    "tuition-centre": {
+      "root": "apps/tuition-centre",
+      "framework": "vite"
+    },
+    "admin": {
+      "root": "apps/admin",
+      "framework": "vite"
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": {
+        "service": "student"
+      }
+    }
+  ]
+}
