@@ -10,9 +10,41 @@ import {
   INITIAL_ENROLLMENTS,
   INITIAL_FOLLOW_UPS
 } from './mockData';
+import {
+  INITIAL_BOUNTIES,
+  VERBAL_CHECKPOINTS_DATA,
+  SPACED_REPETITION_COHORT_DATA,
+  INITIAL_STUDY_SESSIONS,
+  MENTOR_OPPORTUNITIES
+} from './studentCompatibility';
 
 const STORAGE_KEY = 'zhero_tc_store_v1';
 const STORE_EVENT = 'zhero_tc_store_change';
+
+// Attempt to read Student Platform keys from localStorage to provide seamless cross-app continuity
+function getCrossAppStudentData() {
+  if (typeof window === 'undefined') return null;
+  try {
+    const rawProfile = localStorage.getItem('zhero_student_profile');
+    const rawResults = localStorage.getItem('zhero_assessment_results');
+    const rawRoadmap = localStorage.getItem('zhero_active_roadmap');
+    const rawSimulations = localStorage.getItem('zhero_simulation_results');
+    const rawMentorReview = localStorage.getItem('zhero_stage4_mentor_review');
+    const rawCalibration = localStorage.getItem('zhero_learning_calibration_state');
+
+    return {
+      profile: rawProfile ? JSON.parse(rawProfile) : null,
+      results: rawResults ? JSON.parse(rawResults) : null,
+      roadmap: rawRoadmap ? JSON.parse(rawRoadmap) : null,
+      simulations: rawSimulations ? JSON.parse(rawSimulations) : null,
+      mentorReview: rawMentorReview ? JSON.parse(rawMentorReview) : null,
+      calibration: rawCalibration ? JSON.parse(rawCalibration) : null,
+    };
+  } catch (err) {
+    console.warn('Could not read Student Platform cross-app keys:', err);
+    return null;
+  }
+}
 
 function loadInitialState() {
   try {
@@ -20,7 +52,22 @@ function loadInitialState() {
     if (raw) {
       const parsed = JSON.parse(raw);
       if (parsed && parsed.courses && parsed.batches) {
-        return parsed;
+        // Ensure new modules exist
+        return {
+          profile: parsed.profile || INITIAL_CENTRE_PROFILE,
+          courses: parsed.courses || INITIAL_COURSES,
+          batches: parsed.batches || INITIAL_BATCHES,
+          campaigns: parsed.campaigns || INITIAL_CAMPAIGNS,
+          leads: parsed.leads || INITIAL_LEADS,
+          students: parsed.students || INITIAL_STUDENTS,
+          enrollments: parsed.enrollments || INITIAL_ENROLLMENTS,
+          followUps: parsed.followUps || INITIAL_FOLLOW_UPS,
+          bounties: parsed.bounties || INITIAL_BOUNTIES,
+          checkpoints: parsed.checkpoints || VERBAL_CHECKPOINTS_DATA,
+          retentionQueue: parsed.retentionQueue || SPACED_REPETITION_COHORT_DATA,
+          studySessions: parsed.studySessions || INITIAL_STUDY_SESSIONS,
+          mentorOpportunities: parsed.mentorOpportunities || MENTOR_OPPORTUNITIES
+        };
       }
     }
   } catch (err) {
@@ -35,7 +82,12 @@ function loadInitialState() {
     leads: INITIAL_LEADS,
     students: INITIAL_STUDENTS,
     enrollments: INITIAL_ENROLLMENTS,
-    followUps: INITIAL_FOLLOW_UPS
+    followUps: INITIAL_FOLLOW_UPS,
+    bounties: INITIAL_BOUNTIES,
+    checkpoints: VERBAL_CHECKPOINTS_DATA,
+    retentionQueue: SPACED_REPETITION_COHORT_DATA,
+    studySessions: INITIAL_STUDY_SESSIONS,
+    mentorOpportunities: MENTOR_OPPORTUNITIES
   };
 }
 
@@ -65,6 +117,20 @@ export function useTuitionStore() {
   return state;
 }
 
+// Read helper for cross-app student inspection
+export function useCrossAppStudentSync() {
+  const [crossAppData, setCrossAppData] = useState(() => getCrossAppStudentData());
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCrossAppData(getCrossAppStudentData());
+    }, 2000);
+    return () => clearInterval(interval);
+  }, []);
+
+  return crossAppData;
+}
+
 // CRUD Actions
 export const storeActions = {
   // Reset store to fresh initial state
@@ -77,7 +143,12 @@ export const storeActions = {
       leads: INITIAL_LEADS,
       students: INITIAL_STUDENTS,
       enrollments: INITIAL_ENROLLMENTS,
-      followUps: INITIAL_FOLLOW_UPS
+      followUps: INITIAL_FOLLOW_UPS,
+      bounties: INITIAL_BOUNTIES,
+      checkpoints: VERBAL_CHECKPOINTS_DATA,
+      retentionQueue: SPACED_REPETITION_COHORT_DATA,
+      studySessions: INITIAL_STUDY_SESSIONS,
+      mentorOpportunities: MENTOR_OPPORTUNITIES
     };
     persistState();
   },
@@ -111,7 +182,6 @@ export const storeActions = {
 
   deleteCourse: (courseId) => {
     memoryState.courses = memoryState.courses.filter(c => c.id !== courseId);
-    // Also remove associated batches
     memoryState.batches = memoryState.batches.filter(b => b.courseId !== courseId);
     persistState();
   },
@@ -229,7 +299,37 @@ export const storeActions = {
     }
   },
 
-  // Enrollments (with validation: capacity limit, course-batch consistency)
+  // Record Mentor Interview notes for a student
+  saveInterviewNotes: (studentId, interviewData) => {
+    const student = memoryState.students.find(s => s.id === studentId);
+    if (student) {
+      student.interviewNotes = interviewData.notes;
+      student.interviewDate = interviewData.date || new Date().toISOString().split('T')[0];
+      student.interviewStatus = 'Completed';
+      student.mentorFeedback = interviewData.feedback;
+      student.agreedNextSteps = interviewData.agreedNextSteps;
+      student.suggestedSkillFocus = interviewData.suggestedSkillFocus;
+    }
+
+    // Also mirror to student platform localStorage key if available
+    try {
+      localStorage.setItem('zhero_stage4_mentor_review', JSON.stringify({
+        counselorName: interviewData.mentorName || 'Dr. Radhika Sen',
+        counselorRole: 'Director & Lead STEM Mentor',
+        meetingDate: new Date().toISOString(),
+        verifiedReadinessScore: interviewData.readinessScore || 85,
+        careerFitSummary: interviewData.feedback || 'Candidate shows strong architectural problem-solving and self-driven coding discipline.',
+        suggestedSkillFocus: interviewData.suggestedSkillFocus || 'Explore real-world client bounties and complete Phase 2 React components.',
+        agreedNextMilestone: interviewData.agreedNextSteps || 'Complete introductory wireframing and submit bounty proposal.',
+      }));
+    } catch {
+      // safe fallback
+    }
+
+    persistState();
+  },
+
+  // Enrollments
   createEnrollment: (payload) => {
     const { studentName, studentEmail, studentPhone, courseId, batchId, feePaid, sponsorship, notes } = payload;
     const course = memoryState.courses.find(c => c.id === courseId);
@@ -242,7 +342,6 @@ export const storeActions = {
       throw new Error(`Batch "${batch.name}" is already at full capacity (${batch.capacity} seats).`);
     }
 
-    // Check if student already enrolled
     let student = memoryState.students.find(s => s.email.toLowerCase() === studentEmail.toLowerCase());
     if (!student) {
       student = {
@@ -258,7 +357,7 @@ export const storeActions = {
         enrollmentDate: new Date().toISOString().split('T')[0],
         status: 'Enrolled',
         assessmentStatus: 'Completed',
-        readinessScore: 75,
+        readinessScore: 78,
         attendanceRate: 100,
         engagementCategory: 'Healthy',
         lastActive: 'Just now',
@@ -269,19 +368,16 @@ export const storeActions = {
       };
       memoryState.students.unshift(student);
     } else {
-      // Update existing student with new course/batch
       student.courseId = course.id;
       student.courseTitle = course.title;
       student.batchId = batch.id;
       student.batchName = batch.name;
     }
 
-    // Increment counts
     course.enrolledCount = (course.enrolledCount || 0) + 1;
     batch.enrolledCount = (batch.enrolledCount || 0) + 1;
     memoryState.profile.usedSeats = Math.min(memoryState.profile.allocatedSeats, (memoryState.profile.usedSeats || 0) + 1);
 
-    // Create Enrollment Record
     const enrollment = {
       id: `enr-${Date.now().toString().slice(-4)}`,
       studentId: student.id,
@@ -299,7 +395,6 @@ export const storeActions = {
 
     memoryState.enrollments.unshift(enrollment);
 
-    // If there was an associated lead, mark them Enrolled
     const matchingLead = memoryState.leads.find(l => l.email.toLowerCase() === studentEmail.toLowerCase());
     if (matchingLead) {
       matchingLead.status = 'Enrolled';
@@ -333,5 +428,68 @@ export const storeActions = {
       f.status = f.status === 'Completed' ? 'Pending' : 'Completed';
       persistState();
     }
+  },
+
+  // Real-World Bounties Management
+  saveBounty: (bounty) => {
+    if (bounty.id) {
+      const idx = memoryState.bounties.findIndex(b => b.id === bounty.id);
+      if (idx !== -1) {
+        memoryState.bounties[idx] = { ...memoryState.bounties[idx], ...bounty };
+      } else {
+        memoryState.bounties.unshift(bounty);
+      }
+    } else {
+      const newBty = {
+        ...bounty,
+        id: `bty-${Date.now().toString().slice(-4)}`,
+        status: bounty.status || 'Open'
+      };
+      memoryState.bounties.unshift(newBty);
+    }
+    persistState();
+  },
+
+  updateBountyStatus: (bountyId, status, mentorNotes) => {
+    const bty = memoryState.bounties.find(b => b.id === bountyId);
+    if (bty) {
+      bty.status = status;
+      if (mentorNotes) bty.mentorNotes = mentorNotes;
+      if (status === 'Mentor Approved') bty.mentorApprovedAt = new Date().toISOString().split('T')[0];
+      if (status === 'Client Accepted') bty.clientAcceptedAt = new Date().toISOString().split('T')[0];
+      persistState();
+    }
+  },
+
+  // Verbal Checkpoints Review
+  saveCheckpointReview: (checkpointId, reviewNotes, isVerified = true) => {
+    const chk = memoryState.checkpoints.find(c => c.id === checkpointId);
+    if (chk) {
+      chk.mentorReviewStatus = isVerified ? 'Verified by Mentor' : 'Remediation Requested';
+      chk.mentorReviewNotes = reviewNotes;
+      chk.reviewedAt = new Date().toISOString().split('T')[0];
+      persistState();
+    }
+  },
+
+  // Study Sessions
+  saveStudySession: (session) => {
+    if (session.id) {
+      const idx = memoryState.studySessions.findIndex(s => s.id === session.id);
+      if (idx !== -1) {
+        memoryState.studySessions[idx] = { ...memoryState.studySessions[idx], ...session };
+      } else {
+        memoryState.studySessions.unshift(session);
+      }
+    } else {
+      const newSession = {
+        ...session,
+        id: `session-${Date.now().toString().slice(-4)}`,
+        status: 'Scheduled',
+        participantCount: 0
+      };
+      memoryState.studySessions.unshift(newSession);
+    }
+    persistState();
   }
 };

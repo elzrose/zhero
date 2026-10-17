@@ -12,6 +12,10 @@ import { BatchesView } from './views/BatchesView';
 import { CampaignsView } from './views/CampaignsView';
 import { LeadsView } from './views/LeadsView';
 import { StudentsView } from './views/StudentsView';
+import { CheckpointsView } from './views/CheckpointsView';
+import { RetentionView } from './views/RetentionView';
+import { BountiesView } from './views/BountiesView';
+import { MentorsView } from './views/MentorsView';
 import { RecommendationsView } from './views/RecommendationsView';
 import { EnrollmentsView } from './views/EnrollmentsView';
 import { AnalyticsView } from './views/AnalyticsView';
@@ -131,6 +135,22 @@ export default function App() {
 
             {currentDashboardSection === 'students' && (
               <StudentsView onDirectRecommend={handleDirectRecommend} />
+            )}
+
+            {currentDashboardSection === 'checkpoints' && (
+              <CheckpointsView />
+            )}
+
+            {currentDashboardSection === 'retention' && (
+              <RetentionView />
+            )}
+
+            {currentDashboardSection === 'bounties' && (
+              <BountiesView />
+            )}
+
+            {currentDashboardSection === 'mentors' && (
+              <MentorsView />
             )}
 
             {currentDashboardSection === 'recommendations' && (

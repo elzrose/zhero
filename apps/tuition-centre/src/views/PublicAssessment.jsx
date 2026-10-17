@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
-import { ASSESSMENT_QUESTIONS } from '../data/mockData';
-import { evaluateAssessmentResponses, getRecommendedCourses } from '../utils/engine';
+import {
+  ASSESSMENT_QUESTIONS,
+  ASSESSMENT_DIMENSIONS,
+  calculateStudentAssessmentResults
+} from '../data/studentCompatibility';
+import { getRecommendedCourses } from '../utils/engine';
 import { useTuitionStore, storeActions } from '../data/store';
 
 function getTodayIsoDate() {
@@ -10,7 +14,7 @@ function getTodayIsoDate() {
 export function PublicAssessment({ onGoToCatalogue, onGoToDashboard }) {
   const store = useTuitionStore();
   const allCourses = store.courses || [];
-  
+
   // URL Campaign parameter check
   const params = new URLSearchParams(window.location.search);
   const initialCampaign = params.get('campaign') || 'MISSION2026';
@@ -26,7 +30,7 @@ export function PublicAssessment({ onGoToCatalogue, onGoToDashboard }) {
   });
 
   const [currentQuestionIdx, setCurrentQuestionIdx] = useState(0);
-  const [answers, setAnswers] = useState([]);
+  const [answersMap, setAnswersMap] = useState({}); // { [questionId]: optionIndex }
   const [assessmentResult, setAssessmentResult] = useState(null);
   const [recommendedCourses, setRecommendedCourses] = useState([]);
   const [enquirySuccess, setEnquirySuccess] = useState(false);
@@ -42,27 +46,43 @@ export function PublicAssessment({ onGoToCatalogue, onGoToDashboard }) {
 
   const handleSelectOption = (optionIndex) => {
     const question = ASSESSMENT_QUESTIONS[currentQuestionIdx];
-    const selectedOption = question.options[optionIndex];
-
-    const updatedAnswers = [
-      ...answers.filter(a => a.questionId !== question.id),
-      { questionId: question.id, optionIndex, selectedOption }
-    ];
-    setAnswers(updatedAnswers);
+    const newAnswersMap = {
+      ...answersMap,
+      [question.id]: optionIndex
+    };
+    setAnswersMap(newAnswersMap);
 
     if (currentQuestionIdx < ASSESSMENT_QUESTIONS.length - 1) {
       setCurrentQuestionIdx(currentQuestionIdx + 1);
     } else {
-      // Completed all questions! Evaluate results
-      const results = evaluateAssessmentResponses(updatedAnswers);
-      setAssessmentResult(results);
+      // Completed all 16 questions! Calculate results using shared psychometric engine
+      const results = calculateStudentAssessmentResults(newAnswersMap);
+      const topCareerObj = results.topRecommendations[0] || {};
+      const topCareerTitle = topCareerObj.title || 'Full-Stack Web Developer';
+      const topScore = topCareerObj.matchScore || 85;
 
-      // Compute recommended courses from centre
+      const topDims = Object.entries(results.dimensions)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 3)
+        .map(([k, v]) => `${k.charAt(0).toUpperCase() + k.slice(1)} (${v}%)`);
+
+      const skillGaps = topCareerObj.developmentAreas || ['Full-Stack Architecture', 'System Design'];
+
+      setAssessmentResult({
+        ...results,
+        topCareer: topCareerTitle,
+        topCareerAffinity: topScore,
+        strengths: topDims,
+        skillGaps: skillGaps,
+        topRecommendation: topCareerObj
+      });
+
+      // Compute recommended courses from centre catalogue
       const leadStub = {
-        targetCareer: results.topCareer,
-        strengths: results.strengths,
-        skillGaps: results.skillGaps,
-        readinessScore: results.topCareerAffinity
+        targetCareer: topCareerTitle,
+        strengths: topDims,
+        skillGaps: skillGaps,
+        readinessScore: topScore
       };
       const matches = getRecommendedCourses(leadStub, allCourses);
       setRecommendedCourses(matches);
@@ -78,21 +98,41 @@ export function PublicAssessment({ onGoToCatalogue, onGoToDashboard }) {
         status: 'Assessed',
         assessmentCompleted: true,
         assessmentDate: getTodayIsoDate(),
-        targetCareer: results.topCareer,
-        readinessScore: results.topCareerAffinity,
-        strengths: results.strengths,
-        skillGaps: results.skillGaps,
+        targetCareer: topCareerTitle,
+        readinessScore: topScore,
+        strengths: topDims,
+        skillGaps: skillGaps,
         interestedCourseId: matches.length > 0 ? matches[0].course.id : null,
-        notes: `Completed campaign ${studentInfo.campaignCode} diagnostic. Top matched career: ${results.topCareer} (${results.topCareerAffinity}% affinity).`,
+        notes: `Completed 16-question psychometric assessment for campaign ${studentInfo.campaignCode}. Primary orientation: ${results.primaryInterest}. Top match: ${topCareerTitle} (${topScore}%).`,
         source: `Campaign ${studentInfo.campaignCode}`
       });
+
+      // Mirror to localStorage for instant cross-app compatibility with the Student App
+      try {
+        localStorage.setItem('zhero_student_profile', JSON.stringify({
+          name: studentInfo.name,
+          email: studentInfo.email,
+          phone: studentInfo.phone,
+          institution: studentInfo.institution,
+          primaryInterest: results.primaryInterest,
+          onboardedAt: results.completedAt
+        }));
+
+        localStorage.setItem('zhero_assessment_results', JSON.stringify({
+          dimensions: results.dimensions,
+          topRecommendations: results.topRecommendations,
+          completedAt: results.completedAt,
+          primaryInterest: results.primaryInterest
+        }));
+      } catch (err) {
+        console.warn('LocalStorage cross-app write note:', err);
+      }
 
       setStep(3);
     }
   };
 
   const handleExpressCourseInterest = (course) => {
-    // Transition or mark enquiry
     const existing = store.leads.find(l => l.email.toLowerCase() === studentInfo.email.toLowerCase());
     if (existing) {
       storeActions.saveLead({
@@ -106,6 +146,8 @@ export function PublicAssessment({ onGoToCatalogue, onGoToDashboard }) {
     setTimeout(() => setEnquirySuccess(false), 3000);
   };
 
+  const currentQ = ASSESSMENT_QUESTIONS[currentQuestionIdx];
+
   return (
     <div style={{ maxWidth: '960px', margin: '0 auto', padding: '3rem 1.5rem', minHeight: '85vh' }}>
       {/* Step 1: Initial Student Registration */}
@@ -113,13 +155,13 @@ export function PublicAssessment({ onGoToCatalogue, onGoToDashboard }) {
         <div className="tc-card" style={{ maxWidth: '640px', margin: '0 auto', padding: '2.5rem' }}>
           <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
             <span className="tc-badge tc-badge-yellow" style={{ marginBottom: '0.5rem' }}>
-              🎯 ZHERO Adaptive Career Discovery
+              🎯 ZHERO Adaptive Career Discovery • 16 Psychometric Questions
             </span>
             <h1 style={{ fontSize: '1.85rem', fontWeight: 800, color: '#171717', letterSpacing: '-0.02em' }}>
               Free 5-Minute Student Career Assessment
             </h1>
             <p style={{ fontSize: '0.9rem', color: 'var(--tc-muted-text)', marginTop: '0.4rem' }}>
-              Sponsored by <strong>Apex Career & Coaching Academy</strong>. Uncover your cognitive strengths, emerging industry roles, and personalized learning roadmaps.
+              Powered by <strong>Apex Career & Coaching Academy</strong>. Uncover your psychometric dimension profile across 6 key axes and match with 12 future-ready tech careers.
             </p>
           </div>
 
@@ -221,14 +263,14 @@ export function PublicAssessment({ onGoToCatalogue, onGoToDashboard }) {
               className="tc-btn-primary"
               style={{ width: '100%', padding: '0.875rem', fontSize: '1rem' }}
             >
-              Start Diagnostic Test →
+              Start 16-Question Diagnostic Test →
             </button>
           </form>
         </div>
       )}
 
       {/* Step 2: Assessment Questions */}
-      {step === 2 && (
+      {step === 2 && currentQ && (
         <div className="tc-card" style={{ maxWidth: '780px', margin: '0 auto', padding: '2.5rem' }}>
           {/* Progress Header */}
           <div style={{ marginBottom: '2rem' }}>
@@ -252,17 +294,22 @@ export function PublicAssessment({ onGoToCatalogue, onGoToDashboard }) {
 
           {/* Question Details */}
           <div style={{ marginBottom: '1.75rem' }}>
-            <span className="tc-badge tc-badge-neutral" style={{ marginBottom: '0.5rem' }}>
-              {ASSESSMENT_QUESTIONS[currentQuestionIdx].category}
-            </span>
+            <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', marginBottom: '0.5rem' }}>
+              <span className="tc-badge tc-badge-neutral">
+                {currentQ.category}
+              </span>
+              <span className="tc-badge tc-badge-yellow" style={{ fontSize: '0.7rem' }}>
+                Focus: {currentQ.dimensionName}
+              </span>
+            </div>
             <h2 style={{ fontSize: '1.35rem', fontWeight: 800, color: '#171717', lineHeight: 1.4, marginTop: '0.5rem' }}>
-              {ASSESSMENT_QUESTIONS[currentQuestionIdx].question}
+              {currentQ.question}
             </h2>
           </div>
 
           {/* Options */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginBottom: '2rem' }}>
-            {ASSESSMENT_QUESTIONS[currentQuestionIdx].options.map((opt, idx) => (
+            {currentQ.options.map((opt, idx) => (
               <button
                 key={idx}
                 onClick={() => handleSelectOption(idx)}
@@ -342,13 +389,13 @@ export function PublicAssessment({ onGoToCatalogue, onGoToDashboard }) {
             marginBottom: '2.5rem'
           }}>
             <span className="tc-badge tc-badge-success" style={{ marginBottom: '0.75rem', fontSize: '0.8rem' }}>
-              ✓ Diagnostic Complete • Profile Synced with Apex Career Academy
+              ✓ Diagnostic Complete • Synced with Student Ecosystem
             </span>
             <h1 style={{ fontSize: '2.25rem', fontWeight: 800, color: '#171717', letterSpacing: '-0.02em' }}>
               Congratulations, {studentInfo.name}!
             </h1>
             <p style={{ fontSize: '1.05rem', color: 'var(--tc-muted-text)', maxWidth: '650px', margin: '0.5rem auto 1.5rem' }}>
-              Your aptitude responses reveal strong potential in modern high-demand technology tracks.
+              Your 16-question psychometric evaluation matches you directly with modern high-growth technology pathways.
             </p>
 
             {/* Top Match Hero Pill */}
@@ -384,6 +431,37 @@ export function PublicAssessment({ onGoToCatalogue, onGoToDashboard }) {
               </div>
             </div>
 
+            {/* 6 Psychometric Dimensions Breakdown */}
+            <div style={{ background: '#FFFFFF', padding: '1.5rem', borderRadius: '16px', border: '1px solid var(--tc-border)', marginBottom: '1.5rem', textAlign: 'left' }}>
+              <div style={{ fontSize: '0.85rem', fontWeight: 700, color: '#171717', marginBottom: '1rem', display: 'flex', justifyContent: 'space-between' }}>
+                <span>📊 6-Dimensional Psychometric Profile</span>
+                <span style={{ color: 'var(--tc-muted-text)', fontWeight: 500 }}>Standardized against industry benchmarks</span>
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '0.85rem' }}>
+                {ASSESSMENT_DIMENSIONS.map((dim) => {
+                  const score = assessmentResult.dimensions[dim.key] || 50;
+                  return (
+                    <div key={dim.key} style={{ background: '#FAF8F5', padding: '0.75rem 1rem', borderRadius: '10px', border: '1px solid var(--tc-border)' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.35rem' }}>
+                        <span style={{ fontWeight: 700, fontSize: '0.85rem', color: '#171717' }}>
+                          {dim.label}
+                        </span>
+                        <span style={{ fontWeight: 800, fontSize: '0.85rem', color: dim.color }}>
+                          {score}%
+                        </span>
+                      </div>
+                      <div style={{ width: '100%', height: '6px', background: '#EAE5D8', borderRadius: '999px', overflow: 'hidden' }}>
+                        <div style={{ width: `${score}%`, height: '100%', background: dim.color }} />
+                      </div>
+                      <div style={{ fontSize: '0.7rem', color: 'var(--tc-muted-text)', marginTop: '0.35rem' }}>
+                        {dim.desc}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
             {/* Strengths & Gaps Breakdown */}
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.25rem', textAlign: 'left', marginTop: '1rem' }}>
               <div style={{ background: '#FFFFFF', padding: '1.25rem', borderRadius: '12px', border: '1px solid var(--tc-border)' }}>
@@ -399,7 +477,7 @@ export function PublicAssessment({ onGoToCatalogue, onGoToDashboard }) {
 
               <div style={{ background: '#FFFFFF', padding: '1.25rem', borderRadius: '12px', border: '1px solid var(--tc-border)' }}>
                 <div style={{ fontSize: '0.8rem', fontWeight: 700, color: '#B78103', textTransform: 'uppercase', marginBottom: '0.5rem' }}>
-                  🎯 Key Skill Gaps to Bridge
+                  🎯 Key Target Competencies
                 </div>
                 <ul style={{ paddingLeft: '1.25rem', fontSize: '0.875rem', color: 'var(--tc-charcoal)', lineHeight: 1.6 }}>
                   {assessmentResult.skillGaps.map((g, idx) => (
@@ -411,8 +489,41 @@ export function PublicAssessment({ onGoToCatalogue, onGoToDashboard }) {
 
             {/* Transparent Algorithm Disclaimer */}
             <p style={{ fontSize: '0.75rem', color: 'var(--tc-subtle-text)', marginTop: '1.5rem', fontStyle: 'italic' }}>
-              * Rule-based explainable diagnostic engine evaluating cognitive aptitudes, project preferences, and skill intersections against industry occupational standards.
+              * Rule-based explainable diagnostic engine evaluating cognitive aptitudes against 12 career taxonomy benchmarks. Fully compatible with Student Platform roadmaps.
             </p>
+          </div>
+
+          {/* Top 3 Matched Career Alternatives */}
+          <div style={{ marginBottom: '2.5rem' }}>
+            <h2 style={{ fontSize: '1.35rem', fontWeight: 800, color: '#171717', marginBottom: '1rem' }}>
+              Top Career Role Recommendations
+            </h2>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1rem' }}>
+              {assessmentResult.topRecommendations.slice(0, 3).map((career, cIdx) => (
+                <div key={career.id} className="tc-card" style={{ padding: '1.25rem' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.5rem' }}>
+                    <span className="tc-badge tc-badge-yellow" style={{ fontSize: '0.7rem' }}>
+                      Rank #{cIdx + 1}
+                    </span>
+                    <span style={{ fontWeight: 800, color: '#8C6A05', fontSize: '1.1rem' }}>
+                      {career.matchScore}%
+                    </span>
+                  </div>
+                  <h3 style={{ fontSize: '1.1rem', fontWeight: 800, color: '#171717', margin: '0.25rem 0' }}>
+                    {career.title}
+                  </h3>
+                  <div style={{ fontSize: '0.75rem', color: 'var(--tc-muted-text)', marginBottom: '0.5rem' }}>
+                    {career.category} • Avg: {career.avgSalary}
+                  </div>
+                  <p style={{ fontSize: '0.8rem', color: 'var(--tc-charcoal)', lineHeight: 1.4, margin: '0.5rem 0' }}>
+                    {career.description}
+                  </p>
+                  <div style={{ fontSize: '0.75rem', color: '#1E7E34', background: '#EAF7EE', padding: '0.4rem 0.6rem', borderRadius: '6px', marginTop: '0.5rem' }}>
+                    💡 {career.matchReason}
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
 
           {/* Recommended Courses from Tuition Centre */}
@@ -527,7 +638,7 @@ export function PublicAssessment({ onGoToCatalogue, onGoToDashboard }) {
           {/* Bottom Navigation */}
           <div style={{ textAlign: 'center', borderTop: '1px solid var(--tc-border)', paddingTop: '1.5rem' }}>
             <button
-              onClick={() => { setStep(1); setAnswers([]); }}
+              onClick={() => { setStep(1); setAnswersMap({}); }}
               className="tc-btn-secondary"
               style={{ marginRight: '1rem' }}
             >

@@ -155,6 +155,147 @@ export function DashboardView({ onNavigate }) {
         </div>
       </div>
 
+      {/* Student-to-Career Ecosystem Operations Hub */}
+      <div className="tc-card" style={{ marginBottom: '2.5rem', background: 'var(--tc-card-gradient)', border: '1px solid #EED180' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem', flexWrap: 'wrap', gap: '0.75rem' }}>
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <span className="tc-badge tc-badge-yellow" style={{ fontSize: '0.7rem' }}>
+                ⭐ Connected Operations
+              </span>
+              <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#171717', margin: 0 }}>
+                Centre-Side Student-to-Career Ecosystem Hub
+              </h3>
+            </div>
+            <p style={{ fontSize: '0.85rem', color: 'var(--tc-muted-text)', marginTop: '0.25rem' }}>
+              Connected operations with student platform roadmaps, verbal checkpoints, SM-2 retention, and client bounties.
+            </p>
+          </div>
+        </div>
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1rem' }}>
+          {/* Card 1: AI Verbal Checkpoints */}
+          <div
+            onClick={() => onNavigate('checkpoints')}
+            style={{
+              background: '#FFFFFF',
+              padding: '1.25rem',
+              borderRadius: '12px',
+              border: '1px solid var(--tc-border)',
+              cursor: 'pointer',
+              transition: 'all 0.15s ease',
+              boxShadow: 'var(--tc-shadow-sm)'
+            }}
+            onMouseOver={(e) => { e.currentTarget.style.borderColor = 'var(--tc-primary-yellow)'; }}
+            onMouseOut={(e) => { e.currentTarget.style.borderColor = 'var(--tc-border)'; }}
+          >
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
+              <span style={{ fontSize: '1.5rem' }}>🎙️</span>
+              <span className="tc-badge tc-badge-warning" style={{ fontSize: '0.65rem' }}>
+                Anti-Speedrun Active
+              </span>
+            </div>
+            <div style={{ fontWeight: 800, fontSize: '1.05rem', color: '#171717' }}>AI Verbal Checkpoints</div>
+            <div style={{ fontSize: '0.8rem', color: 'var(--tc-muted-text)', margin: '0.25rem 0 0.75rem' }}>
+              Review student oral transcripts & conceptual rubrics.
+            </div>
+            <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#8C6A05' }}>
+              Manage Oral Checkpoints →
+            </div>
+          </div>
+
+          {/* Card 2: Spaced Repetition */}
+          <div
+            onClick={() => onNavigate('retention')}
+            style={{
+              background: '#FFFFFF',
+              padding: '1.25rem',
+              borderRadius: '12px',
+              border: '1px solid var(--tc-border)',
+              cursor: 'pointer',
+              transition: 'all 0.15s ease',
+              boxShadow: 'var(--tc-shadow-sm)'
+            }}
+            onMouseOver={(e) => { e.currentTarget.style.borderColor = 'var(--tc-primary-yellow)'; }}
+            onMouseOut={(e) => { e.currentTarget.style.borderColor = 'var(--tc-border)'; }}
+          >
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
+              <span style={{ fontSize: '1.5rem' }}>🧠</span>
+              <span className="tc-badge tc-badge-success" style={{ fontSize: '0.65rem' }}>
+                7d Calibration On
+              </span>
+            </div>
+            <div style={{ fontWeight: 800, fontSize: '1.05rem', color: '#171717' }}>Memory Retention (SM-2)</div>
+            <div style={{ fontSize: '0.8rem', color: 'var(--tc-muted-text)', margin: '0.25rem 0 0.75rem' }}>
+              Ebbinghaus forgetting curve protection & recall queues.
+            </div>
+            <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#8C6A05' }}>
+              View Retention Health →
+            </div>
+          </div>
+
+          {/* Card 3: Project Bounties */}
+          <div
+            onClick={() => onNavigate('bounties')}
+            style={{
+              background: '#FFFFFF',
+              padding: '1.25rem',
+              borderRadius: '12px',
+              border: '1px solid var(--tc-border)',
+              cursor: 'pointer',
+              transition: 'all 0.15s ease',
+              boxShadow: 'var(--tc-shadow-sm)'
+            }}
+            onMouseOver={(e) => { e.currentTarget.style.borderColor = 'var(--tc-primary-yellow)'; }}
+            onMouseOut={(e) => { e.currentTarget.style.borderColor = 'var(--tc-border)'; }}
+          >
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
+              <span style={{ fontSize: '1.5rem' }}>💼</span>
+              <span className="tc-badge tc-badge-yellow" style={{ fontSize: '0.65rem' }}>
+                {store.bounties?.length || 4} Bounties
+              </span>
+            </div>
+            <div style={{ fontWeight: 800, fontSize: '1.05rem', color: '#171717' }}>Real-World Bounties</div>
+            <div style={{ fontSize: '0.8rem', color: 'var(--tc-muted-text)', margin: '0.25rem 0 0.75rem' }}>
+              Sponsor contracts, code audits & student stipend payouts.
+            </div>
+            <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#8C6A05' }}>
+              Review Project Bounties →
+            </div>
+          </div>
+
+          {/* Card 4: Mentors & Study Hub */}
+          <div
+            onClick={() => onNavigate('mentors')}
+            style={{
+              background: '#FFFFFF',
+              padding: '1.25rem',
+              borderRadius: '12px',
+              border: '1px solid var(--tc-border)',
+              cursor: 'pointer',
+              transition: 'all 0.15s ease',
+              boxShadow: 'var(--tc-shadow-sm)'
+            }}
+            onMouseOver={(e) => { e.currentTarget.style.borderColor = 'var(--tc-primary-yellow)'; }}
+            onMouseOut={(e) => { e.currentTarget.style.borderColor = 'var(--tc-border)'; }}
+          >
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
+              <span style={{ fontSize: '1.5rem' }}>🤝</span>
+              <span className="tc-badge tc-badge-success" style={{ fontSize: '0.65rem' }}>
+                Stage 4 Sync
+              </span>
+            </div>
+            <div style={{ fontWeight: 800, fontSize: '1.05rem', color: '#171717' }}>Mentors & Study Hub</div>
+            <div style={{ fontSize: '0.8rem', color: 'var(--tc-muted-text)', margin: '0.25rem 0 0.75rem' }}>
+              Stage 4 career interviews & live Study Together rooms.
+            </div>
+            <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#8C6A05' }}>
+              Open Mentorship Hub →
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Two Column Layout: Urgent Follow-Ups & Active Batches Utilization */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(420px, 1fr))', gap: '1.75rem' }}>
         {/* Urgent Follow-Ups Card */}
