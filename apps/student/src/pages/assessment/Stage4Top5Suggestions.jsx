@@ -65,38 +65,23 @@ export function Stage4Top5Suggestions({ onProceedToComparison, onBackToStage3 })
 
   return (
     <div style={{ maxWidth: '920px', margin: '0 auto', paddingBottom: '3rem' }}>
-      {/* Header Banner */}
-      <div style={{ marginBottom: '2.5rem', textAlign: 'center' }}>
-        <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', marginBottom: '8px' }}>
-          <span style={{
-            fontSize: '0.75rem',
-            fontWeight: 800,
-            padding: '3px 12px',
-            borderRadius: '999px',
-            backgroundColor: '#ECFDF5',
-            color: '#047857',
-            border: '1px solid #A7F3D0',
-          }}>
-            Validated by {mentorReview.mentorName || 'Career Mentor'}
-          </span>
-        </div>
-
+      {/* Header */}
+      <div style={{ marginBottom: '1.5rem' }}>
         <h2 style={{
-          fontSize: '2rem',
-          fontWeight: 800,
+          fontSize: '1.5rem',
+          fontWeight: 700,
           color: '#171717',
-          letterSpacing: '-0.02em',
-          margin: '0 0 0.5rem 0',
+          margin: '0 0 0.25rem 0',
         }}>
-          Top 5 Personalized Career Suggestions
+          Top 5 Career Suggestions
         </h2>
-        <p style={{ fontSize: '1rem', color: '#77736F', margin: 0, maxWidth: '580px', marginInline: 'auto', lineHeight: '1.6' }}>
-          Based on your background in <strong>{context.courseStream || 'your course'}</strong>, your descriptive interests, and your AI assessment.
+        <p style={{ fontSize: '0.9rem', color: '#77736F', margin: 0 }}>
+          Select at least two careers to compare side by side.
         </p>
       </div>
 
       {/* Clean Spacious Career Cards */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', marginBottom: '3rem' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '2rem' }}>
         {rawCareers.map((career, idx) => {
           const isComparing = compareList.includes(career.id);
 
@@ -105,83 +90,67 @@ export function Stage4Top5Suggestions({ onProceedToComparison, onBackToStage3 })
               key={career.id || idx}
               style={{
                 backgroundColor: '#FFFFFF',
-                borderRadius: '20px',
-                border: isComparing ? '2px solid #FE6904' : '1px solid #EAE7E2',
-                boxShadow: '0 2px 12px rgba(23, 23, 23, 0.02)',
-                padding: '2rem',
-                transition: 'all 0.2s ease',
+                borderRadius: '12px',
+                border: isComparing ? '1px solid #FE6904' : '1px solid #EAE7E2',
+                padding: '1.25rem',
               }}
             >
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem', marginBottom: '1.25rem' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem', marginBottom: '1rem' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                   <div style={{
-                    width: '46px',
-                    height: '46px',
-                    borderRadius: '14px',
+                    width: '36px',
+                    height: '36px',
+                    borderRadius: '8px',
                     backgroundColor: idx === 0 ? '#FFE5CE' : '#F8F8F7',
                     color: idx === 0 ? '#FE6904' : '#171717',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    fontWeight: 800,
-                    fontSize: '1.1rem',
+                    fontWeight: 600,
+                    fontSize: '0.95rem',
                   }}>
                     #{idx + 1}
                   </div>
 
                   <div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
-                      <h3 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 800, color: '#171717' }}>
-                        {career.title}
-                      </h3>
-                      {idx === 0 && (
-                        <span style={{
-                          fontSize: '0.7rem',
-                          fontWeight: 700,
-                          padding: '2px 8px',
-                          borderRadius: '999px',
-                          backgroundColor: '#ECFDF5',
-                          color: '#047857',
-                        }}>
-                          Top Match
-                        </span>
-                      )}
-                    </div>
-                    <p style={{ margin: '4px 0 0 0', fontSize: '0.875rem', color: '#77736F' }}>
+                    <h3 style={{ margin: 0, fontSize: '1.125rem', fontWeight: 600, color: '#171717' }}>
+                      {career.title}
+                    </h3>
+                    <p style={{ margin: '2px 0 0 0', fontSize: '0.85rem', color: '#77736F' }}>
                       {career.description}
                     </p>
                   </div>
                 </div>
 
                 <div style={{
-                  backgroundColor: '#FBFBFA',
+                  backgroundColor: '#F8F8F7',
                   border: '1px solid #EAE7E2',
-                  padding: '6px 14px',
-                  borderRadius: '12px',
+                  padding: '4px 12px',
+                  borderRadius: '8px',
                   textAlign: 'right',
                 }}>
-                  <div style={{ fontSize: '0.7rem', color: '#77736F', fontWeight: 600 }}>Affinity</div>
-                  <div style={{ fontSize: '1.2rem', fontWeight: 800, color: '#FE6904' }}>
+                  <div style={{ fontSize: '0.7rem', color: '#77736F', fontWeight: 600 }}>Match</div>
+                  <div style={{ fontSize: '1.1rem', fontWeight: 700, color: '#FE6904' }}>
                     {career.matchScore}%
                   </div>
                 </div>
               </div>
 
-              {/* Why It Fits Box */}
+              {/* Why It Fits */}
               <div style={{
-                backgroundColor: '#FFF8F4',
-                padding: '1.25rem',
-                borderRadius: '14px',
-                border: '1px solid #FFE5CE',
-                marginBottom: '1.25rem',
+                backgroundColor: '#F8F8F7',
+                padding: '0.875rem',
+                borderRadius: '8px',
+                border: '1px solid #EAE7E2',
+                marginBottom: '1rem',
               }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '6px' }}>
-                  <Lightbulb size={16} color="#FE6904" />
-                  <span style={{ fontSize: '0.825rem', fontWeight: 800, color: '#171717' }}>
-                    Why This Fits Your Profile:
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '4px' }}>
+                  <Lightbulb size={14} color="#FE6904" />
+                  <span style={{ fontSize: '0.8rem', fontWeight: 600, color: '#171717' }}>
+                    Why it fits:
                   </span>
                 </div>
-                <p style={{ fontSize: '0.875rem', color: '#4B5563', margin: 0, lineHeight: '1.6' }}>
+                <p style={{ fontSize: '0.85rem', color: '#77736F', margin: 0, lineHeight: '1.5' }}>
                   {career.whyFit}
                 </p>
               </div>
@@ -193,18 +162,17 @@ export function Stage4Top5Suggestions({ onProceedToComparison, onBackToStage3 })
                 justifyContent: 'space-between',
                 flexWrap: 'wrap',
                 gap: '1rem',
-                paddingTop: '0.5rem',
               }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
-                  <span style={{ fontSize: '0.78rem', fontWeight: 700, color: '#77736F' }}>Strengths:</span>
+                  <span style={{ fontSize: '0.75rem', fontWeight: 600, color: '#77736F' }}>Skills:</span>
                   {career.keyStrengths?.slice(0, 3).map((st) => (
                     <span key={st} style={{
-                      backgroundColor: '#F8F8F7',
+                      backgroundColor: '#FFFFFF',
                       border: '1px solid #EAE7E2',
-                      padding: '3px 10px',
+                      padding: '2px 8px',
                       borderRadius: '8px',
                       fontSize: '0.75rem',
-                      color: '#374151',
+                      color: '#171717',
                     }}>
                       {st}
                     </span>
@@ -218,19 +186,18 @@ export function Stage4Top5Suggestions({ onProceedToComparison, onBackToStage3 })
                     display: 'flex',
                     alignItems: 'center',
                     gap: '6px',
-                    padding: '8px 16px',
-                    borderRadius: '10px',
-                    border: isComparing ? '2px solid #FE6904' : '1px solid #EAE7E2',
+                    padding: '6px 14px',
+                    borderRadius: '8px',
+                    border: isComparing ? '1px solid #FE6904' : '1px solid #EAE7E2',
                     backgroundColor: isComparing ? '#FFE5CE' : '#FFFFFF',
                     color: isComparing ? '#FE6904' : '#171717',
-                    fontWeight: 700,
-                    fontSize: '0.825rem',
+                    fontWeight: 600,
+                    fontSize: '0.8rem',
                     cursor: 'pointer',
-                    transition: 'all 0.15s ease',
                   }}
                 >
                   {isComparing ? <Check size={14} /> : <GitCompare size={14} />}
-                  <span>{isComparing ? 'Selected for Comparison' : 'Compare Career'}</span>
+                  <span>{isComparing ? 'Selected for comparison' : 'Compare'}</span>
                 </button>
               </div>
             </div>
@@ -252,17 +219,17 @@ export function Stage4Top5Suggestions({ onProceedToComparison, onBackToStage3 })
             display: 'flex',
             alignItems: 'center',
             gap: '8px',
-            backgroundColor: 'transparent',
+            backgroundColor: '#FFFFFF',
             border: '1px solid #EAE7E2',
-            padding: '10px 20px',
-            borderRadius: '12px',
+            padding: '8px 16px',
+            borderRadius: '8px',
             color: '#171717',
-            fontWeight: 700,
+            fontWeight: 600,
             fontSize: '0.9rem',
             cursor: 'pointer',
           }}
         >
-          <ArrowLeft size={16} /> Back to Mentor Meet
+          <ArrowLeft size={16} /> Back
         </button>
 
         <button
@@ -270,20 +237,19 @@ export function Stage4Top5Suggestions({ onProceedToComparison, onBackToStage3 })
           style={{
             display: 'flex',
             alignItems: 'center',
-            gap: '10px',
+            gap: '8px',
             backgroundColor: '#FE6904',
             color: '#FFFFFF',
             border: 'none',
-            padding: '14px 32px',
-            borderRadius: '14px',
-            fontWeight: 800,
-            fontSize: '1rem',
+            padding: '10px 24px',
+            borderRadius: '8px',
+            fontWeight: 600,
+            fontSize: '0.9rem',
             cursor: 'pointer',
-            boxShadow: '0 4px 16px rgba(254, 105, 4, 0.25)',
           }}
         >
-          <span>Compare Careers Side-by-Side ({compareList.length} Selected)</span>
-          <ArrowRight size={18} />
+          <span>Compare careers ({compareList.length})</span>
+          <ArrowRight size={16} />
         </button>
       </div>
     </div>

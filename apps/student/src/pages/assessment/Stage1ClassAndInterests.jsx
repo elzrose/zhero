@@ -1,11 +1,4 @@
 import React, { useState } from 'react';
-import {
-  GraduationCap,
-  BookOpen,
-  Sparkles,
-  ArrowRight,
-  CheckCircle2
-} from 'lucide-react';
 import { storageService } from '../../services/storageService';
 
 const CLASS_OPTIONS = [
@@ -79,129 +72,113 @@ export function Stage1ClassAndInterests({ onProceed }) {
 
   return (
     <div style={{ maxWidth: '780px', margin: '0 auto', paddingBottom: '3rem' }}>
-      {/* Spacious Clean Header */}
-      <div style={{ marginBottom: '2.5rem', textAlign: 'center' }}>
+      <div style={{ marginBottom: '2rem' }}>
         <h2 style={{
-          fontSize: '2rem',
-          fontWeight: 800,
+          fontSize: '1.5rem',
+          fontWeight: 700,
           color: '#171717',
-          letterSpacing: '-0.02em',
           margin: '0 0 0.5rem 0',
         }}>
-          Let's Start with Your Background
+          Background and interests
         </h2>
-        <p style={{ fontSize: '1rem', color: '#77736F', margin: 0, maxWidth: '540px', marginInline: 'auto', lineHeight: '1.6' }}>
-          Tell us what class you are in, your current course, and what genuinely excites you. Our AI evaluates your answers in the next step.
+        <p style={{ fontSize: '0.9rem', color: '#77736F', margin: 0 }}>
+          Select your academic level, current stream, and topics that interest you.
         </p>
       </div>
 
-      <form onSubmit={handleContinue} style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-        {/* Input 1: Class / Grade */}
+      <form onSubmit={handleContinue} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+        {/* Level */}
         <div style={{
           backgroundColor: '#FFFFFF',
-          borderRadius: '20px',
+          borderRadius: '12px',
           border: '1px solid #EAE7E2',
-          padding: '2rem',
-          boxShadow: '0 2px 12px rgba(23, 23, 23, 0.02)',
+          padding: '1.5rem',
         }}>
           <label style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px',
-            fontSize: '1rem',
-            fontWeight: 800,
+            display: 'block',
+            fontSize: '0.95rem',
+            fontWeight: 600,
             color: '#171717',
-            marginBottom: '1rem',
+            marginBottom: '0.75rem',
           }}>
-            <GraduationCap size={18} color="#FE6904" />
-            <span>1. What class or academic level are you in?</span>
+            Academic level
           </label>
 
           <div style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
-            gap: '10px',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+            gap: '8px',
           }}>
             {CLASS_OPTIONS.map((item) => {
               const isSelected = classGrade === item;
               return (
-                <div
+                <button
                   key={item}
+                  type="button"
                   onClick={() => setClassGrade(item)}
                   style={{
-                    padding: '12px 16px',
-                    borderRadius: '12px',
-                    border: isSelected ? '2px solid #FE6904' : '1px solid #EAE7E2',
-                    backgroundColor: isSelected ? '#FFF8F4' : '#FBFBFA',
-                    color: isSelected ? '#FE6904' : '#374151',
-                    fontWeight: isSelected ? 700 : 500,
-                    fontSize: '0.875rem',
+                    padding: '10px 14px',
+                    borderRadius: '8px',
+                    border: isSelected ? '1px solid #FE6904' : '1px solid #EAE7E2',
+                    backgroundColor: isSelected ? '#FFE5CE' : '#FFFFFF',
+                    color: '#171717',
+                    fontWeight: isSelected ? 600 : 400,
+                    fontSize: '0.85rem',
                     cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    transition: 'all 0.15s ease',
+                    textAlign: 'left',
                   }}
                 >
-                  <span>{item}</span>
-                  {isSelected && <CheckCircle2 size={16} color="#FE6904" />}
-                </div>
+                  {item}
+                </button>
               );
             })}
           </div>
         </div>
 
-        {/* Input 2: Course / Stream */}
+        {/* Stream */}
         <div style={{
           backgroundColor: '#FFFFFF',
-          borderRadius: '20px',
+          borderRadius: '12px',
           border: '1px solid #EAE7E2',
-          padding: '2rem',
-          boxShadow: '0 2px 12px rgba(23, 23, 23, 0.02)',
+          padding: '1.5rem',
         }}>
           <label style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px',
-            fontSize: '1rem',
-            fontWeight: 800,
+            display: 'block',
+            fontSize: '0.95rem',
+            fontWeight: 600,
             color: '#171717',
-            marginBottom: '1rem',
+            marginBottom: '0.75rem',
           }}>
-            <BookOpen size={18} color="#FE6904" />
-            <span>2. What course or stream are you currently studying?</span>
+            Current course or stream
           </label>
 
           <div style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(230px, 1fr))',
-            gap: '10px',
-            marginBottom: courseStream === 'Other / Self-Taught' ? '1rem' : 0,
+            gridTemplateColumns: 'repeat(auto-fit, minmax(210px, 1fr))',
+            gap: '8px',
+            marginBottom: courseStream === 'Other / Self-Taught' ? '0.75rem' : 0,
           }}>
             {COURSE_OPTIONS.map((course) => {
               const isSelected = courseStream === course;
               return (
-                <div
+                <button
                   key={course}
+                  type="button"
                   onClick={() => setCourseStream(course)}
                   style={{
-                    padding: '12px 16px',
-                    borderRadius: '12px',
-                    border: isSelected ? '2px solid #FE6904' : '1px solid #EAE7E2',
-                    backgroundColor: isSelected ? '#FFF8F4' : '#FBFBFA',
-                    color: isSelected ? '#FE6904' : '#374151',
-                    fontWeight: isSelected ? 700 : 500,
+                    padding: '10px 14px',
+                    borderRadius: '8px',
+                    border: isSelected ? '1px solid #FE6904' : '1px solid #EAE7E2',
+                    backgroundColor: isSelected ? '#FFE5CE' : '#FFFFFF',
+                    color: '#171717',
+                    fontWeight: isSelected ? 600 : 400,
                     fontSize: '0.85rem',
                     cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    transition: 'all 0.15s ease',
+                    textAlign: 'left',
                   }}
                 >
-                  <span>{course}</span>
-                  {isSelected && <CheckCircle2 size={16} color="#FE6904" />}
-                </div>
+                  {course}
+                </button>
               );
             })}
           </div>
@@ -211,12 +188,12 @@ export function Stage1ClassAndInterests({ onProceed }) {
               type="text"
               value={customCourse}
               onChange={(e) => setCustomCourse(e.target.value)}
-              placeholder="Specify your stream or self-directed coursework..."
+              placeholder="Specify your stream..."
               style={{
                 width: '100%',
-                padding: '12px 16px',
-                borderRadius: '12px',
-                border: '1.5px solid #FE6904',
+                padding: '10px 14px',
+                borderRadius: '8px',
+                border: '1px solid #EAE7E2',
                 fontSize: '0.9rem',
                 outline: 'none',
                 marginTop: '8px',
@@ -225,107 +202,84 @@ export function Stage1ClassAndInterests({ onProceed }) {
           )}
         </div>
 
-        {/* Input 3: Descriptive Interests */}
+        {/* Interests */}
         <div style={{
           backgroundColor: '#FFFFFF',
-          borderRadius: '20px',
+          borderRadius: '12px',
           border: '1px solid #EAE7E2',
-          padding: '2rem',
-          boxShadow: '0 2px 12px rgba(23, 23, 23, 0.02)',
+          padding: '1.5rem',
         }}>
           <label style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px',
-            fontSize: '1rem',
-            fontWeight: 800,
+            display: 'block',
+            fontSize: '0.95rem',
+            fontWeight: 600,
             color: '#171717',
-            marginBottom: '0.5rem',
+            marginBottom: '0.25rem',
           }}>
-            <Sparkles size={18} color="#FE6904" />
-            <span>3. In your own words, what are your genuine interests?</span>
+            Areas of interest
           </label>
-          <p style={{ fontSize: '0.85rem', color: '#77736F', margin: '0 0 1rem 0' }}>
-            Write freely about projects you loved, topics you enjoy reading or creating, or things you want to build.
+          <p style={{ fontSize: '0.8rem', color: '#77736F', margin: '0 0 0.75rem 0' }}>
+            Describe subjects, hobbies, or types of problems you enjoy working on.
           </p>
 
           <textarea
             rows={4}
             value={descriptiveInterests}
             onChange={(e) => setDescriptiveInterests(e.target.value)}
-            placeholder="Type your interests in your own words..."
+            placeholder="Type your interests..."
             required
             style={{
               width: '100%',
-              padding: '14px 18px',
-              borderRadius: '14px',
-              border: '1.5px solid #EAE7E2',
-              fontSize: '0.95rem',
+              padding: '10px 14px',
+              borderRadius: '8px',
+              border: '1px solid #EAE7E2',
+              fontSize: '0.9rem',
               color: '#171717',
               outline: 'none',
-              lineHeight: '1.6',
-              backgroundColor: '#FBFBFA',
+              lineHeight: 1.5,
+              backgroundColor: '#FFFFFF',
               boxSizing: 'border-box',
-              transition: 'border-color 0.2s ease',
             }}
-            onFocus={(e) => (e.target.style.borderColor = '#FE6904')}
-            onBlur={(e) => (e.target.style.borderColor = '#EAE7E2')}
           />
 
           {/* Quick topic tags */}
-          <div style={{ marginTop: '1rem' }}>
-            <span style={{ fontSize: '0.75rem', fontWeight: 600, color: '#77736F', marginRight: '8px' }}>
-              Suggestions:
-            </span>
-            <div style={{ display: 'inline-flex', flexWrap: 'wrap', gap: '6px', marginTop: '4px' }}>
-              {QUICK_INTERESTS.map((chip) => (
-                <button
-                  key={chip}
-                  type="button"
-                  onClick={() => handleChipClick(chip)}
-                  style={{
-                    backgroundColor: '#FFFFFF',
-                    border: '1px solid #EAE7E2',
-                    padding: '4px 12px',
-                    borderRadius: '999px',
-                    fontSize: '0.75rem',
-                    color: '#4B5563',
-                    cursor: 'pointer',
-                    transition: 'all 0.15s ease',
-                  }}
-                  onMouseEnter={(e) => (e.target.style.borderColor = '#FE6904')}
-                  onMouseLeave={(e) => (e.target.style.borderColor = '#EAE7E2')}
-                >
-                  + {chip}
-                </button>
-              ))}
-            </div>
+          <div style={{ marginTop: '0.75rem', display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+            {QUICK_INTERESTS.map((chip) => (
+              <button
+                key={chip}
+                type="button"
+                onClick={() => handleChipClick(chip)}
+                style={{
+                  backgroundColor: '#F8F8F7',
+                  border: '1px solid #EAE7E2',
+                  padding: '4px 10px',
+                  borderRadius: '9999px',
+                  fontSize: '0.75rem',
+                  color: '#171717',
+                  cursor: 'pointer',
+                }}
+              >
+                + {chip}
+              </button>
+            ))}
           </div>
         </div>
 
-        {/* Submit Button */}
-        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '1rem' }}>
+        {/* Submit */}
+        <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '0.5rem' }}>
           <button
             type="submit"
             disabled={!descriptiveInterests.trim()}
+            className="btn-primary"
             style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '10px',
-              backgroundColor: !descriptiveInterests.trim() ? '#EAE7E2' : '#FE6904',
-              color: '#FFFFFF',
-              border: 'none',
-              padding: '14px 36px',
-              borderRadius: '14px',
-              fontWeight: 800,
-              fontSize: '1rem',
+              padding: '0.75rem 1.75rem',
+              fontSize: '0.9rem',
+              fontWeight: 500,
+              opacity: !descriptiveInterests.trim() ? 0.5 : 1,
               cursor: !descriptiveInterests.trim() ? 'not-allowed' : 'pointer',
-              boxShadow: '0 4px 16px rgba(254, 105, 4, 0.25)',
-              transition: 'all 0.2s ease',
             }}
           >
-            <span>Start AI MCQ Assessment</span>
-            <ArrowRight size={18} />
+            Continue
           </button>
         </div>
       </form>

@@ -112,8 +112,8 @@ export function Stage3PreliminaryAnalysis({ onProceedToStage4, onBackToStage2 })
     <div style={{ maxWidth: '960px', margin: '0 auto', paddingBottom: '3rem' }}>
       {/* Prominent Mandatory Badge: Awaiting Human Review */}
       <div style={{
-        backgroundColor: '#FFFBEB',
-        border: '1.5px solid #F59E0B',
+        backgroundColor: '#F8F8F7',
+        border: '1.5px solid #FA9B2A',
         borderRadius: '16px',
         padding: '1.25rem 1.5rem',
         marginBottom: '1.5rem',
@@ -124,16 +124,16 @@ export function Stage3PreliminaryAnalysis({ onProceedToStage4, onBackToStage2 })
       }}>
         <div style={{
           padding: '8px',
-          backgroundColor: '#FEF3C7',
+          backgroundColor: '#FFE5CE',
           borderRadius: '10px',
-          color: '#B45309',
+          color: '#77736F',
           flexShrink: 0,
         }}>
           <ShieldAlert size={22} />
         </div>
         <div style={{ flex: 1 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
-            <span style={{ fontSize: '0.95rem', fontWeight: 800, color: '#92400E' }}>
+            <span style={{ fontSize: '0.95rem', fontWeight: 800, color: '#171717' }}>
               AI-generated preliminary guidance — awaiting human review
             </span>
             <span style={{
@@ -141,13 +141,13 @@ export function Stage3PreliminaryAnalysis({ onProceedToStage4, onBackToStage2 })
               fontWeight: 700,
               padding: '2px 8px',
               borderRadius: '999px',
-              backgroundColor: '#FDE68A',
-              color: '#78350F',
+              backgroundColor: '#EAE7E2',
+              color: '#77736F',
             }}>
               Stage 3 of 6
             </span>
           </div>
-          <p style={{ fontSize: '0.85rem', color: '#78350F', margin: '6px 0 0 0', lineHeight: '1.5' }}>
+          <p style={{ fontSize: '0.85rem', color: '#77736F', margin: '6px 0 0 0', lineHeight: '1.5' }}>
             These paths reflect AI pattern recognition of your answers so far. ZHERO does not let an algorithm make life choices for you. In <strong>Stage 4</strong>, you will review these paths with a dedicated career counsellor who will help test, refine, and humanize these options.
           </p>
         </div>
@@ -193,7 +193,7 @@ export function Stage3PreliminaryAnalysis({ onProceedToStage4, onBackToStage2 })
             borderRadius: '12px',
             border: '1px solid #EAE7E2',
           }}>
-            <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#10B981', textTransform: 'uppercase', marginBottom: '6px' }}>
+            <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#FE6904', textTransform: 'uppercase', marginBottom: '6px' }}>
               2. Student-Reported Skills
             </div>
             <div style={{ fontSize: '0.85rem', color: '#171717', lineHeight: '1.5' }}>
@@ -208,7 +208,7 @@ export function Stage3PreliminaryAnalysis({ onProceedToStage4, onBackToStage2 })
             borderRadius: '12px',
             border: '1px solid #EAE7E2',
           }}>
-            <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#6366F1', textTransform: 'uppercase', marginBottom: '6px' }}>
+            <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#FE6904', textTransform: 'uppercase', marginBottom: '6px' }}>
               3. Expressed Doubts / Priorities
             </div>
             <div style={{ fontSize: '0.85rem', color: '#171717', lineHeight: '1.5' }}>
@@ -223,7 +223,7 @@ export function Stage3PreliminaryAnalysis({ onProceedToStage4, onBackToStage2 })
             borderRadius: '12px',
             border: '1px solid #EAE7E2',
           }}>
-            <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#EC4899', textTransform: 'uppercase', marginBottom: '6px' }}>
+            <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#FE6904', textTransform: 'uppercase', marginBottom: '6px' }}>
               4. AI Hypotheses (For Review)
             </div>
             <div style={{ fontSize: '0.85rem', color: '#171717', lineHeight: '1.5' }}>
@@ -302,8 +302,8 @@ export function Stage3PreliminaryAnalysis({ onProceedToStage4, onBackToStage2 })
                             fontWeight: 700,
                             padding: '2px 8px',
                             borderRadius: '999px',
-                            backgroundColor: '#ECFDF5',
-                            color: '#047857',
+                            backgroundColor: '#FFE5CE',
+                            color: '#FE6904',
                             display: 'flex',
                             alignItems: 'center',
                             gap: '4px',
@@ -334,7 +334,7 @@ export function Stage3PreliminaryAnalysis({ onProceedToStage4, onBackToStage2 })
                   <div style={{
                     padding: '0 1.5rem 1.5rem 1.5rem',
                     borderTop: '1px solid #EAE7E2',
-                    backgroundColor: '#FAFAF9',
+                    backgroundColor: '#F8F8F7',
                   }}>
                     {/* Why this interests you & Supporting Evidence */}
                     <div style={{
@@ -355,7 +355,7 @@ export function Stage3PreliminaryAnalysis({ onProceedToStage4, onBackToStage2 })
                             Why It May Interest You
                           </span>
                         </div>
-                        <p style={{ fontSize: '0.875rem', color: '#4B5563', lineHeight: '1.6', margin: 0 }}>
+                        <p style={{ fontSize: '0.875rem', color: '#77736F', lineHeight: '1.6', margin: 0 }}>
                           {career.whyInterest}
                         </p>
                       </div>
@@ -367,12 +367,12 @@ export function Stage3PreliminaryAnalysis({ onProceedToStage4, onBackToStage2 })
                         border: '1px solid #EAE7E2',
                       }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px' }}>
-                          <TrendingUp size={16} color="#10B981" />
+                          <TrendingUp size={16} color="#FE6904" />
                           <span style={{ fontSize: '0.85rem', fontWeight: 800, color: '#171717' }}>
                             Supporting Answers & Conversational Evidence
                           </span>
                         </div>
-                        <p style={{ fontSize: '0.875rem', color: '#4B5563', lineHeight: '1.6', margin: 0 }}>
+                        <p style={{ fontSize: '0.875rem', color: '#77736F', lineHeight: '1.6', margin: 0 }}>
                           {career.supportingEvidence}
                         </p>
                       </div>
@@ -392,12 +392,12 @@ export function Stage3PreliminaryAnalysis({ onProceedToStage4, onBackToStage2 })
                         border: '1px solid #EAE7E2',
                       }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px' }}>
-                          <Briefcase size={16} color="#6366F1" />
+                          <Briefcase size={16} color="#FE6904" />
                           <span style={{ fontSize: '0.85rem', fontWeight: 800, color: '#171717' }}>
                             Realistic Day-In-The-Life Work Example
                           </span>
                         </div>
-                        <p style={{ fontSize: '0.85rem', color: '#4B5563', lineHeight: '1.6', margin: 0 }}>
+                        <p style={{ fontSize: '0.85rem', color: '#77736F', lineHeight: '1.6', margin: 0 }}>
                           {career.workExample}
                         </p>
                       </div>
@@ -409,12 +409,12 @@ export function Stage3PreliminaryAnalysis({ onProceedToStage4, onBackToStage2 })
                         border: '1px solid #EAE7E2',
                       }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px' }}>
-                          <AlertTriangle size={16} color="#F59E0B" />
+                          <AlertTriangle size={16} color="#FA9B2A" />
                           <span style={{ fontSize: '0.85rem', fontWeight: 800, color: '#171717' }}>
                             Potential Challenges & Trade-Offs
                           </span>
                         </div>
-                        <p style={{ fontSize: '0.85rem', color: '#4B5563', lineHeight: '1.6', margin: 0 }}>
+                        <p style={{ fontSize: '0.85rem', color: '#77736F', lineHeight: '1.6', margin: 0 }}>
                           {career.challenges}
                         </p>
                       </div>
@@ -434,7 +434,7 @@ export function Stage3PreliminaryAnalysis({ onProceedToStage4, onBackToStage2 })
                           Key Questions To Discuss With Human Counsellor (Stage 4)
                         </span>
                       </div>
-                      <p style={{ fontSize: '0.85rem', color: '#4B5563', lineHeight: '1.6', margin: 0 }}>
+                      <p style={{ fontSize: '0.85rem', color: '#77736F', lineHeight: '1.6', margin: 0 }}>
                         "{career.counsellingQuestions}"
                       </p>
                     </div>
@@ -544,11 +544,11 @@ export function Stage3PreliminaryAnalysis({ onProceedToStage4, onBackToStage2 })
                         <div style={{
                           marginTop: '8px',
                           fontSize: '0.8rem',
-                          color: '#047857',
-                          backgroundColor: '#ECFDF5',
+                          color: '#FE6904',
+                          backgroundColor: '#FFE5CE',
                           padding: '8px 12px',
                           borderRadius: '8px',
-                          border: '1px solid #A7F3D0',
+                          border: '1px solid #EAE7E2',
                         }}>
                           <strong>Demonstrated Task Evidence:</strong> "{simCompleted[career.id].submittedWork}"
                         </div>

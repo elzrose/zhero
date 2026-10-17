@@ -65,7 +65,7 @@ export function AssessmentPage({ onCompleteAssessment, onCancel }) {
   };
 
   const handleReset = () => {
-    if (window.confirm('Restart your Career Discovery Journey from Stage 1?')) {
+    if (window.confirm('Restart the assessment from Stage 1?')) {
       storageService.resetAssessment();
       setCompletedStages([]);
       setCurrentStage(1);
@@ -73,44 +73,24 @@ export function AssessmentPage({ onCompleteAssessment, onCancel }) {
   };
 
   return (
-    <div style={{ padding: '2rem 1.5rem', maxWidth: '1040px', margin: '0 auto' }}>
+    <div className="page">
       {/* Top Header Actions */}
-      <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginBottom: '1rem', gap: '8px' }}>
+      <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginBottom: '1.5rem', gap: '8px' }}>
         <button
           onClick={handleReset}
-          title="Restart from Stage 1"
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '6px',
-            padding: '6px 14px',
-            borderRadius: '10px',
-            border: '1px solid #EAE7E2',
-            backgroundColor: '#FFFFFF',
-            fontSize: '0.8rem',
-            fontWeight: 600,
-            color: '#77736F',
-            cursor: 'pointer',
-          }}
+          className="btn-secondary"
+          style={{ fontSize: '0.85rem', padding: '0.45rem 0.85rem' }}
         >
-          <RotateCcw size={13} /> Restart
+          <RotateCcw size={14} /> Restart
         </button>
 
         {onCancel && (
           <button
             onClick={onCancel}
-            style={{
-              padding: '6px 14px',
-              borderRadius: '10px',
-              border: '1px solid #EAE7E2',
-              backgroundColor: '#FFFFFF',
-              fontSize: '0.8rem',
-              fontWeight: 600,
-              color: '#171717',
-              cursor: 'pointer',
-            }}
+            className="btn-secondary"
+            style={{ fontSize: '0.85rem', padding: '0.45rem 0.85rem' }}
           >
-            Save & Exit
+            Save and exit
           </button>
         )}
       </div>

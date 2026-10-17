@@ -97,9 +97,9 @@ export function Stage5FinalRecommendations({ onProceedToRoadmap, onBackToStage4 
             fontWeight: 800,
             padding: '3px 10px',
             borderRadius: '999px',
-            backgroundColor: isHumanReviewed ? '#ECFDF5' : '#FFFBEB',
-            color: isHumanReviewed ? '#047857' : '#B45309',
-            border: `1px solid ${isHumanReviewed ? '#A7F3D0' : '#FDE68A'}`,
+            backgroundColor: isHumanReviewed ? '#FFE5CE' : '#F8F8F7',
+            color: isHumanReviewed ? '#FE6904' : '#77736F',
+            border: `1px solid ${isHumanReviewed ? '#EAE7E2' : '#EAE7E2'}`,
             display: 'flex',
             alignItems: 'center',
             gap: '6px',
@@ -121,7 +121,7 @@ export function Stage5FinalRecommendations({ onProceedToRoadmap, onBackToStage4 
         {/* Mandatory Philosophy message */}
         <p style={{
           fontSize: '0.925rem',
-          color: '#4B5563',
+          color: '#77736F',
           lineHeight: '1.6',
           margin: '0 0 1rem 0',
           backgroundColor: '#F8F8F7',
@@ -143,10 +143,7 @@ export function Stage5FinalRecommendations({ onProceedToRoadmap, onBackToStage4 
           color: '#171717',
         }}>
           <div>
-            <span style={{ color: '#77736F' }}>Gemini AI Inquiry:</span> <strong>Verified</strong>
-          </div>
-          <div>
-            <span style={{ color: '#77736F' }}>Simulation Evidence:</span>{' '}
+            <span style={{ color: '#77736F' }}>Simulation evidence:</span>{' '}
             <strong>{Object.keys(simulations).length} task(s) completed</strong>
           </div>
           <div>
@@ -200,28 +197,21 @@ export function Stage5FinalRecommendations({ onProceedToRoadmap, onBackToStage4 
                         {career.title}
                       </h3>
                       {career.isEndorsedByMentor && (
-                        <span style={{
-                          fontSize: '0.7rem',
-                          fontWeight: 700,
-                          padding: '2px 8px',
-                          borderRadius: '999px',
-                          backgroundColor: '#ECFDF5',
-                          color: '#047857',
-                          border: '1px solid #A7F3D0',
+                        <span className="badge" style={{
+                          backgroundColor: '#FFE5CE',
+                          color: '#FE6904',
+                          border: '1px solid #EAE7E2',
                         }}>
-                          ★ Mentor Recommended
+                          Recommended
                         </span>
                       )}
                       {career.hasSimulationEvidence && (
-                        <span style={{
-                          fontSize: '0.7rem',
-                          fontWeight: 700,
-                          padding: '2px 8px',
-                          borderRadius: '999px',
-                          backgroundColor: '#EFF6FF',
-                          color: '#1E40AF',
+                        <span className="badge" style={{
+                          backgroundColor: '#F8F8F7',
+                          color: '#171717',
+                          border: '1px solid #EAE7E2',
                         }}>
-                          ✓ Evidence Validated
+                          Validated
                         </span>
                       )}
                     </div>
@@ -268,7 +258,7 @@ export function Stage5FinalRecommendations({ onProceedToRoadmap, onBackToStage4 
                   borderRadius: '12px',
                   border: '1px solid #EAE7E2',
                 }}>
-                  <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#10B981', marginBottom: '4px', textTransform: 'uppercase' }}>
+                  <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#FE6904', marginBottom: '4px', textTransform: 'uppercase' }}>
                     Mentor Evaluation Note
                   </div>
                   <p style={{ fontSize: '0.85rem', color: '#171717', margin: 0, lineHeight: '1.5' }}>
@@ -283,7 +273,7 @@ export function Stage5FinalRecommendations({ onProceedToRoadmap, onBackToStage4 
                   borderRadius: '12px',
                   border: '1px solid #EAE7E2',
                 }}>
-                  <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#6366F1', marginBottom: '4px', textTransform: 'uppercase' }}>
+                  <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#FE6904', marginBottom: '4px', textTransform: 'uppercase' }}>
                     Skills to Develop & Challenges
                   </div>
                   <p style={{ fontSize: '0.85rem', color: '#171717', margin: 0, lineHeight: '1.5' }}>

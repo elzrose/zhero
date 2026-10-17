@@ -181,7 +181,7 @@ export function Stage4VirtualCounselling({ onProceedToStage5, onBackToStage3 }) 
                 Virtual Career Counselling Session
               </h2>
             </div>
-            <p style={{ fontSize: '0.925rem', color: '#4B5563', margin: '6px 0 0 0', maxWidth: '720px', lineHeight: '1.6' }}>
+            <p style={{ fontSize: '0.925rem', color: '#77736F', margin: '6px 0 0 0', maxWidth: '720px', lineHeight: '1.6' }}>
               "Your assessment is a starting point, not a decision about your future. Meet with a career mentor to discuss what matters to you, explore your concerns, and refine your next steps."
             </p>
           </div>
@@ -245,24 +245,6 @@ export function Stage4VirtualCounselling({ onProceedToStage5, onBackToStage3 }) 
         </div>
       </div>
 
-      {/* Honest Demo Disclaimer Notice */}
-      <div style={{
-        padding: '0.85rem 1.25rem',
-        backgroundColor: '#EFF6FF',
-        border: '1px solid #BFDBFE',
-        borderRadius: '12px',
-        marginBottom: '1.5rem',
-        display: 'flex',
-        alignItems: 'center',
-        gap: '10px',
-        fontSize: '0.825rem',
-        color: '#1E40AF',
-      }}>
-        <Info size={18} flexShrink={0} />
-        <div>
-          <strong>Transparent Hackathon Demonstration Mode:</strong> Mentor scheduling and meeting room operate as functional interactive simulations. In production, this connects to institutional WebRTC video infrastructure. No false claims of live external humans are made.
-        </div>
-      </div>
 
       {/* VIEW 1: BOOKING FLOW */}
       {viewMode === 'booking' && (
@@ -293,7 +275,7 @@ export function Stage4VirtualCounselling({ onProceedToStage5, onBackToStage3 }) 
                       padding: '1rem',
                       borderRadius: '14px',
                       border: isSelected ? '2px solid #FE6904' : '1px solid #EAE7E2',
-                      backgroundColor: isSelected ? '#FFF8F4' : '#F8F8F7',
+                      backgroundColor: isSelected ? '#FFE5CE' : '#F8F8F7',
                       cursor: 'pointer',
                       transition: 'all 0.2s ease',
                     }}
@@ -400,7 +382,7 @@ export function Stage4VirtualCounselling({ onProceedToStage5, onBackToStage3 }) 
                         padding: '8px 10px',
                         borderRadius: '8px',
                         border: meetingFormat === fmt.id ? '2px solid #FE6904' : '1px solid #EAE7E2',
-                        backgroundColor: meetingFormat === fmt.id ? '#FFF8F4' : '#F8F8F7',
+                        backgroundColor: meetingFormat === fmt.id ? '#FFE5CE' : '#F8F8F7',
                         fontSize: '0.8rem',
                         fontWeight: 700,
                         color: meetingFormat === fmt.id ? '#FE6904' : '#171717',
@@ -479,12 +461,12 @@ export function Stage4VirtualCounselling({ onProceedToStage5, onBackToStage3 }) 
             {/* Top Bar inside call */}
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#10B981', animation: 'pulse 1s infinite' }} />
-                <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#A7F3D0' }}>
+                <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#FE6904', animation: 'pulse 1s infinite' }} />
+                <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#EAE7E2' }}>
                   Live Session ({formatTimer(meetingDuration)})
                 </span>
               </div>
-              <span style={{ fontSize: '0.75rem', color: '#9CA3AF' }}>
+              <span style={{ fontSize: '0.75rem', color: '#77736F' }}>
                 ZHERO Protected Room • 1080p Encrypted
               </span>
             </div>
@@ -498,7 +480,7 @@ export function Stage4VirtualCounselling({ onProceedToStage5, onBackToStage3 }) 
             }}>
               {/* Mentor Feed */}
               <div style={{
-                backgroundColor: '#262626',
+                backgroundColor: '#171717',
                 borderRadius: '14px',
                 height: '180px',
                 display: 'flex',
@@ -506,7 +488,7 @@ export function Stage4VirtualCounselling({ onProceedToStage5, onBackToStage3 }) 
                 alignItems: 'center',
                 justifyContent: 'center',
                 position: 'relative',
-                border: '1px solid #374151',
+                border: '1px solid #171717',
               }}>
                 <div style={{
                   width: '56px',
@@ -532,7 +514,7 @@ export function Stage4VirtualCounselling({ onProceedToStage5, onBackToStage3 }) 
                   padding: '2px 8px',
                   borderRadius: '4px',
                   fontSize: '0.65rem',
-                  color: '#10B981',
+                  color: '#FE6904',
                 }}>
                   Speaking • Mentor
                 </div>
@@ -540,7 +522,7 @@ export function Stage4VirtualCounselling({ onProceedToStage5, onBackToStage3 }) 
 
               {/* Student Feed */}
               <div style={{
-                backgroundColor: '#262626',
+                backgroundColor: '#171717',
                 borderRadius: '14px',
                 height: '180px',
                 display: 'flex',
@@ -548,13 +530,13 @@ export function Stage4VirtualCounselling({ onProceedToStage5, onBackToStage3 }) 
                 alignItems: 'center',
                 justifyContent: 'center',
                 position: 'relative',
-                border: '1px solid #374151',
+                border: '1px solid #171717',
               }}>
                 <div style={{
                   width: '56px',
                   height: '56px',
                   borderRadius: '50%',
-                  backgroundColor: '#4B5563',
+                  backgroundColor: '#77736F',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -574,7 +556,7 @@ export function Stage4VirtualCounselling({ onProceedToStage5, onBackToStage3 }) 
                   padding: '2px 8px',
                   borderRadius: '4px',
                   fontSize: '0.65rem',
-                  color: '#9CA3AF',
+                  color: '#77736F',
                 }}>
                   {isCameraOn ? 'Camera Active' : 'Camera Off'}
                 </div>
@@ -588,7 +570,7 @@ export function Stage4VirtualCounselling({ onProceedToStage5, onBackToStage3 }) 
               justifyContent: 'center',
               gap: '12px',
               paddingTop: '1rem',
-              borderTop: '1px solid #374151',
+              borderTop: '1px solid #171717',
             }}>
               <button
                 onClick={() => setIsMicOn(!isMicOn)}
@@ -596,7 +578,7 @@ export function Stage4VirtualCounselling({ onProceedToStage5, onBackToStage3 }) 
                   width: '42px',
                   height: '42px',
                   borderRadius: '50%',
-                  backgroundColor: isMicOn ? '#374151' : '#DC2626',
+                  backgroundColor: isMicOn ? '#171717' : '#171717',
                   color: '#FFFFFF',
                   border: 'none',
                   display: 'flex',
@@ -614,7 +596,7 @@ export function Stage4VirtualCounselling({ onProceedToStage5, onBackToStage3 }) 
                   width: '42px',
                   height: '42px',
                   borderRadius: '50%',
-                  backgroundColor: isCameraOn ? '#374151' : '#DC2626',
+                  backgroundColor: isCameraOn ? '#171717' : '#171717',
                   color: '#FFFFFF',
                   border: 'none',
                   display: 'flex',
@@ -684,14 +666,14 @@ export function Stage4VirtualCounselling({ onProceedToStage5, onBackToStage3 }) 
                     style={{
                       padding: '8px 12px',
                       borderRadius: '8px',
-                      backgroundColor: checklist[item.key] ? '#ECFDF5' : '#F8F8F7',
-                      border: `1px solid ${checklist[item.key] ? '#A7F3D0' : '#EAE7E2'}`,
+                      backgroundColor: checklist[item.key] ? '#FFE5CE' : '#F8F8F7',
+                      border: `1px solid ${checklist[item.key] ? '#EAE7E2' : '#EAE7E2'}`,
                       display: 'flex',
                       alignItems: 'center',
                       gap: '8px',
                       cursor: 'pointer',
                       fontSize: '0.8rem',
-                      color: checklist[item.key] ? '#047857' : '#4B5563',
+                      color: checklist[item.key] ? '#FE6904' : '#77736F',
                       fontWeight: checklist[item.key] ? 700 : 500,
                     }}
                   >
@@ -699,7 +681,7 @@ export function Stage4VirtualCounselling({ onProceedToStage5, onBackToStage3 }) 
                       type="checkbox"
                       checked={checklist[item.key]}
                       readOnly
-                      style={{ accentColor: '#10B981' }}
+                      style={{ accentColor: '#FE6904' }}
                     />
                     <span>{item.label}</span>
                   </div>
@@ -766,7 +748,7 @@ export function Stage4VirtualCounselling({ onProceedToStage5, onBackToStage3 }) 
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <FileCheck size={20} color="#10B981" />
+                <FileCheck size={20} color="#FE6904" />
                 <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#171717', margin: 0 }}>
                   Mentor Post-Session Assessment & Review
                 </h3>
@@ -778,8 +760,8 @@ export function Stage4VirtualCounselling({ onProceedToStage5, onBackToStage3 }) 
 
             {viewMode === 'completed' && (
               <span style={{
-                backgroundColor: '#ECFDF5',
-                color: '#047857',
+                backgroundColor: '#FFE5CE',
+                color: '#FE6904',
                 padding: '4px 12px',
                 borderRadius: '999px',
                 fontSize: '0.8rem',
@@ -918,7 +900,7 @@ export function Stage4VirtualCounselling({ onProceedToStage5, onBackToStage3 }) 
                 <button
                   type="submit"
                   style={{
-                    backgroundColor: '#10B981',
+                    backgroundColor: '#FE6904',
                     color: '#FFFFFF',
                     border: 'none',
                     padding: '12px 24px',

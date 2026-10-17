@@ -145,89 +145,6 @@ export function Stage2GeminiConversation({ onProceedToStage3, onBackToStage1 }) 
 
   return (
     <div style={{ maxWidth: '880px', margin: '0 auto', paddingBottom: '3rem' }}>
-      {/* Top Banner / Engine status */}
-      <div style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        padding: '0.875rem 1.25rem',
-        backgroundColor: '#FFFFFF',
-        borderRadius: '14px',
-        border: '1px solid #EAE7E2',
-        marginBottom: '1rem',
-        boxShadow: '0 2px 6px rgba(23,23,23,0.02)',
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <div style={{
-            width: '10px',
-            height: '10px',
-            borderRadius: '50%',
-            backgroundColor: apiStatus.configured ? '#10B981' : '#F59E0B',
-            boxShadow: apiStatus.configured ? '0 0 8px #10B981' : '0 0 8px #F59E0B',
-          }} />
-          <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#171717' }}>
-                {apiStatus.configured ? 'Gemini 1.5 Flash Connected' : 'ZHERO Adaptive Reflection Engine'}
-              </span>
-              <span style={{
-                fontSize: '0.65rem',
-                fontWeight: 700,
-                padding: '2px 8px',
-                borderRadius: '999px',
-                backgroundColor: apiStatus.configured ? '#ECFDF5' : '#FEF3C7',
-                color: apiStatus.configured ? '#047857' : '#B45309',
-                border: `1px solid ${apiStatus.configured ? '#A7F3D0' : '#FDE68A'}`,
-              }}>
-                {apiStatus.configured ? 'Live AI Mode' : 'Transparent Local Engine'}
-              </span>
-            </div>
-            <div style={{ fontSize: '0.75rem', color: '#77736F' }}>
-              {apiStatus.configured
-                ? 'Server-side key securely isolated • Zero client credentials exposed'
-                : 'Using heuristic inquiry engine • Add GEMINI_API_KEY to .env for generative model'}
-            </div>
-          </div>
-        </div>
-
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <button
-            onClick={() => setShowConsentModal(!showConsentModal)}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '4px',
-              fontSize: '0.75rem',
-              color: '#77736F',
-              background: 'none',
-              border: 'none',
-              cursor: 'pointer',
-              textDecoration: 'underline',
-            }}
-          >
-            <ShieldCheck size={14} color="#047857" /> Privacy & AI Ethics
-          </button>
-        </div>
-      </div>
-
-      {/* Fallback Notice if triggered */}
-      {activeFallbackNotice && (
-        <div style={{
-          padding: '0.75rem 1rem',
-          backgroundColor: '#FFFBEB',
-          border: '1px solid #FDE68A',
-          borderRadius: '10px',
-          marginBottom: '1rem',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '8px',
-          fontSize: '0.8rem',
-          color: '#92400E',
-        }}>
-          <AlertCircle size={16} />
-          <span>Notice: Live API call switched to verified heuristic fallback ({activeFallbackNotice}). Assessment integrity maintained.</span>
-        </div>
-      )}
 
       {/* Main Conversation Container */}
       <div style={{
@@ -252,11 +169,11 @@ export function Stage2GeminiConversation({ onProceedToStage3, onBackToStage1 }) 
           borderTopRightRadius: '20px',
         }}>
           <div>
-            <h3 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 800, color: '#171717' }}>
+            <h3 style={{ margin: 0, fontSize: '1.125rem', fontWeight: 600, color: '#171717' }}>
               Conversational Career Discovery
             </h3>
             <p style={{ margin: 0, fontSize: '0.8rem', color: '#77736F', marginTop: '2px' }}>
-              Take your time to reply in full sentences. There are no wrong answers or IQ tests.
+              Take your time to reply in full sentences. There are no wrong answers.
             </p>
           </div>
 
@@ -267,23 +184,23 @@ export function Stage2GeminiConversation({ onProceedToStage3, onBackToStage1 }) 
             gap: '8px',
             backgroundColor: '#FFFFFF',
             padding: '6px 12px',
-            borderRadius: '999px',
+            borderRadius: '9999px',
             border: '1px solid #EAE7E2',
           }}>
-            <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#171717' }}>
-              Evidence Depth: {userTurnsCount}/4
+            <span style={{ fontSize: '0.75rem', fontWeight: 600, color: '#171717' }}>
+              Evidence depth: {userTurnsCount}/4
             </span>
             <div style={{
               width: '60px',
               height: '6px',
               backgroundColor: '#EAE7E2',
-              borderRadius: '999px',
+              borderRadius: '9999px',
               overflow: 'hidden',
             }}>
               <div style={{
                 height: '100%',
                 width: `${Math.min(100, (userTurnsCount / 4) * 100)}%`,
-                backgroundColor: isReadyForSynthesis ? '#10B981' : '#FE6904',
+                backgroundColor: '#FE6904',
                 transition: 'width 0.3s ease',
               }} />
             </div>
@@ -345,23 +262,11 @@ export function Stage2GeminiConversation({ onProceedToStage3, onBackToStage1 }) 
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: isUser ? 'flex-end' : 'flex-start',
-                    gap: '6px',
-                    marginTop: '6px',
-                    fontSize: '0.68rem',
-                    color: isUser ? 'rgba(255,255,255,0.6)' : '#77736F',
+                    marginTop: '4px',
+                    fontSize: '0.7rem',
+                    color: isUser ? 'rgba(255,255,255,0.7)' : '#77736F',
                   }}>
                     <span>{m.timestamp}</span>
-                    {!isUser && (
-                      <span style={{
-                        padding: '1px 6px',
-                        borderRadius: '4px',
-                        backgroundColor: m.isAiPowered ? '#ECFDF5' : '#F3F4F6',
-                        color: m.isAiPowered ? '#047857' : '#4B5563',
-                        fontWeight: 600,
-                      }}>
-                        {m.isAiPowered ? 'Gemini AI' : 'Adaptive Logic'}
-                      </span>
-                    )}
                   </div>
                 </div>
               </div>
@@ -492,12 +397,12 @@ export function Stage2GeminiConversation({ onProceedToStage3, onBackToStage1 }) 
               onClick={toggleVoiceInput}
               title={isListening ? 'Stop listening' : 'Optional voice dictation'}
               style={{
-                width: '44px',
-                height: '44px',
-                borderRadius: '12px',
+                width: '40px',
+                height: '40px',
+                borderRadius: '8px',
                 border: '1px solid #EAE7E2',
-                backgroundColor: isListening ? '#FEE2E2' : '#F8F8F7',
-                color: isListening ? '#DC2626' : '#77736F',
+                backgroundColor: isListening ? '#FFE5CE' : '#F8F8F7',
+                color: isListening ? '#FE6904' : '#77736F',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
