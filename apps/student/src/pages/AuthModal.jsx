@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Eye, EyeOff, Sparkles } from 'lucide-react';
+import { Eye, EyeOff } from 'lucide-react';
 import { Modal } from '../components/Modal';
 import { storageService } from '../services/storageService';
 
@@ -12,7 +12,7 @@ export function AuthModal({ isOpen, onClose, onAuthSuccess }) {
     password: '',
     educationLevel: 'Undergraduate (2nd Year)',
     stream: 'Computer Science & Engineering',
-    institution: 'Apex Career Academy — Kochi Campus',
+    institution: 'Apex Career Academy',
   });
   const [error, setError] = useState('');
 
@@ -27,15 +27,15 @@ export function AuthModal({ isOpen, onClose, onAuthSuccess }) {
     setError('');
 
     if (mode === 'signup' && !formData.name.trim()) {
-      setError('Please enter your full name.');
+      setError('Enter your full name.');
       return;
     }
     if (!formData.email.trim() || !formData.email.includes('@')) {
-      setError('Please enter a valid email address.');
+      setError('Enter a valid email address.');
       return;
     }
     if (formData.password.length < 6) {
-      setError('Password should be at least 6 characters.');
+      setError('Password must be at least 6 characters.');
       return;
     }
 
@@ -58,111 +58,65 @@ export function AuthModal({ isOpen, onClose, onAuthSuccess }) {
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title={mode === 'signin' ? 'Sign In to ZHERO' : 'Create Student Account'}>
-      {/* Demo Quick Login Callout */}
-      <div style={{
-        background: '#FFE5CE',
-        border: '1px solid #FA9B2A',
-        borderRadius: '12px',
-        padding: '1rem',
-        marginBottom: '1.5rem',
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.4rem' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <Sparkles size={16} color="#FE6904" />
-            <strong style={{ fontSize: '0.875rem', color: '#171717' }}>Hackathon Quick Access</strong>
-          </div>
-          <span style={{ fontSize: '0.7rem', color: '#FE6904', fontWeight: 700, background: '#FFFFFF', padding: '2px 8px', borderRadius: '9999px' }}>
-            Demo Ready
-          </span>
-        </div>
-        <p style={{ fontSize: '0.8rem', color: '#77736F', marginBottom: '0.85rem' }}>
-          One-click sign in preloaded with Ananya Sharma (2nd Year CS, Apex Academy Sponsored) with sample assessments.
-        </p>
-        <button
-          type="button"
-          onClick={handleDemoLogin}
-          style={{
-            width: '100%',
-            backgroundColor: '#FE6904',
-            color: '#FFFFFF',
-            border: 'none',
-            borderRadius: '8px',
-            padding: '0.65rem 1rem',
-            fontSize: '0.875rem',
-            fontWeight: 700,
-            cursor: 'pointer',
-            boxShadow: '0 2px 8px rgba(254, 105, 4, 0.25)',
-          }}
-        >
-          ⚡ Continue as Demo Student
-        </button>
-      </div>
-
+    <Modal isOpen={isOpen} onClose={onClose} title={mode === 'signin' ? 'Sign in' : 'Create account'}>
       {/* Tabs */}
       <div style={{
         display: 'flex',
         borderBottom: '1px solid #EAE7E2',
-        marginBottom: '1.25rem',
+        marginBottom: '1.5rem',
       }}>
         <button
+          type="button"
           onClick={() => { setMode('signin'); setError(''); }}
           style={{
             flex: 1,
-            padding: '0.65rem',
+            padding: '0.5rem',
             background: 'none',
             border: 'none',
             borderBottom: mode === 'signin' ? '2px solid #FE6904' : '2px solid transparent',
             color: mode === 'signin' ? '#FE6904' : '#77736F',
-            fontWeight: mode === 'signin' ? 700 : 500,
+            fontWeight: mode === 'signin' ? 600 : 400,
             cursor: 'pointer',
-            fontSize: '0.875rem',
+            fontSize: '0.9rem',
           }}
         >
-          Sign In
+          Sign in
         </button>
         <button
+          type="button"
           onClick={() => { setMode('signup'); setError(''); }}
           style={{
             flex: 1,
-            padding: '0.65rem',
+            padding: '0.5rem',
             background: 'none',
             border: 'none',
             borderBottom: mode === 'signup' ? '2px solid #FE6904' : '2px solid transparent',
             color: mode === 'signup' ? '#FE6904' : '#77736F',
-            fontWeight: mode === 'signup' ? 700 : 500,
+            fontWeight: mode === 'signup' ? 600 : 400,
             cursor: 'pointer',
-            fontSize: '0.875rem',
+            fontSize: '0.9rem',
           }}
         >
-          New Student
+          Create account
         </button>
       </div>
 
       {error && (
-        <div style={{
-          backgroundColor: '#FFEBEE',
-          color: '#C62828',
-          padding: '0.6rem 0.85rem',
-          borderRadius: '8px',
-          fontSize: '0.8rem',
-          marginBottom: '1rem',
-          border: '1px solid #FFCDD2',
-        }}>
+        <p style={{ color: '#171717', fontSize: '0.85rem', margin: '0 0 1rem 0' }}>
           {error}
-        </div>
+        </p>
       )}
 
       {/* Form */}
       <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
         {mode === 'signup' && (
           <div>
-            <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 600, color: '#171717', marginBottom: '4px' }}>
-              Full Name
+            <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 500, color: '#171717', marginBottom: '4px' }}>
+              Full name
             </label>
             <input
               type="text"
-              placeholder="e.g. Ananya Sharma"
+              placeholder="Ananya Sharma"
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
               style={{
@@ -170,7 +124,7 @@ export function AuthModal({ isOpen, onClose, onAuthSuccess }) {
                 padding: '0.65rem 0.85rem',
                 borderRadius: '8px',
                 border: '1px solid #EAE7E2',
-                fontSize: '0.875rem',
+                fontSize: '0.9rem',
                 outline: 'none',
               }}
             />
@@ -178,12 +132,12 @@ export function AuthModal({ isOpen, onClose, onAuthSuccess }) {
         )}
 
         <div>
-          <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 600, color: '#171717', marginBottom: '4px' }}>
-            Email Address
+          <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 500, color: '#171717', marginBottom: '4px' }}>
+            Email
           </label>
           <input
             type="email"
-            placeholder="student@campus.edu"
+            placeholder="student@example.com"
             value={formData.email}
             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
             style={{
@@ -191,14 +145,14 @@ export function AuthModal({ isOpen, onClose, onAuthSuccess }) {
               padding: '0.65rem 0.85rem',
               borderRadius: '8px',
               border: '1px solid #EAE7E2',
-              fontSize: '0.875rem',
+              fontSize: '0.9rem',
               outline: 'none',
             }}
           />
         </div>
 
         <div>
-          <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 600, color: '#171717', marginBottom: '4px' }}>
+          <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 500, color: '#171717', marginBottom: '4px' }}>
             Password
           </label>
           <div style={{ position: 'relative' }}>
@@ -212,7 +166,7 @@ export function AuthModal({ isOpen, onClose, onAuthSuccess }) {
                 padding: '0.65rem 2.5rem 0.65rem 0.85rem',
                 borderRadius: '8px',
                 border: '1px solid #EAE7E2',
-                fontSize: '0.875rem',
+                fontSize: '0.9rem',
                 outline: 'none',
               }}
             />
@@ -228,6 +182,7 @@ export function AuthModal({ isOpen, onClose, onAuthSuccess }) {
                 border: 'none',
                 color: '#77736F',
                 cursor: 'pointer',
+                padding: 0,
               }}
             >
               {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
@@ -238,8 +193,8 @@ export function AuthModal({ isOpen, onClose, onAuthSuccess }) {
         {mode === 'signup' && (
           <>
             <div>
-              <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 600, color: '#171717', marginBottom: '4px' }}>
-                Education Level
+              <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 500, color: '#171717', marginBottom: '4px' }}>
+                Education level
               </label>
               <select
                 value={formData.educationLevel}
@@ -249,12 +204,12 @@ export function AuthModal({ isOpen, onClose, onAuthSuccess }) {
                   padding: '0.65rem 0.85rem',
                   borderRadius: '8px',
                   border: '1px solid #EAE7E2',
-                  fontSize: '0.875rem',
+                  fontSize: '0.9rem',
                   outline: 'none',
                   backgroundColor: '#FFFFFF',
                 }}
               >
-                <option>High School (11th / 12th Grade)</option>
+                <option>High School</option>
                 <option>Undergraduate (1st / 2nd Year)</option>
                 <option>Undergraduate (Final Year)</option>
                 <option>Postgraduate / Job Seeker</option>
@@ -262,12 +217,12 @@ export function AuthModal({ isOpen, onClose, onAuthSuccess }) {
             </div>
 
             <div>
-              <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 600, color: '#171717', marginBottom: '4px' }}>
-                Enrolled Tuition Centre / Institute
+              <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 500, color: '#171717', marginBottom: '4px' }}>
+                Institution
               </label>
               <input
                 type="text"
-                placeholder="e.g. Apex Career Academy"
+                placeholder="Apex Career Academy"
                 value={formData.institution}
                 onChange={(e) => setFormData({ ...formData, institution: e.target.value })}
                 style={{
@@ -275,7 +230,7 @@ export function AuthModal({ isOpen, onClose, onAuthSuccess }) {
                   padding: '0.65rem 0.85rem',
                   borderRadius: '8px',
                   border: '1px solid #EAE7E2',
-                  fontSize: '0.875rem',
+                  fontSize: '0.9rem',
                   outline: 'none',
                 }}
               />
@@ -285,21 +240,30 @@ export function AuthModal({ isOpen, onClose, onAuthSuccess }) {
 
         <button
           type="submit"
+          className="btn-primary"
           style={{
-            backgroundColor: '#171717',
-            color: '#FFFFFF',
-            border: 'none',
-            borderRadius: '8px',
+            width: '100%',
             padding: '0.75rem',
             fontSize: '0.9rem',
-            fontWeight: 700,
-            cursor: 'pointer',
+            fontWeight: 500,
             marginTop: '0.5rem',
           }}
         >
-          {mode === 'signin' ? 'Sign In to Dashboard' : 'Complete Registration'}
+          {mode === 'signin' ? 'Sign in' : 'Create account'}
         </button>
       </form>
+
+      {/* Quiet single text button below the form */}
+      <div style={{ textAlign: 'center', marginTop: '1.25rem' }}>
+        <button
+          type="button"
+          onClick={handleDemoLogin}
+          className="link-btn"
+          style={{ fontSize: '0.85rem' }}
+        >
+          Continue as demo student
+        </button>
+      </div>
     </Modal>
   );
 }
