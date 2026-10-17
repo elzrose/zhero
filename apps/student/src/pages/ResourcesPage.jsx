@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { Search, ExternalLink, Bookmark, CheckCircle2, Clock } from 'lucide-react';
+import { Search, ExternalLink, Bookmark, CheckCircle2 } from 'lucide-react';
 import { RESOURCES_DATA } from '../data/resourcesData';
 
 export function ResourcesPage({
-  bookmarkedResources,
+  bookmarkedResources = [],
   onToggleBookmark,
-  completedResources,
+  completedResources = [],
   onToggleComplete
 }) {
   const [searchQuery, setSearchQuery] = useState('');
@@ -25,15 +25,9 @@ export function ResourcesPage({
   });
 
   return (
-    <div style={{ padding: '2rem 1.5rem', maxWidth: '1100px', margin: '0 auto' }}>
-      {/* Header */}
-      <div style={{ marginBottom: '2rem' }}>
-        <h1 style={{ fontSize: '2rem', fontWeight: 800, color: '#171717', letterSpacing: '-0.02em', margin: 0 }}>
-          Curated Learning Resources
-        </h1>
-        <p style={{ fontSize: '0.95rem', color: '#77736F', marginTop: '0.35rem' }}>
-          Vetted, beginner-friendly tutorials, documentation, and guided projects to bridge skill gaps.
-        </p>
+    <div className="page">
+      <div className="page-header">
+        <h1 className="page-title">Resources</h1>
       </div>
 
       {/* Search & Filters */}
@@ -43,69 +37,77 @@ export function ResourcesPage({
         gap: '1rem',
         alignItems: 'center',
         justifyContent: 'space-between',
-        marginBottom: '1.5rem',
+        marginBottom: '1rem',
       }}>
-        {/* Search Input */}
-        <div style={{ position: 'relative', flex: '1 1 300px', maxWidth: '400px' }}>
-          <Search size={16} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: '#77736F' }} />
+        <div style={{ position: 'relative', flex: '1 1 260px', maxWidth: '360px' }}>
+          <Search size={16} style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)', color: '#77736F' }} />
           <input
             type="text"
-            placeholder="Search by title, skill, or provider..."
+            placeholder="Search resources..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             style={{
               width: '100%',
-              padding: '0.65rem 0.85rem 0.65rem 2.25rem',
-              borderRadius: '10px',
+              padding: '6px 10px 6px 32px',
+              borderRadius: '8px',
               border: '1px solid #EAE7E2',
-              fontSize: '0.875rem',
+              fontSize: '0.85rem',
               outline: 'none',
               backgroundColor: '#FFFFFF',
+              boxSizing: 'border-box',
             }}
           />
         </div>
 
-        {/* Difficulty Filter */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <span style={{ fontSize: '0.8rem', color: '#77736F', fontWeight: 600 }}>Difficulty:</span>
+          <span style={{ fontSize: '0.8rem', color: '#77736F' }}>Level:</span>
           <select
             value={selectedDifficulty}
             onChange={(e) => setSelectedDifficulty(e.target.value)}
             style={{
-              padding: '0.55rem 0.85rem',
+              padding: '6px 10px',
               borderRadius: '8px',
               border: '1px solid #EAE7E2',
-              fontSize: '0.85rem',
+              fontSize: '0.8rem',
               backgroundColor: '#FFFFFF',
               color: '#171717',
               outline: 'none',
               cursor: 'pointer',
             }}
           >
-            <option value="All">All Levels</option>
+            <option value="All">All levels</option>
             <option value="Beginner">Beginner</option>
             <option value="Intermediate">Intermediate</option>
           </select>
         </div>
       </div>
 
-      {/* Type Filter Pills */}
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginBottom: '2rem' }}>
+      {/* Type filter tabs */}
+      <div style={{
+        display: 'flex',
+        gap: '1.25rem',
+        borderBottom: '1px solid #EAE7E2',
+        marginBottom: '1.5rem',
+        overflowX: 'auto',
+      }}>
         {types.map((t) => {
           const isActive = selectedType === t;
           return (
             <button
               key={t}
+              type="button"
               onClick={() => setSelectedType(t)}
               style={{
-                padding: '0.45rem 1rem',
-                borderRadius: '9999px',
-                border: isActive ? '1px solid #FE6904' : '1px solid #EAE7E2',
-                backgroundColor: isActive ? '#FFE5CE' : '#FFFFFF',
+                background: 'none',
+                border: 'none',
+                borderBottom: isActive ? '2px solid #FE6904' : '2px solid transparent',
                 color: isActive ? '#FE6904' : '#77736F',
-                fontSize: '0.8rem',
-                fontWeight: isActive ? 700 : 500,
+                fontWeight: isActive ? 600 : 400,
+                fontSize: '0.85rem',
+                padding: '8px 2px',
                 cursor: 'pointer',
+                marginBottom: '-1px',
+                whiteSpace: 'nowrap',
               }}
             >
               {t}
@@ -114,8 +116,8 @@ export function ResourcesPage({
         })}
       </div>
 
-      {/* Resources Cards Grid */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '1.25rem' }}>
+      {/* Rows (title, type, duration, bookmark and complete icons) instead of cards */}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
         {filtered.map((res) => {
           const isBookmarked = bookmarkedResources.includes(res.id);
           const isDone = completedResources.includes(res.id);
@@ -123,138 +125,85 @@ export function ResourcesPage({
           return (
             <div
               key={res.id}
+              className="list-row"
               style={{
-                backgroundColor: '#FFFFFF',
-                borderRadius: '16px',
-                border: '1px solid #EAE7E2',
-                padding: '1.5rem',
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'space-between',
-                boxShadow: '0 1px 3px rgba(23, 23, 23, 0.04)',
-              }}
-            >
-              <div>
-                {/* Header row */}
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.65rem' }}>
-                  <div style={{ display: 'flex', gap: '6px' }}>
-                    <span style={{
-                      fontSize: '0.7rem',
-                      fontWeight: 700,
-                      padding: '2px 8px',
-                      borderRadius: '6px',
-                      background: '#FFE5CE',
-                      color: '#FE6904',
-                    }}>
-                      {res.type}
-                    </span>
-                    <span style={{
-                      fontSize: '0.7rem',
-                      fontWeight: 600,
-                      padding: '2px 8px',
-                      borderRadius: '6px',
-                      background: '#F8F8F7',
-                      color: '#77736F',
-                    }}>
-                      {res.difficulty}
-                    </span>
-                  </div>
-
-                  <span style={{ fontSize: '0.75rem', color: '#77736F', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                    <Clock size={12} />
-                    {res.duration}
-                  </span>
-                </div>
-
-                <h3 style={{ fontSize: '1.05rem', fontWeight: 800, color: '#171717', margin: '0 0 0.35rem', lineHeight: 1.4 }}>
-                  {res.title}
-                </h3>
-                <span style={{ fontSize: '0.75rem', color: '#FE6904', fontWeight: 600, display: 'block', marginBottom: '0.65rem' }}>
-                  {res.provider}
-                </span>
-
-                <p style={{ fontSize: '0.82rem', color: '#77736F', lineHeight: 1.5, margin: '0 0 1rem' }}>
-                  {res.description}
-                </p>
-
-                <div style={{
-                  display: 'inline-block',
-                  fontSize: '0.72rem',
-                  padding: '3px 8px',
-                  borderRadius: '6px',
-                  background: '#FAF9F7',
-                  border: '1px solid #EAE7E2',
-                  color: '#171717',
-                  fontWeight: 500,
-                  marginBottom: '1rem',
-                }}>
-                  Skill: {res.skillTag}
-                </div>
-              </div>
-
-              {/* Action row */}
-              <div style={{
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
-                paddingTop: '0.75rem',
-                borderTop: '1px solid #EAE7E2',
-              }}>
-                <div style={{ display: 'flex', gap: '0.5rem' }}>
-                  <button
-                    onClick={() => onToggleBookmark(res.id)}
-                    title={isBookmarked ? 'Remove Bookmark' : 'Bookmark Resource'}
-                    style={{
-                      background: isBookmarked ? '#FFE5CE' : '#FFFFFF',
-                      border: '1px solid #EAE7E2',
-                      borderRadius: '6px',
-                      padding: '5px 8px',
-                      cursor: 'pointer',
-                      color: isBookmarked ? '#FE6904' : '#77736F',
-                    }}
-                  >
-                    <Bookmark size={14} fill={isBookmarked ? '#FE6904' : 'none'} />
-                  </button>
-
-                  <button
-                    onClick={() => onToggleComplete(res.id)}
-                    title="Mark Completed"
-                    style={{
-                      background: isDone ? '#E8F5E9' : '#FFFFFF',
-                      border: isDone ? '1px solid #C8E6C9' : '1px solid #EAE7E2',
-                      borderRadius: '6px',
-                      padding: '5px 8px',
-                      cursor: 'pointer',
-                      color: isDone ? '#2E7D32' : '#77736F',
-                      fontSize: '0.75rem',
-                      fontWeight: 600,
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '4px',
-                    }}
-                  >
-                    <CheckCircle2 size={14} />
-                    <span>{isDone ? 'Completed' : 'Mark Done'}</span>
-                  </button>
-                </div>
-
+                padding: '0.875rem 1.25rem',
+                gap: '1rem',
+                flexWrap: 'wrap',
+              }}
+            >
+              <div style={{ flex: '1 1 280px' }}>
                 <a
                   href={res.url}
                   target="_blank"
                   rel="noreferrer"
                   style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '4px',
-                    fontSize: '0.8rem',
-                    fontWeight: 700,
-                    color: '#FE6904',
+                    fontSize: '0.95rem',
+                    fontWeight: 600,
+                    color: isDone ? '#77736F' : '#171717',
                     textDecoration: 'none',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '6px',
                   }}
                 >
-                  <span>Open Resource</span>
-                  <ExternalLink size={13} />
+                  <span>{res.title}</span>
+                  <ExternalLink size={13} color="#77736F" />
                 </a>
+                <div style={{ fontSize: '0.8rem', color: '#77736F', marginTop: '2px' }}>
+                  {res.provider} • {res.skillTag}
+                </div>
+              </div>
+
+              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                <span className="badge" style={{ backgroundColor: '#F8F8F7', color: '#171717', border: '1px solid #EAE7E2' }}>
+                  {res.type}
+                </span>
+
+                <span style={{ fontSize: '0.8rem', color: '#77736F', minWidth: '55px' }}>
+                  {res.duration}
+                </span>
+
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <button
+                    type="button"
+                    onClick={() => onToggleComplete(res.id)}
+                    title={isDone ? 'Mark as incomplete' : 'Mark as complete'}
+                    aria-label={isDone ? 'Completed' : 'Incomplete'}
+                    style={{
+                      background: 'none',
+                      border: 'none',
+                      cursor: 'pointer',
+                      color: isDone ? '#FE6904' : '#77736F',
+                      padding: '4px',
+                      display: 'flex',
+                      alignItems: 'center',
+                    }}
+                  >
+                    <CheckCircle2 size={18} color={isDone ? '#FE6904' : '#77736F'} />
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => onToggleBookmark(res.id)}
+                    title={isBookmarked ? 'Remove bookmark' : 'Bookmark'}
+                    aria-label={isBookmarked ? 'Saved' : 'Save'}
+                    style={{
+                      background: 'none',
+                      border: 'none',
+                      cursor: 'pointer',
+                      color: isBookmarked ? '#FE6904' : '#77736F',
+                      padding: '4px',
+                      display: 'flex',
+                      alignItems: 'center',
+                    }}
+                  >
+                    <Bookmark size={18} fill={isBookmarked ? '#FE6904' : 'none'} />
+                  </button>
+                </div>
               </div>
             </div>
           );
