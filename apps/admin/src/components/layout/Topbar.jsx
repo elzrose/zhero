@@ -39,24 +39,24 @@ export function Topbar({ activeTab, onSelectTab }) {
   }, []);
 
   const handleResetData = () => {
-    if (window.confirm('Reset all demo data back to hackathon seed state? This resets local updates.')) {
+    if (window.confirm('Reset all platform data back to default state? This will clear local changes.')) {
       StorageService.resetAll();
-      addToast('Platform data reset to factory seed state.', 'success');
+      addToast('Platform data reset to default state.', 'success');
       setProfileOpen(false);
     }
   };
 
   const getBreadcrumbTitle = () => {
     const map = {
-      dashboard: 'Dashboard Overview',
+      dashboard: 'Dashboard',
       users: 'User Management',
-      institutions: 'Tuition Centres & Human Mentors',
-      courses: 'Offered Courses & Tuition Providers',
-      'ai-monitoring': 'Verbal AI & Upstream Telemetry',
-      bounties: 'Company Bounties & Partner Authorization',
-      analytics: 'Cognitive Retention & Cohort Analytics',
+      institutions: 'Tuition Centre Management',
+      courses: 'Course Offerings & Providers',
+      'ai-monitoring': 'AI Monitoring',
+      bounties: 'Company Bounties',
+      analytics: 'Cognitive & Cohort Analytics',
       settings: 'Access Control & Settings',
-      'audit-logs': 'Administrative Audit Logs',
+      'audit-logs': 'Audit Logs',
     };
     return map[activeTab] || 'Dashboard';
   };
@@ -338,16 +338,16 @@ export function Topbar({ activeTab, onSelectTab }) {
                 </div>
               </div>
 
-              {/* Persona Switcher (For testing permissions) */}
+              {/* Role Switcher */}
               <div style={{ padding: '0.5rem 1rem', borderBottom: '1px solid #FAD1C6' }}>
                 <div style={{ fontSize: '0.7rem', fontWeight: 700, color: '#77736D', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.4rem' }}>
-                  Demo Role Switcher
+                  Role Switcher
                 </div>
                 <div style={{ display: 'flex', gap: '0.4rem' }}>
                   <button
                     onClick={() => {
                       switchRole('SUPER_ADMIN');
-                      addToast('Switched persona to Super Admin', 'info');
+                      addToast('Switched view to Super Admin', 'info');
                       setProfileOpen(false);
                     }}
                     style={{
@@ -367,7 +367,7 @@ export function Topbar({ activeTab, onSelectTab }) {
                   <button
                     onClick={() => {
                       switchRole('ADMIN');
-                      addToast('Switched persona to Operational Admin', 'info');
+                      addToast('Switched view to Admin', 'info');
                       setProfileOpen(false);
                     }}
                     style={{
@@ -433,7 +433,7 @@ export function Topbar({ activeTab, onSelectTab }) {
                   onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
                 >
                   <RotateCcw size={16} color="#77736D" />
-                  <span>Reset Demo Data</span>
+                  <span>Reset Platform Data</span>
                 </button>
 
                 <button

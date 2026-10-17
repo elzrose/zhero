@@ -55,9 +55,9 @@ export function SettingsPage() {
     { action: 'View Operational Dashboard & Analytics', admin: true, superAdmin: true },
     { action: 'Browse & Filter Users (Students, Staff)', admin: true, superAdmin: true },
     { action: 'Suspend / Reactivate Student Accounts', admin: true, superAdmin: true },
-    { action: 'Edit Career Taxonomy & Competencies', admin: true, superAdmin: true },
-    { action: 'Author Assessment Questions & Previews', admin: true, superAdmin: true },
-    { action: 'Publish / Unpublish Learning Resources', admin: true, superAdmin: true },
+    { action: 'Manage Course Offerings & Providers', admin: true, superAdmin: true },
+    { action: 'Review Company Problem Bounties', admin: true, superAdmin: true },
+    { action: 'View Cognitive & Cohort Analytics', admin: true, superAdmin: true },
     { action: 'View AI Latency & Inference Traces', admin: true, superAdmin: true },
     { action: 'Approve / Reject Tuition Centre Partnerships', admin: false, superAdmin: true },
     { action: 'Calibrate AI System Prompt Rubrics', admin: false, superAdmin: true },
@@ -69,8 +69,8 @@ export function SettingsPage() {
   return (
     <div className="animate-fade-in">
       <PageHeader
-        title="Access Control & Platform Settings"
-        description="Configure role-based access security, manage your administrator account, and calibrate global platform operational flags."
+        title="Access Control & Settings"
+        description="Manage administrator profile, permissions, and platform settings."
       />
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(380px, 1fr))', gap: '1.5rem', marginBottom: '2rem' }}>

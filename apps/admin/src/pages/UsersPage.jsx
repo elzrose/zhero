@@ -307,15 +307,15 @@ export function UsersPage() {
   return (
     <div className="animate-fade-in">
       <PageHeader
-        title="User & Access Management"
-        description="Search, provision, and audit student, centre operator, and administrator accounts across all Zhero tenants."
+        title="User Management"
+        description="Search, filter, and manage student, tuition centre, and administrator accounts."
         actions={
           <Button
             variant="primary"
             icon={UserPlus}
             onClick={() => setCreateModalOpen(true)}
           >
-            + Provision Authorized User
+            + Add User
           </Button>
         }
       />

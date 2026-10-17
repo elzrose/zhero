@@ -485,15 +485,15 @@ export function InstitutionsPage() {
   return (
     <div className="animate-fade-in">
       <PageHeader
-        title="Tuition Centre Partners & Human Mentorship"
-        description="Verify educational institutions, monitor Human-in-the-Loop GMeet mentor validations, and audit anti-speedrunning academic integrity."
+        title="Tuition Centre Management"
+        description="Approve and manage partner tuition centres, review seat allocations, and oversee mentor validations."
         actions={
           <Button
             variant="primary"
             icon={Plus}
             onClick={() => setCreateModalOpen(true)}
           >
-            + Register New Partner
+            Register Tuition Centre
           </Button>
         }
       />

@@ -83,8 +83,8 @@ export function DashboardPage({ onNavigate }) {
     <div className="animate-fade-in">
       {/* Page Header */}
       <PageHeader
-        title="Operations, Human-in-the-Loop & AI Observability"
-        description="Unified administration for Zhero: Verbal AI interviews, tuition centre mentor validations via GMeet, cognitive spaced repetition, and industry company bounties."
+        title="Platform Operations"
+        description="Centralized platform administration, tuition centre approvals, AI telemetry, and analytics."
         actions={
           <div style={{ display: 'flex', gap: '0.6rem', alignItems: 'center' }}>
             <div
@@ -121,7 +121,7 @@ export function DashboardPage({ onNavigate }) {
             </Button>
 
             <Button variant="primary" icon={Sparkles} onClick={() => onNavigate('ai-monitoring')}>
-              Verbal AI Config
+              AI Settings
             </Button>
           </div>
         }
@@ -204,7 +204,7 @@ export function DashboardPage({ onNavigate }) {
           value={metrics.totalStudents.toLocaleString()}
           change={`${metrics.activeDailyStreaks} Active Streaks`}
           trend="up"
-          subtext="Snapchat-style daily habit"
+          subtext="Daily active learners"
           icon={Users}
           badgeText="Active Learners"
           onClick={() => onNavigate('users')}
@@ -218,18 +218,18 @@ export function DashboardPage({ onNavigate }) {
           subtext="Tuition Centre GMeet sign-off"
           icon={Video}
           variant="coral"
-          badgeText="Can't rely on just AI"
+          badgeText="Mentor Verified"
           onClick={() => onNavigate('institutions')}
         />
 
         <StatCard
           title="Verbal AI Interviews"
           value={metrics.totalVerbalInterviews.toLocaleString()}
-          change="Anti-Speedrunning Active"
+          change="Active Assessments"
           trend="up"
-          subtext="Voice tests after course"
+          subtext="Post-assessment evaluation"
           icon={Mic}
-          badgeText="Gemini 1.5 Voice"
+          badgeText="Voice Assessment"
           onClick={() => onNavigate('ai-monitoring')}
         />
 
@@ -241,7 +241,7 @@ export function DashboardPage({ onNavigate }) {
           subtext="Ebbinghaus Forgetting Curve"
           icon={Brain}
           variant="orange"
-          badgeText="84.6% vs 22% Decay"
+          badgeText="84.6% Retention"
           onClick={() => onNavigate('analytics')}
         />
 
@@ -255,52 +255,6 @@ export function DashboardPage({ onNavigate }) {
           badgeText="Provider Directory"
           onClick={() => onNavigate('courses')}
         />
-      </div>
-
-      {/* Differentiator Philosophy Highlight */}
-      <div
-        style={{
-          backgroundColor: '#FFFFFF',
-          border: '1px solid #FAD1C6',
-          borderRadius: '14px',
-          padding: '1.1rem 1.4rem',
-          marginBottom: '2rem',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          flexWrap: 'wrap',
-          gap: '0.85rem',
-        }}
-      >
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
-          <div
-            style={{
-              width: '36px',
-              height: '36px',
-              borderRadius: '9px',
-              backgroundColor: '#FCEADE',
-              color: '#DB5E8C',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              flexShrink: 0,
-            }}
-          >
-            <ShieldCheck size={20} />
-          </div>
-          <div>
-            <div style={{ fontSize: '0.9rem', fontWeight: 700, color: '#171717' }}>
-              The Hybrid Synergy: Multimodal AI Guidance + Human Validation + Cognitive Habits
-            </div>
-            <div style={{ fontSize: '0.8rem', color: '#77736D', marginTop: '2px' }}>
-              Verbal AI interviews stop speedrunning; tuition centre mentors validate assessments via Google Meet; partner company bounties deliver real-world industry experience; and spaced repetition defeats the forgetting curve.
-            </div>
-          </div>
-        </div>
-        <div style={{ display: 'flex', gap: '0.5rem' }}>
-          <Badge variant="coral">Human Intervention Ready</Badge>
-          <Badge variant="orange" dot>Anti-Speedrun Active</Badge>
-        </div>
       </div>
 
       {/* Human Validation & Verbal Telemetry Live Feeds */}
@@ -317,10 +271,10 @@ export function DashboardPage({ onNavigate }) {
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
             <div>
               <h2 style={{ fontSize: '1.05rem', fontWeight: 700, color: '#171717', margin: 0 }}>
-                Tuition Centre Mentor Validation Pipeline
+                Tuition Centre Mentor Validations
               </h2>
               <p style={{ fontSize: '0.8rem', color: '#77736D', marginTop: '2px' }}>
-                Tuition centre mentors representing Zhero conducting post-assessment GMeet interviews.
+                Tuition centre mentors conducting post-assessment interview validations.
               </p>
             </div>
             <Badge variant="coral">GMeet Integrated</Badge>
@@ -405,10 +359,10 @@ export function DashboardPage({ onNavigate }) {
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
             <div>
               <h2 style={{ fontSize: '1.05rem', fontWeight: 700, color: '#171717', margin: 0 }}>
-                Verbal AI Interviews & Anti-Speedrun Monitor
+                Verbal AI Assessments
               </h2>
               <p style={{ fontSize: '0.8rem', color: '#77736D', marginTop: '2px' }}>
-                Voice evaluations after courses preventing rapid AI speedrunning and verifying genuine retention.
+                Voice assessments tracking student comprehension and response depth.
               </p>
             </div>
             <Badge variant="orange" dot>Audio AI Active</Badge>
@@ -493,7 +447,7 @@ export function DashboardPage({ onNavigate }) {
                 Distribution across top industrial sectors synthesized by Gemini guidance models.
               </p>
             </div>
-            <Badge variant="neutral">Kerala Talent Pool</Badge>
+            <Badge variant="neutral">Student Cohorts</Badge>
           </div>
           <CareerBarChart data={careerData} />
         </div>
@@ -510,10 +464,10 @@ export function DashboardPage({ onNavigate }) {
         {/* Quick Operations Modules */}
         <div className="admin-card">
           <h2 style={{ fontSize: '1.05rem', fontWeight: 700, color: '#171717', marginBottom: '0.5rem' }}>
-            Administrative Command Center
+            Quick Actions
           </h2>
           <p style={{ fontSize: '0.825rem', color: '#77736D', marginBottom: '1.25rem' }}>
-            Shortcuts to high-frequency operational governance, company bounties, and AI configuration.
+            Quick navigation to core operational modules and settings.
           </p>
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>

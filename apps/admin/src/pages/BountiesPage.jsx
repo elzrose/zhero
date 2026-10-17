@@ -265,8 +265,8 @@ export function BountiesPage() {
   return (
     <div className="animate-fade-in">
       <PageHeader
-        title="Company Management & Industry Bounties"
-        description="Gatekeep and manage partner companies authorized to post real-world problem statements for Zhero students. Review problem statements and approve student stipends."
+        title="Company Management & Problem Bounties"
+        description="Manage partner companies authorized to post problem statements, review submissions, and oversee student stipends."
         actions={
           <div style={{ display: 'flex', gap: '0.6rem' }}>
             <Button
@@ -317,10 +317,10 @@ export function BountiesPage() {
         </div>
         <div style={{ flex: 1 }}>
           <div style={{ fontSize: '0.95rem', fontWeight: 800, color: '#171717' }}>
-            Admin Gatekeeper: Company Authorization & Problem Statement Vetting
+            Company Authorization & Problem Statement Review
           </div>
           <div style={{ fontSize: '0.825rem', color: '#77736D', marginTop: '3px' }}>
-            Companies cannot put problems directly in front of students without admin authorization. The Admin Platform maintains the whitelist of authorized companies, toggles posting privileges, and validates that every problem statement offers educational merit and genuine student stipends.
+            Maintain authorized partner companies, manage posting privileges, and review problem statements and student stipends.
           </div>
         </div>
         <div

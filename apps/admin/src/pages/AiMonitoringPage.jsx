@@ -167,15 +167,15 @@ export function AiMonitoringPage() {
   return (
     <div className="animate-fade-in">
       <PageHeader
-        title="AI Observability & Automated Generation Governance"
-        description="Monitor Google Gemini API telemetry, token consumption, latencies, and orchestrate automated assessment question generation."
+        title="AI Monitoring & Configuration"
+        description="Monitor Gemini API telemetry, token consumption, latencies, and configure assessment generation parameters."
         actions={
           <div style={{ display: 'flex', gap: '0.6rem', alignItems: 'center' }}>
             <Button variant="secondary" icon={Download} onClick={handleExportTelemetry}>
               Export Logs
             </Button>
             <Button variant="primary" icon={Play} loading={testing} onClick={handleTestRun}>
-              Run Diagnostic Sandbox Test
+              Run Diagnostics Test
             </Button>
           </div>
         }
@@ -199,11 +199,11 @@ export function AiMonitoringPage() {
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.85rem' }}>
           <ShieldCheck size={18} color="#DB5E8C" />
           <span>
-            <strong>Secure Reverse Proxy Enforced:</strong> Client applications never handle upstream Gemini API keys. All inference routes execute server-side with token rate-limiting.
+            <strong>API Security:</strong> All AI inference requests are routed securely server-side with token rate-limiting.
           </span>
         </div>
         <Badge variant="success" dot>
-          Backend Protected (Port 3003 Proxy)
+          Server-side Proxy Active
         </Badge>
       </div>
 

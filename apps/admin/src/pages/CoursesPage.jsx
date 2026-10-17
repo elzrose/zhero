@@ -199,7 +199,7 @@ export function CoursesPage() {
     <div className="animate-fade-in">
       <PageHeader
         title="Course Offerings & Tuition Providers"
-        description="Comprehensive central registry of all academic and skill-training courses offered across Zhero, including which tuition centres are offering them, instructors, fees, and student enrollments."
+        description="Central directory of all courses offered across Zhero, tuition providers, instructors, fees, and enrollment capacity."
         actions={
           <div style={{ display: 'flex', gap: '0.6rem' }}>
             <Button
@@ -250,10 +250,10 @@ export function CoursesPage() {
         </div>
         <div style={{ flex: 1 }}>
           <div style={{ fontSize: '0.95rem', fontWeight: 800, color: '#171717' }}>
-            Tuition Centre Course Catalog & Provider Accreditation
+            Course Catalog & Provider Accreditation
           </div>
           <div style={{ fontSize: '0.825rem', color: '#77736D', marginTop: '3px' }}>
-            Each course on Zhero is tied directly to a vetted tuition centre partner. Administrators oversee all course offerings, track which centre delivers each curriculum, verify syllabus standards, and monitor student seat occupancy across cohorts.
+            Overview of course curricula, tuition centre providers, syllabus modules, and student seat capacity.
           </div>
         </div>
         <div

@@ -100,10 +100,10 @@ export function AnalyticsPage() {
         </div>
         <div style={{ flex: 1 }}>
           <div style={{ fontSize: '0.95rem', fontWeight: 800, color: '#171717' }}>
-            Neuro-Calibrated Retention: Defeating the Ebbinghaus Forgetting Curve
+            Spaced Repetition & Retention Benchmarks
           </div>
           <div style={{ fontSize: '0.825rem', color: '#77736D', marginTop: '3px' }}>
-            Students forget 78% of learned concepts within 30 days without review. Zhero's spaced-repetition engine delivers micro-prompts at calculated decay points (24h, 3d, 7d, 14d) to cement deep mental schemas.
+            Retention tracking across calibrated review intervals (24h, 3d, 7d, 14d) to support concept recall.
           </div>
         </div>
         <div
@@ -142,7 +142,7 @@ export function AnalyticsPage() {
         <StatCard
           title="Active Daily Streaks"
           value={metrics.activeDailyStreaks?.toLocaleString() || '1,840'}
-          subtitle="Snapchat-model habit formation"
+          subtitle="Consecutive study days"
           icon={Flame}
           variant="coral"
         />
@@ -213,10 +213,6 @@ export function AnalyticsPage() {
             </div>
           ))}
         </div>
-
-        <div style={{ marginTop: '1rem', fontSize: '0.75rem', color: '#77736D', backgroundColor: '#FFFFFF', padding: '8px 12px', borderRadius: '8px', border: '1px solid #FAD1C6' }}>
-          💡 <strong>How it works:</strong> Gemini triggers scenario-based micro-prompts at calibrated intervals (24h, 3d, 7d, 14d) based on student assessment topics and industry bounty tasks to cement knowledge before neuro-decay sets in.
-        </div>
       </div>
 
       {/* SECTION 2: HABIT STREAKS & DYNAMIC PACING */}
@@ -227,10 +223,10 @@ export function AnalyticsPage() {
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
               <Flame size={18} color="#DB5E8C" />
               <h3 style={{ fontSize: '1rem', fontWeight: 800, color: '#171717', margin: 0 }}>
-                Habit Streaks (Snapchat Model)
+                Daily Habit Streaks
               </h3>
             </div>
-            <Badge variant="coral">Gamified Daily Cadence</Badge>
+            <Badge variant="coral">Daily Cadence</Badge>
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
@@ -254,10 +250,6 @@ export function AnalyticsPage() {
                 </div>
               </div>
             ))}
-          </div>
-
-          <div style={{ marginTop: '1rem', fontSize: '0.75rem', color: '#77736D', backgroundColor: '#FCEADE', padding: '8px 12px', borderRadius: '6px', border: '1px solid #FAD1C6' }}>
-            🔥 <strong>Social Accountability:</strong> 94% of students report daily streak preservation keeps them consistent during rigorous tuition modules.
           </div>
         </div>
 
@@ -318,7 +310,7 @@ export function AnalyticsPage() {
             <h3 style={{ fontSize: '1rem', fontWeight: 800, color: '#171717', margin: 0 }}>
               Career Cohort Interest Distribution
             </h3>
-            <Badge variant="orange">Real Student Assessment Data</Badge>
+            <Badge variant="orange">Student Assessment Data</Badge>
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>

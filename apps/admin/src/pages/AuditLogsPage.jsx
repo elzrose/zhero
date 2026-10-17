@@ -98,15 +98,15 @@ export function AuditLogsPage() {
   return (
     <div className="animate-fade-in">
       <PageHeader
-        title="Administrative Audit Logs"
-        description="Immutable forensic trail of partner approvals, taxonomy updates, role escalations, and security events."
+        title="Audit Logs"
+        description="Audit trail of centre approvals, status updates, role changes, and administrative actions."
         actions={
           <Button
             variant="secondary"
             icon={Download}
             onClick={handleExportLogs}
           >
-            Export Audit Trail (CSV)
+            Export Audit Logs (CSV)
           </Button>
         }
       />
