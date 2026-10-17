@@ -19,6 +19,7 @@ export const AnalyticsService = {
     const companies = StorageService.getCompanies();
     const bounties = StorageService.getBounties();
     const bountySubmissions = StorageService.getBountySubmissions();
+    const courses = StorageService.getCourses();
     const science = StorageService.getLearningScience();
 
     const pendingValidations = validations.filter(v => v.status === 'SCHEDULED' || v.status === 'PENDING_SCHEDULE');
@@ -42,6 +43,10 @@ export const AnalyticsService = {
       // Verbal AI Interviews & Anti-Speedrunning
       totalVerbalInterviews: verbalInterviews.length + 840,
       verbalInterviewsVerifiedHumanRate: '98.1%',
+      // Course Offerings & Providers
+      totalCoursesOffered: courses.length,
+      activeCoursesCount: courses.filter(c => c.status === 'ACTIVE').length,
+      totalCourseEnrollments: courses.reduce((sum, c) => sum + (c.enrolledStudents || 0), 0),
       // Learning Science & Streaks
       activeDailyStreaks: science?.streakOverview?.totalActiveStreaks || 1840,
       averageStreakDays: science?.streakOverview?.avgStreakDays || 7.4,

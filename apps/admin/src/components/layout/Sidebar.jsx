@@ -11,6 +11,8 @@ import {
   ShieldCheck,
   ShieldAlert,
   Briefcase,
+  GraduationCap,
+  Brain,
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { StorageService } from '../../services/storageService';
@@ -38,8 +40,10 @@ export function Sidebar({
       badge: totalPendingAttention > 0 ? totalPendingAttention : null,
       badgeVariant: 'warning',
     },
+    { id: 'courses', label: 'Course Offerings & Providers', icon: GraduationCap },
     { id: 'ai-monitoring', label: 'Verbal AI & Diagnostics', icon: Cpu },
     { id: 'bounties', label: 'Company Bounties', icon: Briefcase },
+    { id: 'analytics', label: 'Cognitive & Cohort Analytics', icon: Brain },
     { id: 'settings', label: 'Access Control & Settings', icon: Settings },
     { id: 'audit-logs', label: 'Audit Logs', icon: ScrollText },
   ];

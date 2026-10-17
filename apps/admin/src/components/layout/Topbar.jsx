@@ -51,8 +51,10 @@ export function Topbar({ activeTab, onSelectTab }) {
       dashboard: 'Dashboard Overview',
       users: 'User Management',
       institutions: 'Tuition Centres & Human Mentors',
+      courses: 'Offered Courses & Tuition Providers',
       'ai-monitoring': 'Verbal AI & Upstream Telemetry',
       bounties: 'Company Bounties & Partner Authorization',
+      analytics: 'Cognitive Retention & Cohort Analytics',
       settings: 'Access Control & Settings',
       'audit-logs': 'Administrative Audit Logs',
     };

@@ -11,8 +11,10 @@ import { LoginPage } from './pages/LoginPage';
 import { DashboardPage } from './pages/DashboardPage';
 import { UsersPage } from './pages/UsersPage';
 import { InstitutionsPage } from './pages/InstitutionsPage';
+import { CoursesPage } from './pages/CoursesPage';
 import { AiMonitoringPage } from './pages/AiMonitoringPage';
 import { BountiesPage } from './pages/BountiesPage';
+import { AnalyticsPage } from './pages/AnalyticsPage';
 import { AuditLogsPage } from './pages/AuditLogsPage';
 import { SettingsPage } from './pages/SettingsPage';
 
@@ -26,8 +28,10 @@ function AdminAppContent() {
       'dashboard',
       'users',
       'institutions',
+      'courses',
       'ai-monitoring',
       'bounties',
+      'analytics',
       'settings',
       'audit-logs',
     ];
@@ -101,10 +105,14 @@ function AdminAppContent() {
         return <UsersPage />;
       case 'institutions':
         return <InstitutionsPage />;
+      case 'courses':
+        return <CoursesPage />;
       case 'ai-monitoring':
         return <AiMonitoringPage />;
       case 'bounties':
         return <BountiesPage />;
+      case 'analytics':
+        return <AnalyticsPage />;
       case 'settings':
         return <SettingsPage />;
       case 'audit-logs':

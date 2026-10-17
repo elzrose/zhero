@@ -27,6 +27,8 @@ import {
   Award,
   Briefcase,
   CheckCircle2,
+  GraduationCap,
+  Brain,
 } from 'lucide-react';
 
 export function DashboardPage({ onNavigate }) {
@@ -237,9 +239,21 @@ export function DashboardPage({ onNavigate }) {
           change="Spaced Repetition"
           trend="up"
           subtext="Ebbinghaus Forgetting Curve"
-          icon={Sparkles}
+          icon={Brain}
           variant="orange"
           badgeText="84.6% vs 22% Decay"
+          onClick={() => onNavigate('analytics')}
+        />
+
+        <StatCard
+          title="Courses & Providers"
+          value={`${metrics.totalCoursesOffered || 6} Courses`}
+          change={`${metrics.totalCourseEnrollments || 128} Enrolled`}
+          trend="up"
+          subtext="Offered by verified centres"
+          icon={GraduationCap}
+          badgeText="Provider Directory"
+          onClick={() => onNavigate('courses')}
         />
       </div>
 
@@ -600,6 +614,56 @@ export function DashboardPage({ onNavigate }) {
               </div>
               <div style={{ fontSize: '0.75rem', color: '#77736D', marginTop: '2px' }}>
                 Students, centres & roles
+              </div>
+            </button>
+
+            <button
+              onClick={() => onNavigate('courses')}
+              style={{
+                textAlign: 'left',
+                padding: '1rem',
+                borderRadius: '12px',
+                border: '1px solid #FAD1C6',
+                backgroundColor: '#FCEADE',
+                cursor: 'pointer',
+                transition: 'all 0.15s',
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.borderColor = '#F5AFAE')}
+              onMouseLeave={(e) => (e.currentTarget.style.borderColor = '#FAD1C6')}
+            >
+              <div style={{ color: '#DB5E8C', marginBottom: '0.5rem' }}>
+                <GraduationCap size={20} />
+              </div>
+              <div style={{ fontSize: '0.875rem', fontWeight: 700, color: '#171717' }}>
+                Course Offerings
+              </div>
+              <div style={{ fontSize: '0.75rem', color: '#77736D', marginTop: '2px' }}>
+                Tuition providers & syllabus
+              </div>
+            </button>
+
+            <button
+              onClick={() => onNavigate('analytics')}
+              style={{
+                textAlign: 'left',
+                padding: '1rem',
+                borderRadius: '12px',
+                border: '1px solid #FAD1C6',
+                backgroundColor: '#FCEADE',
+                cursor: 'pointer',
+                transition: 'all 0.15s',
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.borderColor = '#F5AFAE')}
+              onMouseLeave={(e) => (e.currentTarget.style.borderColor = '#FAD1C6')}
+            >
+              <div style={{ color: '#DB5E8C', marginBottom: '0.5rem' }}>
+                <Brain size={20} />
+              </div>
+              <div style={{ fontSize: '0.875rem', fontWeight: 700, color: '#171717' }}>
+                Cognitive Analytics
+              </div>
+              <div style={{ fontSize: '0.75rem', color: '#77736D', marginTop: '2px' }}>
+                Forgetting curve & cohorts
               </div>
             </button>
           </div>

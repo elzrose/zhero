@@ -13,6 +13,7 @@ import {
   INITIAL_BOUNTIES,
   INITIAL_BOUNTY_SUBMISSIONS,
   INITIAL_LEARNING_SCIENCE,
+  INITIAL_COURSES,
 } from './mockData';
 
 const KEYS = {
@@ -30,6 +31,7 @@ const KEYS = {
   BOUNTIES: 'zhero_admin_bounties_v1',
   BOUNTY_SUBMISSIONS: 'zhero_admin_bounty_subs_v1',
   LEARNING_SCIENCE: 'zhero_admin_learning_science_v1',
+  COURSES: 'zhero_admin_courses_v1',
   SESSION: 'zhero_admin_session_v1',
   PLATFORM_SETTINGS: 'zhero_admin_settings_v1',
 };
@@ -84,6 +86,7 @@ export const StorageService = {
     getStored(KEYS.BOUNTIES, INITIAL_BOUNTIES);
     getStored(KEYS.BOUNTY_SUBMISSIONS, INITIAL_BOUNTY_SUBMISSIONS);
     getStored(KEYS.LEARNING_SCIENCE, INITIAL_LEARNING_SCIENCE);
+    getStored(KEYS.COURSES, INITIAL_COURSES);
     getStored(KEYS.PLATFORM_SETTINGS, DEFAULT_SETTINGS);
   },
 
@@ -103,6 +106,7 @@ export const StorageService = {
     localStorage.setItem(KEYS.BOUNTIES, JSON.stringify(INITIAL_BOUNTIES));
     localStorage.setItem(KEYS.BOUNTY_SUBMISSIONS, JSON.stringify(INITIAL_BOUNTY_SUBMISSIONS));
     localStorage.setItem(KEYS.LEARNING_SCIENCE, JSON.stringify(INITIAL_LEARNING_SCIENCE));
+    localStorage.setItem(KEYS.COURSES, JSON.stringify(INITIAL_COURSES));
     localStorage.setItem(KEYS.PLATFORM_SETTINGS, JSON.stringify(DEFAULT_SETTINGS));
     window.dispatchEvent(new CustomEvent('zhero_store_change', { detail: { key: 'ALL' } }));
   },
@@ -241,6 +245,20 @@ export const StorageService = {
   },
   saveLearningScience(science) {
     setStored(KEYS.LEARNING_SCIENCE, science);
+  },
+
+  // Course Offerings & Providers (Platform-wide visibility)
+  getCourses() {
+    return getStored(KEYS.COURSES, INITIAL_COURSES);
+  },
+  saveCourses(courses) {
+    setStored(KEYS.COURSES, courses);
+  },
+  updateCourseStatus(courseId, status) {
+    const list = this.getCourses();
+    const updated = list.map(c => (c.id === courseId ? { ...c, status } : c));
+    this.saveCourses(updated);
+    return updated;
   },
 
   // Settings
