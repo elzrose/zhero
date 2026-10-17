@@ -1,16 +1,28 @@
-# React + Vite
+# ZHERO — Student Platform 👩‍🎓
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+> AI-driven career guidance, recommendation engine, skill-gap analysis, and interactive milestone roadmaps.
 
-Currently, two official plugins are available:
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-zhero--sand.vercel.app-FE6904?style=for-the-badge&logo=vercel)](https://zhero-sand.vercel.app/)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+**🌐 Production URL:** [https://zhero-sand.vercel.app/](https://zhero-sand.vercel.app/)
 
-## React Compiler
+---
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Key Modules & Features
 
-## Expanding the Oxlint configuration
+- **Multi-Stage Career Assessment:** 6-stage progressive evaluation including MCQ analysis, preliminary reports, top-5 suggestions, and AI counselling.
+- **AI Career Assessments & Gemini Integration:** Real-time conversational interview turns, checkpoints, and automated verbal assessment evaluations.
+- **Career Exploration & Roadmaps:** Step-by-step career milestones, salary insights, prerequisite matrices, and skill-gap analyzers.
+- **Student Dashboard:** Real-time progress tracking, readiness metrics, study rooms, revision queues, and bounty hubs.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+---
+
+## Local Development
+
+```bash
+# From repository root:
+npm run dev:student
+
+# Local development URL:
+http://localhost:3001
+```

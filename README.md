@@ -2,7 +2,9 @@
 > **B2B2C Career Guidance & Educational Support Platform**  
 > Built for the **KSUM She Builds Hackathon 2026** by a team of 4.
 
----
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-zhero--sand.vercel.app-FE6904?style=for-the-badge&logo=vercel)](https://zhero-sand.vercel.app/)  
+**🌐 Live Production Deployment:** [https://zhero-sand.vercel.app/](https://zhero-sand.vercel.app/)
+
 
 ## 🌟 Overview
 
@@ -56,11 +58,11 @@ npm install
 
 Each application runs on its own dedicated port to eliminate any port collision:
 
-| Application | Command | Local Address | Assigned Developer | Branch |
-| :--- | :--- | :--- | :--- | :--- |
-| **Student** | `npm run dev:student` | [http://localhost:3001](http://localhost:3001) | Developer 1 | `feature/student` |
-| **Tuition Centre** | `npm run dev:tuition` | [http://localhost:3002](http://localhost:3002) | Developer 2 | `feature/tuition-centre` |
-| **Admin Console** | `npm run dev:admin` | [http://localhost:3003](http://localhost:3003) | Developer 3 | `feature/admin` |
+| Application | Command | Local Address | Live Deployment | Assigned Developer | Branch |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **Student** | `npm run dev:student` | [http://localhost:3001](http://localhost:3001) | [https://zhero-sand.vercel.app/](https://zhero-sand.vercel.app/) | Developer 1 | `feature/student` |
+| **Tuition Centre** | `npm run dev:tuition` | [http://localhost:3002](http://localhost:3002) | *Internal* | Developer 2 | `feature/tuition-centre` |
+| **Admin Console** | `npm run dev:admin` | [http://localhost:3003](http://localhost:3003) | *Internal* | Developer 3 | `feature/admin` |
 
 ### 4. Build Applications for Production
 ```bash
