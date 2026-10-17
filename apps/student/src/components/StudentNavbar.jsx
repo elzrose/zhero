@@ -1,5 +1,4 @@
 import React from 'react';
-import { Sparkles } from 'lucide-react';
 
 export function StudentNavbar({ onOpenAuth, onNavigate, activePage = 'landing' }) {
   return (
@@ -7,80 +6,60 @@ export function StudentNavbar({ onOpenAuth, onNavigate, activePage = 'landing' }
       position: 'sticky',
       top: 0,
       zIndex: 40,
-      backgroundColor: 'rgba(255, 255, 255, 0.94)',
-      backdropFilter: 'blur(12px)',
+      backgroundColor: '#FFFFFF',
       borderBottom: '1px solid #EAE7E2',
-      transition: 'all 0.2s ease',
     }}>
       <div style={{
-        maxWidth: '1240px',
+        maxWidth: '1100px',
         margin: '0 auto',
-        padding: '0.85rem 1.5rem',
+        padding: '0.75rem 1.5rem',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
       }}>
-        {/* Logo and Wordmark */}
+        {/* Logo */}
         <div
           onClick={() => onNavigate('landing')}
-          style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer' }}
+          style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}
         >
           <div style={{
-            width: '36px',
-            height: '36px',
-            borderRadius: '10px',
-            background: 'linear-gradient(135deg, #FE6904 0%, #FA9B2A 100%)',
+            width: '28px',
+            height: '28px',
+            borderRadius: '8px',
+            background: '#FE6904',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             color: '#FFFFFF',
-            fontWeight: 800,
-            fontSize: '1.2rem',
-            boxShadow: '0 4px 12px rgba(254, 105, 4, 0.28)',
+            fontWeight: 700,
+            fontSize: '1rem',
           }}>
             Z
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span style={{ fontSize: '1.25rem', fontWeight: 800, letterSpacing: '-0.03em', color: '#171717' }}>
-              ZHERO
-            </span>
-          </div>
+          <span style={{ fontSize: '1.125rem', fontWeight: 700, color: '#171717' }}>
+            ZHERO
+          </span>
         </div>
 
-        {/* Navigation Links */}
+        {/* Navigation Links: Careers, Roadmap, Resources */}
         <nav style={{
           display: 'flex',
           alignItems: 'center',
-          gap: '1.75rem',
-          fontSize: '0.9rem',
-          fontWeight: 500,
-          color: '#77736F',
+          gap: '1.5rem',
         }}>
-          <button
-            onClick={() => onNavigate('landing')}
-            style={{
-              background: 'none',
-              border: 'none',
-              color: activePage === 'landing' ? '#171717' : '#77736F',
-              fontWeight: activePage === 'landing' ? 600 : 500,
-              cursor: 'pointer',
-              fontSize: '0.9rem',
-            }}
-          >
-            How it works
-          </button>
           <button
             onClick={() => onNavigate('careers')}
             style={{
               background: 'none',
               border: 'none',
               color: activePage === 'careers' ? '#171717' : '#77736F',
-              fontWeight: activePage === 'careers' ? 600 : 500,
+              fontWeight: activePage === 'careers' ? 600 : 400,
               cursor: 'pointer',
               fontSize: '0.9rem',
+              padding: 0,
             }}
           >
-            Explore Careers
+            Careers
           </button>
           <button
             onClick={() => onNavigate('roadmap')}
@@ -88,12 +67,13 @@ export function StudentNavbar({ onOpenAuth, onNavigate, activePage = 'landing' }
               background: 'none',
               border: 'none',
               color: activePage === 'roadmap' ? '#171717' : '#77736F',
-              fontWeight: activePage === 'roadmap' ? 600 : 500,
+              fontWeight: activePage === 'roadmap' ? 600 : 400,
               cursor: 'pointer',
               fontSize: '0.9rem',
+              padding: 0,
             }}
           >
-            Learning Roadmap
+            Roadmap
           </button>
           <button
             onClick={() => onNavigate('resources')}
@@ -101,17 +81,18 @@ export function StudentNavbar({ onOpenAuth, onNavigate, activePage = 'landing' }
               background: 'none',
               border: 'none',
               color: activePage === 'resources' ? '#171717' : '#77736F',
-              fontWeight: activePage === 'resources' ? 600 : 500,
+              fontWeight: activePage === 'resources' ? 600 : 400,
               cursor: 'pointer',
               fontSize: '0.9rem',
+              padding: 0,
             }}
           >
             Resources
           </button>
         </nav>
 
-        {/* Action Controls */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
+        {/* Action Controls: Sign in & Get started */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
           <button
             onClick={onOpenAuth}
             style={{
@@ -119,34 +100,23 @@ export function StudentNavbar({ onOpenAuth, onNavigate, activePage = 'landing' }
               border: 'none',
               color: '#171717',
               fontSize: '0.9rem',
-              fontWeight: 600,
+              fontWeight: 500,
               cursor: 'pointer',
-              padding: '0.5rem 0.85rem',
-              borderRadius: '8px',
+              padding: 0,
             }}
           >
-            Sign In
+            Sign in
           </button>
           <button
             onClick={() => onNavigate('assessment')}
+            className="btn-primary"
             style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '6px',
-              backgroundColor: '#FE6904',
-              color: '#FFFFFF',
               fontSize: '0.875rem',
-              fontWeight: 600,
-              padding: '0.6rem 1.15rem',
-              borderRadius: '10px',
-              border: 'none',
-              cursor: 'pointer',
-              boxShadow: '0 4px 14px rgba(254, 105, 4, 0.32)',
-              transition: 'transform 0.15s ease',
+              fontWeight: 500,
+              padding: '0.5rem 1rem',
             }}
           >
-            <Sparkles size={16} />
-            <span>Discover My Path</span>
+            Get started
           </button>
         </div>
       </div>

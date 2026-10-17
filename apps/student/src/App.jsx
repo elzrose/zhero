@@ -16,6 +16,9 @@ import { RoadmapPage } from './pages/RoadmapPage';
 import { ResourcesPage } from './pages/ResourcesPage';
 import { ProgressPage } from './pages/ProgressPage';
 import { ProfilePage } from './pages/ProfilePage';
+import { OpenSourceHubPage } from './pages/OpenSourceHubPage';
+import { BountyHubPage } from './pages/BountyHubPage';
+import { StudyRoomsPage } from './pages/StudyRoomsPage';
 import LiveInterviewPage from './pages/LiveInterviewPage';
 import { storageService } from './services/storageService';
 import { CAREERS_DATA } from './data/careersData';
@@ -76,7 +79,7 @@ export default function App() {
   const handleGenerateRoadmap = (careerId) => {
     const roadmap = storageService.setRoadmapForCareer(careerId);
     setActiveRoadmap(roadmap);
-    showToast(`Active roadmap set to ${roadmap.careerTitle}!`);
+    showToast('Roadmap updated');
     setCurrentPage('roadmap');
   };
 
@@ -96,20 +99,20 @@ export default function App() {
     const updated = storageService.addCustomTask(phaseIndex, title, duration);
     if (updated) {
       setActiveRoadmap({ ...updated });
-      showToast('Custom milestone added to roadmap!');
+      showToast('Milestone added');
     }
   };
 
   const handleToggleBookmarkResource = (resId) => {
     const updated = storageService.toggleBookmarkResource(resId);
     setBookmarkedResources(updated);
-    showToast(updated.includes(resId) ? 'Resource bookmarked!' : 'Bookmark removed.');
+    showToast(updated.includes(resId) ? 'Resource saved' : 'Resource removed');
   };
 
   const handleToggleCompleteResource = (resId) => {
     const updated = storageService.toggleCompleteResource(resId);
     setCompletedResources(updated);
-    showToast(updated.includes(resId) ? 'Resource marked completed!' : 'Resource status updated.');
+    showToast(updated.includes(resId) ? 'Resource completed' : 'Status updated');
   };
 
   const handleCompleteAssessment = (results) => {
@@ -118,9 +121,9 @@ export default function App() {
       const match = CAREERS_DATA.find((c) => c.title.toLowerCase() === results.primaryCareer.toLowerCase()) || CAREERS_DATA[0];
       const updatedRoadmap = storageService.setRoadmapForCareer(match.id);
       setActiveRoadmap(updatedRoadmap);
-      showToast(`Roadmap dynamically tailored to ${match.title}!`);
+      showToast('Roadmap updated');
     } else {
-      showToast('Career assessment & guidance finalized!');
+      showToast('Assessment saved');
     }
     setCurrentPage('roadmap');
   };
@@ -128,7 +131,7 @@ export default function App() {
   const handleResetAssessment = () => {
     storageService.resetAssessment();
     setAssessmentResults(null);
-    showToast('Assessment progress reset.');
+    showToast('Assessment reset');
     setCurrentPage('assessment');
   };
 
@@ -141,36 +144,39 @@ export default function App() {
     setCompareList(storageService.getCompareList());
     setBookmarkedResources(storageService.getBookmarkedResources());
     setCompletedResources(storageService.getCompletedResources());
-    showToast('All demo state restored to baseline.');
+    showToast('Data reset');
     setCurrentPage('dashboard');
   };
 
   const handleLogout = () => {
     storageService.logoutUser();
     setUserProfile({ ...userProfile, isLoggedIn: false });
-    showToast('Signed out of student session.');
+    showToast('Signed out');
     setCurrentPage('landing');
   };
 
   const isPublicPage = currentPage === 'landing';
 
-  // Titles mapping for Dashboard Header
+  // Titles mapping for Dashboard Header (no subtitles, concise titles per Part B)
   const pageTitles = {
-    dashboard: { title: 'Student Dashboard', subtitle: 'Personalized career intelligence & roadmap tracking' },
-    assessment: { title: 'Career Interest Assessment', subtitle: '16 psychometric scenario questions' },
-    interview: { title: 'Live AI Verbal Assessment', subtitle: 'Real-time spoken conversational interview with adaptive Gemini reasoning' },
-    results: { title: 'Assessment Results', subtitle: 'Your top 5 aligned career pathways' },
-    careers: { title: 'Career Catalogue', subtitle: '18+ emerging & core professional disciplines' },
-    'career-detail': { title: 'Career Profile', subtitle: 'Comprehensive skill & pathway breakdown' },
-    compare: { title: 'Career Comparison', subtitle: 'Side-by-side analysis across requirements and compensation' },
-    'skill-gap': { title: 'Skill-Gap Diagnostic', subtitle: 'Interactive self-audit against industry standards' },
-    roadmap: { title: 'Personalized Roadmap', subtitle: 'Actionable step-by-step learning milestones' },
-    resources: { title: 'Learning Resources', subtitle: 'Curated beginner guides and tutorials' },
-    progress: { title: 'Growth Metrics', subtitle: 'Quantitative readiness and session activity audit' },
-    profile: { title: 'Student Settings', subtitle: 'Profile details and demo storage controls' },
+    dashboard: { title: 'Dashboard' },
+    assessment: { title: 'Assessment' },
+    interview: { title: 'Interview' },
+    results: { title: 'Matches' },
+    careers: { title: 'Careers' },
+    'career-detail': { title: 'Career profile' },
+    compare: { title: 'Compare' },
+    'skill-gap': { title: 'Skill gaps' },
+    roadmap: { title: 'Roadmap' },
+    resources: { title: 'Resources' },
+    'github-hub': { title: 'Open source' },
+    bounties: { title: 'Bounties' },
+    'study-rooms': { title: 'Study rooms' },
+    progress: { title: 'Progress' },
+    profile: { title: 'Profile' },
   };
 
-  const headerInfo = pageTitles[currentPage] || { title: 'ZHERO Student Portal', subtitle: '' };
+  const headerInfo = pageTitles[currentPage] || { title: 'ZHERO' };
 
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: '#F8F8F7' }}>
@@ -182,18 +188,17 @@ export default function App() {
           right: '24px',
           backgroundColor: '#171717',
           color: '#FFFFFF',
-          padding: '0.75rem 1.25rem',
-          borderRadius: '10px',
+          padding: '0.65rem 1rem',
+          borderRadius: '8px',
           fontSize: '0.85rem',
-          fontWeight: 600,
-          boxShadow: '0 10px 25px rgba(0, 0, 0, 0.2)',
+          fontWeight: 500,
+          boxShadow: '0 1px 3px rgba(23, 23, 23, 0.04)',
           zIndex: 999,
           display: 'flex',
           alignItems: 'center',
           gap: '8px',
-          animation: 'slideUp 0.2s ease',
+          animation: 'modalFadeIn 0.15s ease',
         }}>
-          <span style={{ color: '#FE6904' }}>✓</span>
           <span>{toastMessage}</span>
         </div>
       )}
@@ -205,7 +210,7 @@ export default function App() {
         onAuthSuccess={(profile) => {
           setUserProfile(profile);
           setCurrentPage('dashboard');
-          showToast(`Welcome back, ${profile.name}!`);
+          showToast('Signed in');
         }}
       />
 
@@ -238,7 +243,6 @@ export default function App() {
           <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0 }}>
             <StudentHeader
               title={headerInfo.title}
-              subtitle={headerInfo.subtitle}
               onOpenMobile={() => setIsMobileSidebarOpen(true)}
               onNavigate={handleNavigate}
             />
@@ -340,6 +344,30 @@ export default function App() {
                   onToggleBookmark={handleToggleBookmarkResource}
                   completedResources={completedResources}
                   onToggleComplete={handleToggleCompleteResource}
+                />
+              )}
+
+              {currentPage === 'github-hub' && (
+                <OpenSourceHubPage
+                  userProfile={userProfile}
+                  activeRoadmap={activeRoadmap}
+                  onNavigate={handleNavigate}
+                />
+              )}
+
+              {currentPage === 'bounties' && (
+                <BountyHubPage
+                  userProfile={userProfile}
+                  activeRoadmap={activeRoadmap}
+                  onNavigate={handleNavigate}
+                />
+              )}
+
+              {currentPage === 'study-rooms' && (
+                <StudyRoomsPage
+                  userProfile={userProfile}
+                  activeRoadmap={activeRoadmap}
+                  onNavigate={handleNavigate}
                 />
               )}
 
