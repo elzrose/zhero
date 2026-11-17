@@ -9,6 +9,13 @@
   --zhero-warm-orange: #FA9B2A;
   --zhero-pale-peach: #FFE5CE;
   --zhero-golden-orange: #F39E2A;
+
+  /* Strict 4-shade aliases (Admin / Complementary Theme) */
+  --shade-1: #FCEADE; /* Pale Blush Cream - canvas & light fills */
+  --shade-2: #FAD1C6; /* Soft Peach - borders & soft interactive elements */
+  --shade-3: #F5AFAE; /* Muted Rose - secondary accents & charts */
+  --shade-4: #DB5E8C; /* Deep Berry Rose - primary interactive, buttons & headings */
+  --zhero-primary-coral: var(--shade-4);
   
   /* Neutrals & Surfaces */
   --zhero-white: #FFFFFF;

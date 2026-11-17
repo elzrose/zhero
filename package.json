@@ -2,11 +2,14 @@
   "name": "zhero-monorepo",
   "version": "1.0.0",
   "private": true,
+  "type": "module",
   "description": "ZHERO — Career Guidance and Educational Support Monorepo (KSUM She Builds Hackathon)",
   "workspaces": [
     "apps/*"
   ],
   "scripts": {
+    "server": "node server/index.js",
+    "test:server": "node server/test.js",
     "dev:student": "npm --prefix apps/student run dev",
     "dev:tuition": "npm --prefix apps/tuition-centre run dev",
     "dev:admin": "npm --prefix apps/admin run dev",

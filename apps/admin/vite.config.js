@@ -5,9 +5,7 @@ import { fileURLToPath } from 'url'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
-// https://vite.dev/config/
 export default defineConfig({
-  base: './',
   plugins: [react()],
   server: {
     port: 3003,
@@ -17,5 +15,6 @@ export default defineConfig({
     alias: {
       '@shared': path.resolve(__dirname, '../../shared'),
     },
+    dedupe: ['react', 'react-dom'],
   },
 })

@@ -6,6 +6,7 @@
 
 import { CAREERS_DATA } from '../data/careersData.js';
 import { calculateAssessmentResults } from './scoringEngine.js';
+import { zheroApi } from '../../../../shared/config/index.js';
 
 const STORAGE_KEYS = {
   USER_PROFILE: 'zhero_student_profile',
@@ -138,6 +139,21 @@ export const storageService = {
       const results = calculateAssessmentResults(answers);
       localStorage.setItem(STORAGE_KEYS.ASSESSMENT_RESULTS, JSON.stringify(results));
       this.logActivity('Completed full Career Interest Assessment.');
+
+      // Sync asynchronously to shared SQLite DB
+      try {
+        const profile = this.getUserProfile();
+        zheroApi.submitAssessment({
+          studentId: profile.id,
+          email: profile.email,
+          primaryCareer: results.primaryCareer,
+          readinessScore: results.overallScore || 75,
+          results,
+        });
+      } catch (syncErr) {
+        // Safe offline fallback
+      }
+
       return results;
     } catch (e) {
       console.error('Failed to save assessment results', e);

@@ -30,3 +30,8 @@ dist-ssr
 .env.development.local
 .env.test.local
 .env.production.local
+
+# Database
+server/data/*.db
+server/data/*.db-journal
+

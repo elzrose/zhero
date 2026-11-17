@@ -59,3 +59,6 @@ export const API_ENDPOINTS = {
   INSTITUTIONS: '/api/v1/institutions',
   ANALYTICS: '/api/v1/analytics',
 };
+
+export { zheroApi, getStoredToken, getStoredUser, setStoredSession, clearStoredSession, API_BASE_URL } from './apiClient.js';
+

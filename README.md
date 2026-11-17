@@ -25,12 +25,18 @@ zhero/
 │   ├── student/               # 👩‍🎓 Student Portal (Port 3001)
 │   ├── tuition-centre/        # 🏫 Tuition Centre & Cohorts (Port 3002)
 │   └── admin/                 # ⚙️ Platform Admin & Ops (Port 3003)
+├── server/                    # 🚀 Shared Backend & SQLite DB (Port 5000)
+│   ├── index.js               # HTTP REST Server & CORS preflight
+│   ├── db.js                  # Persistent SQLite engine (node:sqlite)
+│   ├── auth.js                # PBKDF2 hashing & JWT sessions
+│   ├── routes.js              # Full REST API endpoints & audit logger
+│   └── test.js                # In-process automated test suite
 ├── shared/
 │   ├── styles/                # Brand tokens & CSS variables
-│   ├── components/            # Reusable UI components
-│   └── config/                # Port map, URLs, and constants
+│   ├── components/            # Reusable UI components & BrandNavbar
+│   └── config/                # apiClient.js, Port map, URLs, and constants
 ├── docs/
-│   ├── PROJECT_OVERVIEW.md    # Product specs & stakeholder value
+│   ├── PROJECT_OVERVIEW.md    # Product specs & stakeholder specs
 │   ├── ARCHITECTURE.md        # Monorepo architecture & integration plan
 │   ├── DESIGN_SYSTEM.md       # Color palettes, typography & tokens
 │   └── CONTRIBUTION_GUIDE.md  # Git branching workflow & team rules
@@ -38,6 +44,21 @@ zhero/
 ├── README.md
 └── package.json
 ```
+
+---
+
+## 🔐 Shared Database & Authentication
+
+ZHERO features a unified, zero-dependency persistent SQLite database (`server/data/zhero.db`) and a secure JWT authentication system with role-based access control.
+
+### Demo Credentials:
+| Portal | Role | Email | Password |
+| :--- | :--- | :--- | :--- |
+| **Student Portal** (Port 3001) | `student` | `student@zhero.app` | `Student@123` |
+| **Tuition Centre** (Port 3002) | `tuition-centre` | `tuition@zhero.app` | `Tuition@123` |
+| **Platform Admin** (Port 3003) | `admin` | `admin@zhero.app` | `Admin@123` |
+
+*⚡ All portals also support **1-Click Quick Demo Login** directly in their login dialogs, and the top navigation includes an instant Role Switcher.*
 
 ---
 
@@ -60,11 +81,25 @@ Each application runs on its own dedicated port to eliminate any port collision:
 
 | Application | Command | Local Address | Live Deployment | Assigned Developer | Branch |
 | :--- | :--- | :--- | :--- | :--- | :--- |
+| **Backend & DB** | `npm run server` | [http://localhost:5000](http://localhost:5000) | *REST API & SQLite* | Team Backend | `main` |
 | **Student** | `npm run dev:student` | [http://localhost:3001](http://localhost:3001) | [https://zhero-sand.vercel.app/](https://zhero-sand.vercel.app/) | Developer 1 | `feature/student` |
 | **Tuition Centre** | `npm run dev:tuition` | [http://localhost:3002](http://localhost:3002) | *Internal* | Developer 2 | `feature/tuition-centre` |
 | **Admin Console** | `npm run dev:admin` | [http://localhost:3003](http://localhost:3003) | *Internal* | Developer 3 | `feature/admin` |
 
-### 4. Build Applications for Production
+### 4. Run Automated Test Verification
+```bash
+# Run shared backend & database test suite (12 tests)
+npm run test:server
+
+# Run student platform test suites (100+ tests)
+node apps/student/test/bountyHub.test.js
+node apps/student/test/calibration.test.js
+node apps/student/test/dailyPlanner.test.js
+node apps/student/test/mastery.test.js
+node apps/student/test/studyRoomsAndStreaks.test.js
+```
+
+### 5. Build Applications for Production
 ```bash
 # Build specific app
 npm run build:student
